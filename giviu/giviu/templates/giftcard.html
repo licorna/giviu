@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="container options">
-  <h1 class="span7">{{ title }}</h1>
-
-  <span class="span2 col">ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a> </span>
+  ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
 </section>
 <section class="container">
 
@@ -13,36 +11,36 @@
       <input type="submit" class="span3 col btn inside" value="Buscar"/>
     </form>
     <h3>Categorías</h3>
-    <ul class="span9 categories">
-      <li class="span9"><a  href="/">Todos <span>{{ products_all|length }}</span></a></li>
+    <ul class="span9">
+      <li class="span9 selected"><a  href="/">Todos<span>{{ products|length }}</span></a></li>
       {% for category in categories %}
-      <li class="span9 category {% if category.slug == slug %}selected{% endif %}"><a data-id="{{ category.giftcardcategory.id }}"  href="/giftcard/category/{{ category.slug}}">{{ category.name }} <span id="count{{ category.id }}">{% if category.slug == slug %}{{ products|length }}{% endif %}</span></a></li>
+      <li class="span9 category"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}"></span></a></li>
       {% endfor %}
     </ul>
   </aside>
   <section class="span6" id="giftCardList" data-columns>
     {% for product in products %}
-    <article class="giftCardModule" data-source-id="{{ product.id }}">
+    <article class="giftCardModule" data-source-id="{{ product.product_id }}">
       <figure>
-        <span class="like {% if not is_logged_id %}disabled{% endif%}" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+        <span class="like {% if not is_logged_in %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
         <img src="{{ product.image }}">
       </figure>
       <h2>{{ product.title }}</h2>
-      <h4><a href="/partner/name/{{ product.merchant_id }}">{{ product.merchant_name }}</a></h4>
-      {% if product.type == '1' %}
+      <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+      {% if product.type_ == '1' %}
       <select class="span7 select" name="webmenu"  onchange="showValue(this.value)">
-        {% for product.price in price %}
+        {% for price in product.price %}
         <option value="{{ price }}">$ {{ price }}</option>
         {% endfor %}
       </select>
       {% endif %}
-      {% if product.type == '0' %}
-      <strong class="span9">$ {{ product.price }}</strong>
+      {% if product.type_ == '0' %}
+      <strong class="span9">${{ product.price }}</strong>
       {% endif %}
-      <a href="/giftcard/detail/{{ product.product_id }}-{{ product.title }}" class="btn primary">Regalar</a>
+      <a href="/giftcard/detail/{{ product.product_id }}" class="btn primary">Regalar</a>
+
     </article>
     {% endfor %}
-
   </section>
 
 </section>
@@ -60,5 +58,6 @@
   });
   });
 </script>
+
 
 {% endblock %}
