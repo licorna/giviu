@@ -12,13 +12,20 @@
   <div class="span5">
     <figure class="span9">
       <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
-      <img class="span9" src="<? echo $product['product-image'];?>">
+      <img class="span9" src="{{ product.image }}">
     </figure>
   </div>
   <div class="span4 col actions">
     <h2>{{ product.title }}</h2>
     <div class="span9 col likescount">
-      <?if(count($likes)!="0"){?><span class="icon-heart icolike"></span> A <? echo count($likes); ?> le gusta este regalo <span class="amigos"><?if ($friend!="0"){?><? foreach($friends as $friend){?><a href="/user/preferences/<? echo $friend['user-friend-fb-id'];?>"><img src="https://graph.facebook.com/<? echo $friend['user-friend-fb-id'];?>/picture?width=20&height=20"></a><?}?><?}?><?}?></span>
+      {% if likes > 0 %}
+      <span class="icon-heart icolike"></span> A {{ likes }} le gusta este regalo <span class="amigos">
+        {% for friend in friends %}
+        <a href="/user/preferences/{{ friend.user_friend_fb_id }}"><img src="https://graph.facebook.com/{{ friend.user_friend_fb_id }}/picture?width=20&height=20"></a>
+        {% endfor %}
+
+      </span>
+      {% endif %}
     </div>
     <p class="span9">{{ product.description }}</p>
     <div class="span9 value">
@@ -34,7 +41,7 @@
           {% if product.type_ == '1' %}
           <select class="span9 select" name="product-price">
             {% for price in product.price %}
-            <option value="<?echo$price;?>">${{ price }}</option>
+            <option value="{{ price }}">${{ price }}</option>
             {% endfor %}
           </select>
 
@@ -48,7 +55,7 @@
     </div>
 
     <div class="span9 stepAction">
-      <a href="/giftcard/custom/{{ product.product_id }}-{{ product.title }}" class="span3 btn primary continue">
+      <a href="/giftcard/custom/{{ product.product_id }}" class="span3 btn primary continue">
         Continuar
       </a>
     </div>

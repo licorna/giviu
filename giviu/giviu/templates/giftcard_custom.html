@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="container steps">
+  <span class="stepIndicator">
+    2
+  </span>
+  <span class="actualStep">Seleccionar giftcard / presonalizar gitcard</span> / pagar
+</section>
+
+<section class="container custom">
+  <div class="span3">
+    <div class="giftcardSelected span9">
+      <figure class="span3">
+        <img class="span9" src="{{ product.image }}">
+      </figure>
+      <div class="span6 col">
+        <h3>{{ product.title }}</h3>
+        <strong id="price">$5.000</strong>
+      </div>
+    </div>
+    <form class="span9" method="post" action="/giftcard/pay" id="customForm">
+      <label class="span9">
+        ¿A quien le enviaras esta giftcard?
+      </label>
+      <input type="text" class="span9 nameTo required" name="send-to">
+      <label class="span9">
+        ¿Cual es el correo electronico de <strong class="name">Juan</strong>?
+      </label>
+      <input type="text" class="span9 required email" name="email-to">
+      <label class="span9">
+        ¿En que fecha quieres enviarla?
+      </label>
+      <input type="text" class="span9 required" id="datepicker" value="{{ today }}" name="send-date">
+      <label class="span9">
+        ¿Quieres agregarle un mensaje?
+      </label>
+      <textarea class="span9 required" name="comment" placeholder="Ej: Te deseo un muy feliz cumpleaños!"></textarea>
+      <input type="hidden" value="{{ product.id }}" name="product-id">
+      <input type="hidden" value="{{ product.merchant.id }}" name="product-merchant-id">
+      <input type="hidden" value="1" name="giftcard-design">
+      <input type="hidden" value="" name="product-price"/>
+    </form>
+  </div>
+  <div class="span6 col">
+    <div class="selectGiftcardDesign span9">
+      <span class="icon-arrow-left control" id="prev"></span>
+      <ul class="span9 giftcardsDesign">
+        {% for style in styles %}
+        <li  id="{{ style.id }}">
+          <figure>
+            <img src="/static/img/giftcards/{{ style.image }}">
+          </figure>
+        </li>
+        {% endfor %}
+
+      </ul>
+      <span class="icon-arrow-right control" id="next"></span>
+    </div>
+    <div class="thumbnails" id="pag"></div>
+
+    <div class="span9 stepAction">
+      <a href="/giftcard/pay" id="custom" class="span3 btn primary">
+        Continuar
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  $(document).ready(function(){
+
+  var productInfo = localStorage['product-info']; // define this in "detail" localstorage;
+  var productInfo = productInfo.split('&');
+  var price               = productInfo[0].split('=');
+  var price               = price[1];
+  var price               = price.replace('+','');
+  var id                  = productInfo[1].split('=');
+  var id                  = id[1];
+
+  $('#price').html("$"+separador(price));
+  $('[name="product-price"]').val(price)
+
+  $('.nameTo').keyup(function(){
+  $('.name').html($(this).val());
+  })
+
+  $('#customForm').validate();
+
+  $('#custom').click(function(e){
+  e.preventDefault();
+  $( "#customForm" ).submit();
+  });
+
+  $( "#datepicker" ).datepicker({
+  showOtherMonths: true,
+  selectOtherMonths: true,
+  monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+  monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+  dateFormat: "yy-mm-d",
+  defaultDate: -1,
+  autoSize: true,
+  maxDate: "+1m",
+  minDate: "0"
+  });
+
+  });
+</script>
+
+{% endblock %}

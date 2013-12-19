@@ -29,15 +29,15 @@
       <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
       {% if product.type_ == '1' %}
       <select class="span7 select" name="webmenu"  onchange="showValue(this.value)">
-        {% for price in product.price %}
+        {% for price in product.get_price %}
         <option value="{{ price }}">$ {{ price }}</option>
         {% endfor %}
       </select>
       {% endif %}
       {% if product.type_ == '0' %}
-      <strong class="span9">${{ product.price }}</strong>
+      <strong class="span9">${{ product.get_price }}</strong>
       {% endif %}
-      <a href="/giftcard/detail/{{ product.product_id }}" class="btn primary">Regalar</a>
+      <a href="/giftcard/detail/{{ product.product_id }}-{{ product.title }}" class="btn primary">Regalar</a>
 
     </article>
     {% endfor %}

@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 class Calendar(models.Model):
-    user_id = models.IntegerField(db_column='calendar-user-id') # Field renamed to remove unsuitable characters.
+    user_id = models.IntegerField(db_column='calendar-user-id')
     user_fb_id = models.CharField(db_column='calendar-user-fb-id', max_length=25)
     friend_fb_id = models.CharField(db_column='calendar-friend-fb-id', max_length=255)
     month = models.CharField(db_column='calendar-month', max_length=2)
@@ -61,6 +61,7 @@ class GiftcardCategory(models.Model):
         db_table = 'giftcard-category'
 
 class GiftcardStyle(models.Model):
+    giftcardstyle_id = models.IntegerField(db_column='giftcard-style-id', primary_key=True)
     category_id = models.IntegerField(db_column='giftcard-style-category-id')
     image = models.CharField(db_column='giftcard-style-image', max_length=255)
     status = models.CharField(db_column='giftcard-style-status', max_length=255)
@@ -164,6 +165,11 @@ class Products(models.Model):
 
     def __unicode__(self):
         return str(self.product_id) + ': ' + self.title
+
+    def get_price(self):
+        if ',' in self.price:
+            return self.price.split(',')
+        return self.price
 
 class Provincias(models.Model):
     nombre = models.CharField(max_length=64)
