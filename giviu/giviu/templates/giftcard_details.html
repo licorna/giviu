@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container steps">
+  <span class="stepIndicator">
+    1
+  </span>
+  <span class="actualStep">Seleccionar giftcard</span> / presonalizar gitcard / pagar
+</section>
+
+<section class="container detail">
+
+  <div class="span5">
+    <figure class="span9">
+      <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
+      <img class="span9" src="<? echo $product['product-image'];?>">
+    </figure>
+  </div>
+  <div class="span4 col actions">
+    <h2>{{ product.title }}</h2>
+    <div class="span9 col likescount">
+      <?if(count($likes)!="0"){?><span class="icon-heart icolike"></span> A <? echo count($likes); ?> le gusta este regalo <span class="amigos"><?if ($friend!="0"){?><? foreach($friends as $friend){?><a href="/user/preferences/<? echo $friend['user-friend-fb-id'];?>"><img src="https://graph.facebook.com/<? echo $friend['user-friend-fb-id'];?>/picture?width=20&height=20"></a><?}?><?}?><?}?></span>
+    </div>
+    <p class="span9">{{ product.description }}</p>
+    <div class="span9 value">
+      <div class="span6">
+        {% if product.type_ == '1' %}
+        Selecciona el valor de la giftcard
+        {% else %}
+        Valor giftcard
+        {% endif %}
+      </div>
+      <form id="form">
+        <div class="span3">
+          {% if product.type_ == '1' %}
+          <select class="span9 select" name="product-price">
+            {% for price in product.price %}
+            <option value="<?echo$price;?>">${{ price }}</option>
+            {% endfor %}
+          </select>
+
+          {% else %}
+          <strong class="span9 productPrice">$ {{ product.price }}</strong>
+          <input type="hidden" name="product-price" value="{{ product.price }}"/>
+          {% endif %}
+        </div>
+        <input type="hidden" name="product-id" value="{{ product.product_id }}"/>
+      </form>
+    </div>
+
+    <div class="span9 stepAction">
+      <a href="/giftcard/custom/{{ product.product_id }}-{{ product.title }}" class="span3 btn primary continue">
+        Continuar
+      </a>
+    </div>
+    <div class="span9 finePrint">
+      <div class="span9 head"><span class="icon-menu"></span> Detalle</div>
+      {{ product.fine_print|safe }}
+    </div>
+  </div>
+</section>
+
+<script>
+  $(document).ready(function(){
+  $('.continue').click(function(e){
+  e.preventDefault();
+  var url = $(this).attr('href');
+  localStorage['product-info'] = $('form').serialize();
+  location.href=url;
+
+  })
+  });
+</script>
+{% endblock %}

@@ -87,6 +87,7 @@ class Giftcards(models.Model):
         db_table = 'giftcards'
 
 class Likes(models.Model):
+    likes_id = models.IntegerField(db_column='like-id', primary_key=True)
     source_id = models.IntegerField(db_column='like-source-id')
     user_id = models.IntegerField(db_column='like-user-id')
     user_fb_id = models.CharField(db_column='like-user-fb-id', max_length=255)
@@ -115,6 +116,7 @@ class MerchantUsers(models.Model):
         db_table = 'merchant-users'
 
 class Merchants(models.Model):
+    merchant_id = models.IntegerField(db_column='merchant-id', primary_key=True)
     creation_date = models.DateTimeField(db_column='merchant-creation-date')
     name = models.CharField(db_column='merchant-name', max_length=255)
     slug = models.CharField(db_column='merchant-slug', max_length=255)
@@ -183,6 +185,7 @@ class Services(models.Model):
         db_table = 'services'
 
 class UserFriends(models.Model):
+    user_friends_id = models.IntegerField(db_column='user-friends-id', primary_key=True)
     me_fb_id = models.CharField(db_column='user-friend-me-fb-id', max_length=25)
     fb_id = models.CharField(db_column='user-friend-fb-id', max_length=25)
     name = models.CharField(db_column='user-friend-name', max_length=255)

@@ -26,7 +26,7 @@
         <img src="{{ product.image }}">
       </figure>
       <h2>{{ product.title }}</h2>
-      <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant_slug }}">{{ product.merchant_name }}</a></h4>
+      <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
       {% if product.type_ == '1' %}
       <select class="span7 select" name="webmenu"  onchange="showValue(this.value)">
         {% for price in product.price %}
