@@ -18,6 +18,7 @@ $(document).ready(function(e){
 
     $('.close').on('click',closeModal);
 
+    $('.mobileActions').on('click',menuDisplay);
 
 
 
@@ -41,6 +42,10 @@ $(document).ready(function(e){
 
 
 });
+
+function menuDisplay(e){
+    $('.mobile').slideToggle('fast');
+}
 
 function alertMessage(title,content){
     $('#alertTitle').html(title);

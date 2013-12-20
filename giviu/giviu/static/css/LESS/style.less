@@ -253,6 +253,7 @@ header{
   }
 }
 
+
 footer{
   background: #fff;
   border-top:1px solid @greyBorder;
@@ -1508,7 +1509,108 @@ span.tooltip {
 }
 
 
-@media screen and (max-width: 480px){
+@media screen and (max-width: 600px){
+  .mobileActions{
+    text-align:right;
+    margin-top:20px;
+    display:block!important;
+  }
+  .mobile{
+    ul{
+      width:104%;
+      li{
+        display:block;
+        border:0px;
+        padding:0px;
+        .span9;
+        height:auto;
+        text-align:left;
+        background-color:#fff;
+        a{
+         .span9;
+         border-bottom: 1px dotted #999;
+         padding:10px;
+        }
+      }    
+    }
+  }
+  .showyourlove,.options{
+    display:none!important;
+  }
+  aside{
+    border:none;
+    display:none;
+    form{
+      display: none;
+    }
+  }
+  .size-1of3{
+    width:100%!important;
+    .giftCardModule{
+      margin:0px 0px 10px 0px!important;
+      figure{
+        img{
+          width:100%;
+          height:auto!important;
+        }
+      }
+      .btn{
+        margin-left:10px;
+      }
+      .dd{
+        width:90%!important;
+      }
+    }
+  }
+
+  .detail{
+    .giftcardImage{
+      .span9;
+      .like{
+        left:20px;
+        top:20px;
+      }
+      img{
+        height:190px;
+      }
+    }
+    .actions{
+      .span9;
+    }
+    .stepAction{
+      margin-left: 6px;
+    }
+  }
+
+  .custom{
+    .selectGiftcardDesign{
+      margin-top: 10px;
+      height:185px;
+      background-color:transparent;
+      overflow:hidden;
+      ul{
+        li{
+          figure{
+            width: 78%;
+            margin-top:5px;
+          }
+        }
+      }
+      .control{
+        top:75px;
+        &#prev{
+          left:0px;
+        }        
+        &#next{
+          right:0px;
+        }
+      }
+    }
+  }
+  
+  .steps{
+    font-size:10px;
+  }
 
 
 }

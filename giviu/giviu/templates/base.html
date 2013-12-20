@@ -61,7 +61,7 @@
   <body class="cf <? echo $home;?>">
     <header class="span9 <? echo $header;?>">
       <div class="container">
-        <div class="inner span2">
+        <div class="span2">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
         </div>
         <?if($header!='enterprise'){?>
@@ -78,10 +78,24 @@
             <li><a href="/pages/how" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
             {% endif %}
           </ul>
-        </nav>
+        </nav>  
         <?}?>
+          <div class="mobileActions" style="display:none;">
+            <a href="#" class="btn secondary"><span class="icon-menu"></span></a>
+          </div>
       </div>
     </header>
+        <nav class="mobile" style="display:none;">
+          <ul>
+            <li><a href="?session=off" >Cerrar sesion</a></li>
+            <li><a href="/user/calendar">Mis fechas</a></li>
+            <li><a href="/user/sender">Mis giftcards</a></li>
+            <li><a href="/user/profile"> Bienvenid<?if($_SESSION['user-gender']=="male"){?>o<?}else{?>a<?}?> <strong><? echo $_SESSION['user-name'];?></strong></a></li>
+            <li><a href="/user/register">Regístrate</a></li>
+            <li><a href="/user/login">Ingresa</a></li>
+          </ul>
+        </nav>
+
     <div id="alertMessage" style="display:none;">
       <h2 id="alertTitle">alert</h2>
       <div class="close" data-close="alertMessage">
