@@ -1,7 +1,28 @@
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
+from django.core.context_processors import csrf
+from django.contrib.auth import authenticate, login
 from models import GiftcardCategory, Products, Likes, Merchants, UserFriends, GiftcardStyle
 from datetime import datetime
+
+
+def do_login(request):
+    c = {}
+    c.update(csrf(request))
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['pass']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('/')
+        else:
+            return redirect('/login?message=invalid')
+
+    if 'message' in request.GET:
+        c['message'] = request.GET['message']
+    return render_to_response('login.html', c)
 
 def home(request):
     categories = GiftcardCategory.objects.all()
