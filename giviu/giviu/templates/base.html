@@ -87,12 +87,15 @@
     </header>
         <nav class="mobile" style="display:none;">
           <ul>
+            {% if is_logged_in %}
             <li><a href="?session=off" >Cerrar sesion</a></li>
             <li><a href="/user/calendar">Mis fechas</a></li>
             <li><a href="/user/sender">Mis giftcards</a></li>
             <li><a href="/user/profile"> Bienvenid<?if($_SESSION['user-gender']=="male"){?>o<?}else{?>a<?}?> <strong><? echo $_SESSION['user-name'];?></strong></a></li>
+            {% else %}
             <li><a href="/user/register">Regístrate</a></li>
             <li><a href="/user/login">Ingresa</a></li>
+            {% endif %}
           </ul>
         </nav>
 
