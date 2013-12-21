@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^giftcard/category/(?P<slug>\d+)$', 'giviu.views.giftcard_category', name='giftcard_category'),
     url(r'^giftcard/custom/(?P<gift_id>\d+)$', 'giviu.views.giftcard_custom', name='giftcard_custom'),
     url(r'^login$', 'giviu.views.do_login', name='login'),
+    url(r'^logout$', 'giviu.views.do_logout', name='logout'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -9,16 +9,16 @@
     <title>Giviu - {{ title }} </title>
     <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
     <link rel="stylesheet/less" type="text/css" href="{% static "css/LESS/style.less" %}"/>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="{% static "css/jquery-ui.css" %}"/>
     <script src="{% static "js/less-1.3.3.min.js" %}"></script>
     <script src="{% static "js/prefixfree.min.js" %}"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/jquery-ui.js" %}"></script>
     <script src="{% static "js/jquery.dd.min.js" %}"></script>
     <script src="{% static "js/jquery.carouFredSel-5.6.2.js" %}"></script>
     <script src="{% static "js/jquery.validate.js" %}"></script>
     <script src="{% static "js/jquery.tipsy.js" %}"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js"></script>
+    <script src="{% static "js/modernizr.min.js" %}"></script>
     <script src="{% static "js/global.js" %}"></script>
 
     <meta property="fb:admins" content="esteldesign"/>
@@ -67,18 +67,18 @@
         <?if($header!='enterprise'){?>
         <nav class="span7 col showyourlove">
           <ul>
-            {% if is_logged_in %}
-            <li><a href="?session=off" class="btn secondary logout"><span class="icon-close"></span></a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/logout" class="btn secondary logout"><span class="icon-close"></span></a></li>
             <li><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
             <li><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
-            <li><a href="/user/profile" class="normal"><span class="icon-pencil"></span> Bienvenid<?if($_SESSION['user-gender']=="male"){?>o<?}else{?>a<?}?> <strong><? echo $_SESSION['user-name'];?></strong></a></li>
+            <li><a href="/user/profile" class="normal"><span class="icon-pencil"></span> Bienvenido {{ user.name }}</a></li>
             {% else %}
-            <li><a href="/user/register" class="btn secondary"> Regístrate</a></li>
-            <li><a href="/user/login" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
+            <li><a href="/register" class="btn secondary"> Regístrate</a></li>
+            <li><a href="/login" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
             <li><a href="/pages/how" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
             {% endif %}
           </ul>
-        </nav>  
+        </nav>
         <?}?>
           <div class="mobileActions" style="display:none;">
             <a href="#" class="btn secondary"><span class="icon-menu"></span></a>
