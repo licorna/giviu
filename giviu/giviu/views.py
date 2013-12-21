@@ -17,15 +17,15 @@ def do_login(request):
         username = request.POST['username']
         password = request.POST['pass']
         user = authenticate(username=username, password=password)
-        print user
         if user is not None:
             if user.is_active:
                 login(request, user)
-                print 'Autenticado!'
                 return redirect('/')
         else:
+            # TODO: improve way of user alerting.
             return redirect('/login?message=invalid')
 
+    # TODO: same here, improve this ugly snippet
     if 'message' in request.GET:
         c['message'] = request.GET['message']
     return render_to_response('login.html', c, context_instance=RequestContext(request))
@@ -34,18 +34,30 @@ def do_logout(request):
     logout(request)
     return redirect('/')
 
-def home(request):
-    context = RequestContext(request)
-    categories = GiftcardCategory.objects.all()
-    products = Products.objects.all()
+def attach_merchant_to_products(products):
     for p in products:
-        # FIXIT: Following reference should be automatic if model had coherent references.
         p.merchant = Merchants.objects.get(pk=int(p.merchant_id))
-    data = {
+    return products
+
+def home(request, slug=None):
+    categories = GiftcardCategory.objects.all()
+    data = {}
+    if slug:
+        category = GiftcardCategory.objects.get(slug__exact=slug)
+        products = Products.objects.filter(category__exact=category.giftcardcategory_id)
+        data = {
+            'this_category': category,
+        }
+    else:
+        products = Products.objects.all()
+    all_product_len = Products.objects.count()
+    products = attach_merchant_to_products(products)
+    data.update({
         'categories': categories,
-        'products': products
-    }
-    return render_to_response('giftcard.html', data, context_instance=context)
+        'products': products,
+        'all_products_len': all_product_len,
+    })
+    return render_to_response('giftcard.html', data, context_instance=RequestContext(request))
 
 
 def giftcard_detail(request, gift_id):
@@ -88,24 +100,3 @@ def giftcard_custom(request, gift_id):
         'today': date.strftime("%Y-%m-%d")
     }
     return render_to_response('giftcard_custom.html', data)
-
-
-def giftcard_category(request, slug):
-    print slug
-    category = GiftcardCategory.objects.get(slug__exact=slug)
-    products_this = Products.objects.filter(category__exact=category.giftcardcategory_id)
-    for p in products_this:
-        if p.kind == '1':
-            p.price = p.price.split(',')
-        # FIXIT: Following reference should be automatic if model had coherent references.
-        p.merchant = Merchants.objects.get(pk=int(p.merchant_id))
-    products_all = Products.objects.all()
-    categories = GiftcardCategory.objects.all()
-    data = {
-        'slug': slug,
-        'title': category.name,
-        'products': products_this,
-        'products_all': products_all,
-        'categories': categories
-    }
-    return render_to_response('giftcard_category.html', data)

@@ -60,6 +60,10 @@ class GiftcardCategory(models.Model):
     status = models.CharField(db_column='category-status', max_length=255)
     parent_id = models.IntegerField(db_column='category-parent-id')
     description = models.TextField(db_column='category-description')
+
+    def count(self):
+        return Products.objects.filter(category__exact=self.giftcardcategory_id).count()
+
     class Meta:
         db_table = 'giftcard-category'
 
