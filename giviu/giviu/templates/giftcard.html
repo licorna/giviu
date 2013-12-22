@@ -27,14 +27,14 @@
       </figure>
       <h2>{{ product.title }}</h2>
       <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
-      {% if product.type_ == '1' %}
+      {% if product.kind == '1' %}
       <select class="span7 select" name="webmenu"  onchange="showValue(this.value)">
         {% for price in product.get_price %}
         <option value="{{ price }}">$ {{ price }}</option>
         {% endfor %}
       </select>
       {% endif %}
-      {% if product.type_ == '0' %}
+      {% if product.kind == '0' %}
       <strong class="span9">${{ product.get_price }}</strong>
       {% endif %}
       <a href="/giftcard/detail/{{ product.product_id }}" class="btn primary">Regalar</a>

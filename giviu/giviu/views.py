@@ -34,6 +34,9 @@ def do_logout(request):
     logout(request)
     return redirect('/')
 
+def do_register(request):
+    return render_to_response('register.html')
+
 def attach_merchant_to_products(products):
     for p in products:
         p.merchant = Merchants.objects.get(pk=int(p.merchant_id))
@@ -76,7 +79,7 @@ def giftcard_detail(request, gift_id):
         'likes': likes,
         'friends': friends,
     }
-    return render_to_response('giftcard_details.html', data)
+    return render_to_response('giftcard_details.html', data, context_instance=RequestContext(request))
 
 
 def giftcard_custom(request, gift_id):
@@ -99,4 +102,4 @@ def giftcard_custom(request, gift_id):
         'styles': style,
         'today': date.strftime("%Y-%m-%d")
     }
-    return render_to_response('giftcard_custom.html', data)
+    return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))

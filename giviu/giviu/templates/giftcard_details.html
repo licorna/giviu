@@ -30,7 +30,7 @@
     <p class="span9">{{ product.description }}</p>
     <div class="span9 value">
       <div class="span6">
-        {% if product.type_ == '1' %}
+        {% if product.kind == '1' %}
         Selecciona el valor de la giftcard
         {% else %}
         Valor giftcard
@@ -38,7 +38,7 @@
       </div>
       <form id="form">
         <div class="span3">
-          {% if product.type_ == '1' %}
+          {% if product.kind == '1' %}
           <select class="span9 select" name="product-price">
             {% for price in product.price %}
             <option value="{{ price }}">${{ price }}</option>

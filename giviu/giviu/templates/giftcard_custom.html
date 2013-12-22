@@ -20,6 +20,7 @@
       </div>
     </div>
     <form class="span9" method="post" action="/giftcard/pay" id="customForm">
+      {% csrf_token %}
       <label class="span9">
         ¿A quien le enviaras esta giftcard?
       </label>
