@@ -4,8 +4,8 @@ from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from models import GiftcardCategory, Products, Likes, Merchants, UserFriends, GiftcardStyle
-from datetime import datetime
 from hashlib import md5
+
 
 def do_login(request):
     if request.user.is_authenticated():
@@ -85,7 +85,6 @@ def giftcard_detail(request, gift_id):
 def giftcard_custom(request, gift_id):
     product = Products.objects.get(pk=gift_id)
     style = GiftcardStyle.objects.all()
-    date = datetime.now()
     if product.kind == '1':
         product.price = product.price.split(',')
         product.merchant = Merchants.objects.get(pk=product.merchant_id)
@@ -100,7 +99,6 @@ def giftcard_custom(request, gift_id):
         'likes': likes,
         'friends': friends,
         'styles': style,
-        'today': date.strftime("%Y-%m-%d")
     }
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 

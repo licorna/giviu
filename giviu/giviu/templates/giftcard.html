@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load locale_price %}
 {% block content %}
 <section class="container options">
   ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
@@ -30,12 +31,12 @@
       {% if product.kind == '1' %}
       <select class="span7 select" name="webmenu"  onchange="showValue(this.value)">
         {% for price in product.get_price %}
-        <option value="{{ price }}">$ {{ price }}</option>
+        <option value="{{ price }}">{{ price|clp }}</option>
         {% endfor %}
       </select>
       {% endif %}
       {% if product.kind == '0' %}
-      <strong class="span9">${{ product.get_price }}</strong>
+      <strong class="span9">{{ product.get_price|clp }}</strong>
       {% endif %}
       <a href="/giftcard/detail/{{ product.product_id }}" class="btn primary">Regalar</a>
 
