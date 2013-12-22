@@ -14,7 +14,7 @@
     } else {
       FB.login();
     }
-  });
+    }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
   };
 
   (function(d){
@@ -26,9 +26,9 @@
   }(document));
 
   function newuser() {
-    FB.api('/me?fields=birthday,email,first_name,last_name,gender', function(response) {
-      console.log(response.birthday);
+    FB.api('/me/', function(response) {
       $('[name="name"]').val(response.first_name);
+      $('[name="location"]').val(response.location.name);
       $('[name="lastName"]').val(response.last_name);
       $('[name="username"]').val(response.email);
       $('[name="gender"]').val(response.gender);
@@ -38,12 +38,23 @@
       $('#btn-login').slideUp('fast');
       $('.confirm').slideDown('fast');
       // cargar datos de usuario visibles //
-      $('#facebook-name').html(response.first_name+' '+response.last_name);
-      $('#facebook-birth').html(response.user_birthday);
-      $('#facebook-email').html(response.email);
+    
+      if(response.email==undefined){
+        email = '<input type="text" name="username" placeholder="ingresa tu correo electronico" class="span9 required email">';
+      }else{
+        email = response.email;
+      }
+      $('#facebook-name').html(response.first_name);
+      $('#facebook-birth').html(response.birthday);
+      $('#facebook-email').html(email);
       $('#facebook-avatar').attr('src','https://graph.facebook.com/'+response.id+'/picture?width=200&amp;height=200');
+    }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
+  }
 
-    }, {scope:'email,user_birthday'});
+  function birthday(id) {
+    FB.api('/'+id+'?fields=birthday', function(response) {
+      console.log(response);
+    }, {access_token:accesToken,scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
   }
 
 

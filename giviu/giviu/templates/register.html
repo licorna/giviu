@@ -11,7 +11,9 @@
       <center>
         <h1><span class="icon-key"></span> Ingresa a Giviu</h1>
         <p>Utilizando tu cuenta de facebook</p>
-        <a href="#" onclick="login();" class="btn facebook" id="btn-login"><span class="msg"><span class="icon-facebook"></span>Ingresa haciendo click aquí</span><img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif"></a>
+        <a href="#" class="btn facebook fb-login-button" id="btn-login"><span class="msg">Ingresa haciendo click aquí <fb:login-button scope="email user_birthday user_location"></fb:login-button></span><img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif"></a>
+        
+
         <div class="confirm">
           <div class="span3">
             <figure class="span8">
@@ -19,135 +21,27 @@
             </figure>
           </div>
           <div class="span6">
-            <ul>
-              <li id="facebook-name"></li>
-              <li id="facebook-birth"></li>
-              <li id="facebook-email"></li>
-            </ul>
+              <form method="post" id="register" action="/user/register">
+                <input type="hidden" name="name"/>
+                <input type="hidden" name="lastName"/>
+                <input type="hidden" name="username" >
+                <input type="hidden" name="gender"/>
+                <input type="hidden" name="birth"/>
+                <input type="hidden" name="location"/>
+                <input type="hidden"  name="facebookId" value="0"/>
+                <ul>
+                  <li id="facebook-name"></li>
+                  <li id="facebook-birth"></li>
+                  <li id="facebook-email"></li>
+                </ul>
+            </form>
             <a href="#" class="btn confirmBtn">ingresar</a>
           </div>
         </div>
       </center>
     </section>
-    <section class="span9 col" id="formComplete" style="display:none;">
-      <form method="post" id="register" action="/user/register">
-          <input type="hidden" name="name"/>
-          <input type="hidden" name="lastName"/>
-          <input type="hidden" name="username" >
-          <input type="hidden" name="gender"/>
-          <input type="hidden" name="birth"/>
-          <input type="hidden"  name="facebookId" value="0"/>
-        </div>
-      </form>
-    </section>
-
-
   </section>
 
 </section>
 <script src="{% static "js/facebookconnect.js" %}"></script>
-<script>
-
-  $(document).ready(function(){
-    $('#register').validate();
-    $('#changeOption').click(function(){
-    formNormal('0');
-  });
-
-  $('#username').focusout(function(){
-  var url = "/interaction/userByMail";
-  var email = $(this).val();
-  $('#register input').attr('disabled','disabled')
-  $.get( url, { u: email} )
-  .done(function( data ) {
-  var data = data.replace(/^\s+|\s+$/g, '');
-  if(data=='1'){
-  $('#username').val('').focus();
-  $('#recovery').slideDown('fast');
-  $('#register input').removeAttr('disabled')
-  }else{
-  $('#recovery').slideUp('fast');
-  $('#register input').removeAttr('disabled')
-  }
-  });
-  })
-  $( "#datepicker" ).datepicker({
-  changeMonth: true,
-  changeYear: true,
-  monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
-  dateFormat: "dd/mm/yy",
-  defaultDate: -1,
-  yearRange: "1930:2013"
-  });
-
-  $('#continue').click(function(e){
-  e.preventDefault();
-  formComplete()
-  })
-  defineUbication()
-
-  /*$.get( "/interaction/region")
-  .done(function( data ) {
-  $('.region').html(data);
-  });*/
-
-
-  $('.region').change(function(){
-  provincia($(this).val());
-  })
-
-  $('.provincia').change(function(){
-  comuna($(this).val());
-  })
-
-
-  function defineUbication(){
-  $('.local').each(function(){
-  var id          = $(this).attr('data-id');
-  var selected = $(this).attr('data-selected');
-  var selected = parseInt(selected);
-  var type        = $(this).attr('name');
-  ajaxDefineUbication(id,type,selected);
-  })
-  }
-
-  function ajaxDefineUbication(id, type,selected){
-  var url = "/interaction/"+type;
-  $.get( url, { u: id, s: selected} )
-  .done(function( data ) {
-  $('.'+type).html(data);
-  });
-  }
-
-  function region(regionId){
-  $.get( "/interaction/region", { u: id} )
-  .done(function( data ) {
-  $('.region').html(data);
-  });
-  }
-
-  function provincia(regionId){
-  $.get( "/interaction/provincia", { u: regionId} )
-  .done(function( data ) {
-  $('.provincia').html(data);
-  });
-  }
-  function comuna(provinciaId){
-  $.get( "/interaction/comuna", { u: provinciaId} )
-  .done(function( data ) {
-  $('.comuna').html(data);
-  });
-  }
-
-  function formComplete(facebookId){
-  $('#selecttype').addClass('up');
-  $('#registercontent').addClass('big');
-  $('[name="facebookId"').val(facebookId);
-  }
-
-
-
-  })
-
-</script>
 {% endblock %}

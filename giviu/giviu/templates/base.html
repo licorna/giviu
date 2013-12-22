@@ -20,6 +20,7 @@
     <script src="{% static "js/jquery.tipsy.js" %}"></script>
     <script src="{% static "js/modernizr.min.js" %}"></script>
     <script src="{% static "js/global.js" %}"></script>
+    <script src="{% static "js/session.js" %}"></script>
 
     <meta property="fb:admins" content="esteldesign"/>
     <!--<meta property="fb:app_id" content="434125903369455"/>-->
@@ -67,16 +68,29 @@
         <?if($header!='enterprise'){?>
         <nav class="span7 col showyourlove">
           <ul>
-            {% if user.is_authenticated %}
+            <!--{% if user.is_authenticated %}
             <li><a href="/logout" class="btn secondary logout"><span class="icon-close"></span></a></li>
             <li><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
             <li><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
-            <li><a href="/user/profile" class="normal"><span class="icon-pencil"></span> Hola {{ user.name }}</a></li>
+            <li><a href="/user/profile" class="normal"><span class="icon-pencil"></span> Bienvenido {{ user.name }}</a></li>
             {% else %}
             <li><a href="/register" class="btn secondary"> Regístrate</a></li>
             <li><a href="/login" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
             <li><a href="/pages/how" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
-            {% endif %}
+            {% endif %}-->
+            <li class="logged"><a href="/logout" class="btn secondary logout"><span class="icon-close"></span></a></li>
+            <li class="logged"><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
+            <li class="logged"><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
+            <li class="logged" id="userInfo">
+              <a href="/user/profile" class="normal">
+                <figure class="avatarHeader"></figure> 
+                <span class="name">Hola <strong id="session-name"></strong></span>
+              </a>
+            </li>
+            
+            <li class="not-logged"><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
+            <li class="not-logged"><a href="/pages/how" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+         
           </ul>
         </nav>
         <?}?>
@@ -119,8 +133,7 @@
           Para hacer like debes ingresar
         </div>
         <div class="span9" id="likeLoginAction">
-          <a href="/user/login" class="login">Ingresa aquí</a>
-          <small class="span9"><a href="/user/register">¿Aun no estas registrado?</a></small>
+          <a href="/register" class="login">Ingresa aquí</a>
         </div>
       </div>
     </span>

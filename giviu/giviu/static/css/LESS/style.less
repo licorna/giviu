@@ -440,6 +440,26 @@ header h1{
 nav{
   margin: 15px 0 7px 0;
   padding-right:15px;
+  .logged{
+    display:none;
+  }
+  #userInfo{
+    width:auto;
+    .avatarHeader{
+      border-radius:50%;
+      width:40px;
+      height:40px;
+      overflow:hidden;
+      display:inline-block;
+      float:left;
+      margin-right:0px;
+      margin-top:-6px;
+      border:2px solid @greyBorder;
+    }
+    .name{
+    margin-top:5px;
+    }
+  }
   &.showyourlove{
     font-size:16px;
     text-align:right;
