@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^login$', 'giviu.views.do_login', name='login'),
     url(r'^logout$', 'giviu.views.do_logout', name='logout'),
     url(r'^register$', 'giviu.views.do_register', name='register'),
+    url(r'^giftcard/pay$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

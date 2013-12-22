@@ -103,3 +103,24 @@ def giftcard_custom(request, gift_id):
         'today': date.strftime("%Y-%m-%d")
     }
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
+
+
+def giftcard_confirmation(request):
+    if request.method != 'POST':
+        return redirect('/')
+
+    product = Products.objects.get(pk=int(request.POST['product-id']))
+    merchant = Merchants.objects.get(pk=int(request.POST['product-merchant-id']))
+
+    data = {
+        'send_to': request.POST['send-to'],
+        'email_to': request.POST['email-to'],
+        'send_date': request.POST['send-date'],
+        'comment': request.POST['comment'],
+        'product': product,
+        'merchant': merchant
+    }
+
+    data.update(csrf(request))
+
+    return render_to_response('pay_confirmation.html', data, context_instance=RequestContext(request))

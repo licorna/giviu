@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container steps">
+  <span class="stepIndicator">
+    3
+  </span>
+  <span class="actualStep">Seleccionar giftcard / presonalizar gitcard / pagar</span>
+</section>
+
+<section class="container pay">
+  <h2>Confirmación de compra</h2>
+  <div class="span9 paymentInfo">
+    <div class="span3">
+      <figure class="span9">
+        <img src="/static/img/giftcards/{{ style.image }}">
+      </figure>
+
+    </div>
+    <div class="span6 col">
+      <h3>{{ product.merchant.name }}</h3>
+
+      <strong class="price">$ {{ product.get_price }}</strong>
+
+      <ul>
+        <li><strong>Se le enviara a: </strong> {{ send_to }}</li>
+        <li><strong>Al correo: </strong> {{ email_to }}</li>
+        <li><strong>El día: </strong> {{ send_date }}</li>
+        <li><strong>Mensaje: </strong> {{ comment }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="span9 stepAction">
+    <form method="post" action="/giftcard/create/">
+      <input type="hidden" name="parentId" value="<? echo $_POST['product-merchant-id']; ?>">
+      <input type="hidden" name="sendDate" value="<? echo $_POST['send-date']; ?>">
+      <input type="hidden" name="giftcardTo" value="<? echo $_POST['send-to']; ?>">
+      <input type="hidden" name="giftcardEmail" value="<? echo $_POST['email-to']; ?>">
+      <input type="hidden" name="giftcardComment" value="<? echo $_POST['comment'];?>">
+      <input type="hidden" name="giftcardStyle" value="<? echo $_POST['giftcard-design'];?>">
+      <input type="hidden" name="giftcardprice" value="<?echo  $_POST['product-price']; ?>">
+      <input type="hidden" name="giftcardProductId" value="<? echo $_POST['product-id'];?>">
+      <input type="submit" value="Pagar"  class="span2 btn primary">
+    </form>
+
+    <!--<a href="/giftcard/custom" class="span1 btn secondary">
+        Modificar
+        </a>-->
+  </div>
+
+</section>
+{% endblock %}
