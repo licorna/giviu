@@ -9,7 +9,6 @@
   FB.Event.subscribe('auth.authResponseChange', function(response) {
     if (response.status === 'connected') {
       newuser();
-      $('#changeAccount').show();
     } else if (response.status === 'not_authorized') {
       FB.login();
     } else {
@@ -27,20 +26,24 @@
   }(document));
 
   function newuser() {
-    FB.api('/me', function(response) {
-      console.log(response);
+    FB.api('/me?fields=birthday,email,first_name,last_name,gender', function(response) {
+      console.log(response.birthday);
       $('[name="name"]').val(response.first_name);
       $('[name="lastName"]').val(response.last_name);
       $('[name="username"]').val(response.email);
       $('[name="gender"]').val(response.gender);
       $('[name="birth"]').val(response.birthday);
       $('[name="facebookId"]').val(response.id);
-      $('#selecttype').addClass('up');
-      $('#registercontent').addClass('big');
       $('#fb-show-sheet').remove();
-      $('.msg').show();
-      $('.loader').hide();
-    }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
+      $('#btn-login').slideUp('fast');
+      $('.confirm').slideDown('fast');
+      // cargar datos de usuario visibles //
+      $('#facebook-name').html(response.first_name+' '+response.last_name);
+      $('#facebook-birth').html(response.user_birthday);
+      $('#facebook-email').html(response.email);
+      $('#facebook-avatar').attr('src','https://graph.facebook.com/'+response.id+'/picture?width=200&amp;height=200');
+
+    }, {scope:'email,user_birthday'});
   }
 
 
@@ -56,3 +59,7 @@
     FB.logout();
   }
 
+  $('.confirmBtn').click(function(e){
+     e.preventDefault();
+     $('#register').submit(); 
+  })

@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block content %}
-<section class="container register">
-  <h1>Registrate</h1>
+<section class="register">
   <section id="registercontent">
     <section class="span9 image" id="selecttype">
       <br/>
@@ -10,59 +9,34 @@
       <br/>
       <br/>
       <center>
-        <a href="#" onclick="login();" class="btn facebook"><span class="msg"><span class="icon-facebook"></span> Registrate utilizando facebook (recomendado)</span> <span style="display:none;" class="loader">Esto puede tardar unos segundos <img src="<? echo $GLOBALS["baseURL"]; ?>/frontend/image/loginloader.gif"></span></a>
-        <br/>
-        o
-        <br/>
-        <br/>
-        <a href="#" id="continue">Ingresa tus datos manualmente</a>
+        <h1><span class="icon-key"></span> Ingresa a Giviu</h1>
+        <p>Utilizando tu cuenta de facebook</p>
+        <a href="#" onclick="login();" class="btn facebook" id="btn-login"><span class="msg"><span class="icon-facebook"></span>Ingresa haciendo click aquí</span><img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif"></a>
+        <div class="confirm">
+          <div class="span3">
+            <figure class="span8">
+              <img class="span9" id="facebook-avatar" src="">          
+            </figure>
+          </div>
+          <div class="span6">
+            <ul>
+              <li id="facebook-name"></li>
+              <li id="facebook-birth"></li>
+              <li id="facebook-email"></li>
+            </ul>
+            <a href="#" class="btn confirmBtn">ingresar</a>
+          </div>
+        </div>
       </center>
     </section>
-    <div class="span1 medio col">
-      .
-    </div>
-    <section class="span9 col" id="formComplete">
+    <section class="span9 col" id="formComplete" style="display:none;">
       <form method="post" id="register" action="/user/register">
-        <div class="span5">
-          <label class="span9">Tu nombre</label>
-          <input type="text" name="name" class="span8 required"/>
-          <label class="span9">Tu apellido</label>
-          <input type="text" name="lastName" class="span8 required"/>
-          <label class="span9">Tu correo electrónico</label>
-          <input type="text" name="username" class="span8 required email" id="username"/>
-          <div class="span8 msg alert" id="recovery" style="font-size:0.8em; display:none;">
-            <span class="icon-shocked"></span> Este correo ya figura en nuestros registros <a href="/user/recoveryPass">¿has olvidado tu contraseña?</a>
-          </div>
-          <label class="span9">Ingresa una contraseña</label>
-          <input type="password" name="pass" class="span8 required"/>
-          <label class="span9">Re-ingresa una contraseña</label>
-          <input type="password"  name="pass"class="span8 required"/>
-        </div>
-
-        <div class="span4 col">
-          <label class="span9">Sexo</label>
-          <select class="span8" name="gender">
-            <option value="male">Masculino</option>
-            <option value="female">Femenino</option>
-          </select>
-          <label class="span9">Fecha de nacimiento</label>
-          <input type="text" class="span8 required" id="datepicker" name="birth"/>
-          <label class="span9">Ubicación</label>
-          <select class="span8  region required local required" name="region" data-id="" data-selected="7">
-
-          </select>
-          <select class="span8  provincia required local required" name="provincia" data-id="7" data-selected="25">
-
-          </select>
-          <select class="span8  comuna required local required" name="comuna" data-id="25" data-selected="115">
-
-          </select>
+          <input type="hidden" name="name"/>
+          <input type="hidden" name="lastName"/>
+          <input type="hidden" name="username" >
+          <input type="hidden" name="gender"/>
+          <input type="hidden" name="birth"/>
           <input type="hidden"  name="facebookId" value="0"/>
-
-          <div class="span8" style="text-align:right;">
-            <a id="changeAccount" onclick="changeAccount();" href="#" style="display:none;" class="btn neutral">Cambiar cuenta de fb</a>
-            <input type="submit" value="Registrar" class="btn primary">
-          </div>
         </div>
       </form>
     </section>
@@ -72,13 +46,12 @@
 
 </section>
 <script src="{% static "js/facebookconnect.js" %}"></script>
-
 <script>
 
   $(document).ready(function(){
-  $('#register').validate();
-  $('#changeOption').click(function(){
-  formNormal('0');
+    $('#register').validate();
+    $('#changeOption').click(function(){
+    formNormal('0');
   });
 
   $('#username').focusout(function(){
@@ -172,10 +145,7 @@
   $('[name="facebookId"').val(facebookId);
   }
 
-  function formNormal(){
-  $('#selecttype').removeClass('up');
-  $('#registercontent').removeClass('big');
-  }
+
 
   })
 
