@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load locale_price %}
 {% block content %}
 <section class="container steps">
   <span class="stepIndicator">
@@ -41,12 +42,12 @@
           {% if product.kind == '1' %}
           <select class="span9 select" name="product-price">
             {% for price in product.price %}
-            <option value="{{ price }}">${{ price }}</option>
+            <option value="{{ price }}">{{ price|clp }}</option>
             {% endfor %}
           </select>
 
           {% else %}
-          <strong class="span9 productPrice">$ {{ product.price }}</strong>
+          <strong class="span9 productPrice">{{ product.price|clp }}</strong>
           <input type="hidden" name="product-price" value="{{ product.price }}"/>
           {% endif %}
         </div>
