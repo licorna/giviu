@@ -115,6 +115,8 @@ def giftcard_confirmation(request):
         'email_to': request.POST['email-to'],
         'send_date': request.POST['send-date'],
         'comment': request.POST['comment'],
+        'price': request.POST['product-price'],
+        'giftcard_design': request.POST['giftcard-design'],
         'product': product,
         'merchant': merchant
     }

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load locale_price %}
 {% block content %}
 <section class="container steps">
   <span class="stepIndicator">
@@ -19,7 +20,7 @@
     <div class="span6 col">
       <h3>{{ product.merchant.name }}</h3>
 
-      <strong class="price">$ {{ product.get_price }}</strong>
+      <strong class="price">{{ price|clp }}</strong>
 
       <ul>
         <li><strong>Se le enviara a: </strong> {{ send_to }}</li>
@@ -31,14 +32,14 @@
   </div>
   <div class="span9 stepAction">
     <form method="post" action="/giftcard/create/">
-      <input type="hidden" name="parentId" value="<? echo $_POST['product-merchant-id']; ?>">
-      <input type="hidden" name="sendDate" value="<? echo $_POST['send-date']; ?>">
-      <input type="hidden" name="giftcardTo" value="<? echo $_POST['send-to']; ?>">
-      <input type="hidden" name="giftcardEmail" value="<? echo $_POST['email-to']; ?>">
-      <input type="hidden" name="giftcardComment" value="<? echo $_POST['comment'];?>">
-      <input type="hidden" name="giftcardStyle" value="<? echo $_POST['giftcard-design'];?>">
-      <input type="hidden" name="giftcardprice" value="<?echo  $_POST['product-price']; ?>">
-      <input type="hidden" name="giftcardProductId" value="<? echo $_POST['product-id'];?>">
+      <input type="hidden" name="parentId" value="{{ product.merchant.id }}">
+      <input type="hidden" name="sendDate" value="{{ send_date }}">
+      <input type="hidden" name="giftcardTo" value="{{ send_to }}">
+      <input type="hidden" name="giftcardEmail" value="{{ email_to }}">
+      <input type="hidden" name="giftcardComment" value="{{ comment }}">
+      <input type="hidden" name="giftcardStyle" value="{{ giftcard_design }}">
+      <input type="hidden" name="giftcardprice" value="{{ price }}">
+      <input type="hidden" name="giftcardProductId" value="{{ product.product_id }}">
       <input type="submit" value="Pagar"  class="span2 btn primary">
     </form>
 

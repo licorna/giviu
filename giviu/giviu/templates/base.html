@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="Pragma" content="no-cache">
-    <title>Giviu - {{ title }} </title>
+    <title>Giviu {% if title %}- {{ title }}{% endif %}</title>
     <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
     <link rel="stylesheet/less" type="text/css" href="{% static "css/LESS/style.less" %}"/>
     <link rel="stylesheet" href="{% static "css/jquery-ui.css" %}"/>
@@ -24,7 +24,7 @@
 
     <meta property="fb:admins" content="esteldesign"/>
     <!--<meta property="fb:app_id" content="434125903369455"/>-->
-    <meta itemprop="name" content="Giviu - Busca, personaliza y envia giftcards a quien quieras <? echo $title;?>">
+    <meta itemprop="name" content="Giviu - Busca, personaliza y envia giftcards a quien quieras {{ title }}">
     <meta itemprop="description" content="Busca personaliza y envia giftcards a quien quieras">
     <meta name="description" content="Busca personaliza y envia giftcards a quien quieras" />
     <meta name="news_keywords" content="Giftcard, giftcards,regalo, regalos, regalos especiales, gift, card" />
@@ -65,7 +65,6 @@
         <div class="span2">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
         </div>
-        <?if($header!='enterprise'){?>
         <nav class="span7 col showyourlove">
           <ul>
             <!--{% if user.is_authenticated %}
@@ -93,26 +92,11 @@
          
           </ul>
         </nav>
-        <?}?>
-          <div class="mobileActions" style="display:none;">
-            <a href="#" class="btn secondary"><span class="icon-menu"></span></a>
-          </div>
+        <div class="mobileActions" style="display:none;">
+          <a href="#" class="btn secondary"><span class="icon-menu"></span></a>
+        </div>
       </div>
     </header>
-        <nav class="mobile" style="display:none;">
-          <ul>
-            {% if is_logged_in %}
-            <li><a href="?session=off" >Cerrar sesion</a></li>
-            <li><a href="/user/calendar">Mis fechas</a></li>
-            <li><a href="/user/sender">Mis giftcards</a></li>
-            <li><a href="/user/profile"> Bienvenid<?if($_SESSION['user-gender']=="male"){?>o<?}else{?>a<?}?> <strong><? echo $_SESSION['user-name'];?></strong></a></li>
-            {% else %}
-            <li><a href="/user/register">Regístrate</a></li>
-            <li><a href="/user/login">Ingresa</a></li>
-            {% endif %}
-          </ul>
-        </nav>
-
     <div id="alertMessage" style="display:none;">
       <h2 id="alertTitle">alert</h2>
       <div class="close" data-close="alertMessage">
