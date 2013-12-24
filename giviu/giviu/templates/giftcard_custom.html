@@ -71,22 +71,22 @@
 <script>
   $(document).ready(function(){
 
+  $('#customForm').validate();
+
   var productInfo = localStorage['product-info']; // define this in "detail" localstorage;
   var productInfo = productInfo.split('&');
-  var price               = productInfo[0].split('=');
-  var price               = price[1];
-  var price               = price.replace('+','');
-  var id                  = productInfo[1].split('=');
-  var id                  = id[1];
+  var price       = productInfo[0].split('=');
+  var price       = price[1];
+  var price       = price.replace('+','');
+  var id          = productInfo[1].split('=');
+  var id          = id[1];
 
   $('#price').html("$"+separador(price));
   $('[name="product-price"]').val(price)
 
   $('.nameTo').keyup(function(){
-  $('.name').html($(this).val());
+    $('.name').html($(this).val());
   })
-
-  $('#customForm').validate();
 
   $('#custom').click(function(e){
   e.preventDefault();
@@ -94,15 +94,15 @@
   });
 
   $( "#datepicker" ).datepicker({
-  showOtherMonths: true,
-  selectOtherMonths: true,
-  monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
-  monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-  dateFormat: "yy-mm-d",
-  defaultDate: -1,
-  autoSize: true,
-  maxDate: "+1m",
-  minDate: "0"
+    showOtherMonths: true,
+    selectOtherMonths: true,
+    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+    dateFormat: "yy-mm-d",
+    defaultDate: -1,
+    autoSize: true,
+    maxDate: "+1m",
+    minDate: "0"
   });
 
   });
