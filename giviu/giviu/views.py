@@ -32,8 +32,9 @@ def do_register(request):
     if request.method == 'POST':
         if 'facebookId' in request.POST:
             fbid = request.POST['facebookId']
-            user = Users.objects.get(fb_id__exact=fbid)
-            if not user:
+            try:
+                user = Users.objects.get(fb_id__exact=fbid)
+            except Users.DoesNotExist:
                 print 'creando un nuevo usuario'
                 bday = request.POST['birth']
                 user = Users.objects.create_user(fbid, fbid, bday)
