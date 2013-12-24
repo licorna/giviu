@@ -1,41 +1,56 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
-from models import GiftcardCategory, Products, Likes, Merchants, UserFriends, GiftcardStyle
+from models import (
+    GiftcardCategory, Products, Likes, Merchants, UserFriends, GiftcardStyle,
+    Users
+)
 from hashlib import md5
 
 
-def do_login(request):
-    if request.user.is_authenticated():
-        # if user is already logged in, return to home
-        return redirect('/')
-    c = {}
-    c.update(csrf(request))
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['pass']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect('/')
-        else:
-            # TODO: improve way of user alerting.
-            return redirect('/login?message=invalid')
+def do_login(request, fbid=None):
+    #if request.user.is_authenticated():
+    #    # if user is already logged in, return to home
+    #    return redirect('/')
 
-    # TODO: same here, improve this ugly snippet
-    if 'message' in request.GET:
-        c['message'] = request.GET['message']
-    return render_to_response('login.html', c, context_instance=RequestContext(request))
+    if fbid:
+        user = authenticate(username=fbid, password=fbid)
+        if user is not None:
+            login(request, user)
+            return True
+
+    return False
+
 
 def do_logout(request):
     logout(request)
     return redirect('/')
 
 def do_register(request):
-    return render_to_response('register.html')
+    if request.method == 'POST':
+        if 'facebookId' in request.POST:
+            fbid = request.POST['facebookId']
+            user = Users.objects.get(fb_id__exact=fbid)
+            if not user:
+                print 'creando un nuevo usuario'
+                bday = request.POST['birth']
+                user = Users.objects.create_user(fbid, fbid, bday)
+            if user:
+                user = authenticate(username=fbid, password=fbid)
+                if not user:
+                    return HttpResponseBadRequest
+                login(request, user)
+                return redirect('/')
+            else:
+                print 'no se pudo crear el usuario siii'
+        else:
+            return HttpResponseBadRequest()
+
+    c = {}
+    c.update(csrf(request))
+    return render_to_response('register.html', c, context_instance=RequestContext(request))
 
 def attach_merchant_to_products(products):
     for p in products:
@@ -120,7 +135,6 @@ def giftcard_confirmation(request):
         'product': product,
         'merchant': merchant
     }
-
     data.update(csrf(request))
 
     return render_to_response('pay_confirmation.html', data, context_instance=RequestContext(request))

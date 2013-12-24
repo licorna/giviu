@@ -13,6 +13,7 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from datetime import datetime
 
 class Calendar(models.Model):
     user_id = models.IntegerField(db_column='calendar-user-id')
@@ -226,16 +227,16 @@ class UserFriends(models.Model):
         db_table = 'user-friends'
 
 class GiviuUserManager(BaseUserManager):
-    def create_user(self, email, date_of_birth, password=None):
+    def create_user(self, fbid, password, date_of_birth):
         """
         Creates and saves a User with the given email, date of
         birth and password.
         """
-        if not email:
+        if not fbid:
             raise ValueError('Users must have an email address')
 
         user = self.model(
-            email=self.normalize_email(email),
+            fb_id=fbid,
             birthday=date_of_birth,
         )
 
@@ -243,12 +244,12 @@ class GiviuUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, date_of_birth, password):
+    def create_superuser(self, fbid, password, date_of_birth):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
-        user = self.create_user(email,
+        user = self.create_user(fbid,
             password=password,
             birthday=date_of_birth
         )
@@ -256,7 +257,11 @@ class GiviuUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+def get_today():
+    return datetime.now().strftime('%Y-%m-%d')
+
 class Users(AbstractBaseUser):
+
     user_id = models.IntegerField(db_column='user-id', primary_key=True)
     name = models.CharField(db_column='user-name', max_length=255)
     last_name = models.CharField(db_column='user-last-name', max_length=255)
@@ -269,11 +274,10 @@ class Users(AbstractBaseUser):
     comuna = models.CharField(db_column='user-comuna', max_length=255)
     gpassword = models.CharField(db_column='user-password', max_length=255)
     friends = models.TextField(db_column='user-friends')
-    creation_date = models.DateField(db_column='user-creation-date')
-    last_log_off = models.DateField(db_column='user-last-log-off')
+    creation_date = models.DateField(db_column='user-creation-date', default=lambda:get_today())
+    last_log_off = models.DateField(db_column='user-last-log-off', default=lambda:get_today())
     avatar = models.CharField(db_column='user-avatar', max_length=255)
-    favorite_category = models.IntegerField(db_column='user-favorite-category')
-    last_purchase = models.DateField(db_column='user-last-purchase')
+    last_purchase = models.DateField(db_column='user-last-purchase', default=lambda:get_today())
     _hash = models.CharField(db_column='user-hash', max_length=255)
     fb_id = models.CharField(db_column='user-fb-id', max_length=25, unique=True)
 
@@ -281,7 +285,7 @@ class Users(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     objects = GiviuUserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'fb_id'
     REQUIRED_FIELDS = ['birthday']
 
     def get_full_name(self):
