@@ -40,10 +40,7 @@ def do_register(request):
             if user:
                 user = authenticate(username=fbid, password=fbid)
                 if not user:
-                    user.set_password(fbid)
-                    user = authenticate(username=fbid, password=fbid)
-                    if not user:
-                        return HttpResponseBadRequest()
+                    return HttpResponseBadRequest()
                 login(request, user)
                 return redirect('/')
             else:
