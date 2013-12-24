@@ -28,7 +28,7 @@
     {% for product in products %}
     <article class="giftCardModule" data-source-id="{{ product.product_id }}">
       <figure>
-        <span class="like {% if not is_logged_in %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
+        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
         <img src="{{ product.image }}">
       </figure>
       <h2>{{ product.title }}</h2>
