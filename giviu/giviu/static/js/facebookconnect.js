@@ -37,15 +37,46 @@
             $('#facebook-name').html('<strong>Bienvenido nuevamente</strong> '+response.first_name);
           },
           404:function(){
-            $('#register').append('<input type="hidden" name="name" value="'+response.first_name+'">');
-            $('#register').append('<input type="hidden" name="location" value="'+response.location.name+'">');
-            $('#register').append('<input type="hidden" name="lastName" value="'+response.last_name+'">');
-            $('#register').append('<input type="hidden" name="email" value="'+response.email+'">');
-            $('#register').append('<input type="hidden" name="gender" value="'+response.gender+'">');
-            $('#register').append('<input type="hidden" name="birth" value="'+response.birthday+'">');
+            if(response.first_name==undefined){
+              first_name = '';
+            }else{
+              first_name = response.first_name;
+            }            
+            if(response.location.name==undefined){
+              location_name = '';
+            }else{
+              location_name = response.location.name;
+            }            
+            if(response.last_name==undefined){
+              last_name = '';
+            }else{
+              last_name = response.last_name;
+            }            
+            if(response.email==undefined){
+              email = '';
+            }else{
+              email = response.email;
+            }            
+            if(response.gender==undefined){
+              gender = '';
+            }else{
+              gender = response.gender;
+            }            
+            if(response.birthday==undefined){
+              birthday = '';
+            }else{
+              birthday = response.birthday;
+            }            
+
+            $('#register').append('<input type="hidden" name="name" value="'+first_name+'">');
+            $('#register').append('<input type="hidden" name="location" value="'+location_name+'">');
+            $('#register').append('<input type="hidden" name="lastName" value="'+last_name+'">');
+            $('#register').append('<input type="hidden" name="email" value="'+email+'">');
+            $('#register').append('<input type="hidden" name="gender" value="'+gender+'">');
+            $('#register').append('<input type="hidden" name="birth" value="'+birthday+'">');
             $('#register').append('<input type="hidden" name="facebookId" value="'+response.id+'">');
-            $('#facebook-name').html(response.first_name);
-            $('#facebook-birth').html(response.birthday);
+            $('#facebook-name').html(first_name);
+            $('#facebook-birth').html(birthday);
             $('#facebook-email').html(email);
           }
         }
@@ -56,7 +87,7 @@
       // cargar datos de usuario visibles //
     
       if(response.email==undefined){
-        email = '<input type="text" name="username" placeholder="ingresa tu correo electronico" class="span9 required email">';
+        email = '<input type="text" name="email" placeholder="ingresa tu correo electronico" class="span9 required email">';
       }else{
         email = response.email;
       }
