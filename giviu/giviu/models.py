@@ -275,7 +275,7 @@ class Users(AbstractBaseUser):
     favorite_category = models.IntegerField(db_column='user-favorite-category')
     last_purchase = models.DateField(db_column='user-last-purchase')
     _hash = models.CharField(db_column='user-hash', max_length=255)
-    fb_id = models.CharField(db_column='user-fb-id', max_length=25)
+    fb_id = models.CharField(db_column='user-fb-id', max_length=25, unique=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
