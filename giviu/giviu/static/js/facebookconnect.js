@@ -26,6 +26,7 @@
   }(document));
 
   function newuser() {
+    showPreload();
     FB.api('/me/', function(response) {
       $.ajax({
         type: "GET",
@@ -92,8 +93,12 @@
      e.preventDefault();
      $('#register').submit(); 
   })
+  function showPreload(){
+    $('#btn-login').slideUp('fast');
+    $('.loader').slideDown('fast');
+  }
 
   function showInfo(){
-      $('#btn-login').slideUp('fast');
-      $('.confirm').slideDown('fast');
+      $('.loader').delay(2000).slideUp('fast');
+      $('.confirm').delay(2000).slideDown('fast');
   }
