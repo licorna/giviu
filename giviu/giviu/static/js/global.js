@@ -1,8 +1,7 @@
 $(document).ready(function(e){
 
-    reviewListLikes();
-    reviewLike();
-
+    //reviewListLikes();
+    //reviewLike();
 
     $(".like").click(function(){
         if($(this).hasClass('disabled')){
@@ -25,7 +24,6 @@ $(document).ready(function(e){
         infinite: false,
         responsive: true,
 		scroll		: {
-			
 			onAfter : function( data ) { 
 				var actualPosition = parseInt($('.selected').html());
 				var actualPosition = actualPosition+1;

@@ -53,19 +53,4 @@
 
 </section>
 
-<script>
-  $(document).ready(function(){
-  $('.category').each(function(){
-  var anchor      = $('a',this)
-  var categoryId = anchor.attr('data-id');
-  var url = '/giftcard/byCategory';
-  $.get(url, { u: categoryId } )
-  .done(function( data ) {
-  $('#count'+categoryId).html(data);
-  });
-  });
-  });
-</script>
-
-
 {% endblock %}
