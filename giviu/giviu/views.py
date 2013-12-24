@@ -10,20 +10,6 @@ from models import (
 from hashlib import md5
 
 
-def do_login(request, fbid=None):
-    #if request.user.is_authenticated():
-    #    # if user is already logged in, return to home
-    #    return redirect('/')
-
-    if fbid:
-        user = authenticate(username=fbid, password=fbid)
-        if user is not None:
-            login(request, user)
-            return True
-
-    return False
-
-
 def do_logout(request):
     logout(request)
     return redirect('/')
@@ -35,9 +21,13 @@ def do_register(request):
             try:
                 user = Users.objects.get(fb_id__exact=fbid)
             except Users.DoesNotExist:
-                print 'creando un nuevo usuario'
                 bday = request.POST['birth']
-                user = Users.objects.create_user(fbid, fbid, bday)
+                user = Users.objects.create_user(fbid, fbid, bday,
+                                                 email=request.POST['email'],
+                                                 location=request.POST['location'],
+                                                 name=request.POST['name'],
+                                                 lastName=request.POST['lastName'],
+                                                 gender=request.POST['gender'])
             if user:
                 user = authenticate(username=fbid, password=fbid)
                 if not user:
@@ -45,7 +35,7 @@ def do_register(request):
                 login(request, user)
                 return redirect('/')
             else:
-                print 'no se pudo crear el usuario siii'
+                print 'LOG: No se pudo crear el usuario'
         else:
             return HttpResponseBadRequest()
 

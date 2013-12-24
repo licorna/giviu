@@ -227,7 +227,7 @@ class UserFriends(models.Model):
         db_table = 'user-friends'
 
 class GiviuUserManager(BaseUserManager):
-    def create_user(self, fbid, password, date_of_birth):
+    def create_user(self, fbid, password, date_of_birth, **kwargs):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -241,8 +241,21 @@ class GiviuUserManager(BaseUserManager):
         )
 
         user.set_password(password)
+
+        if 'email' in kwargs:
+            user.email = kwargs['email']
+        if 'location' in kwargs:
+            user.location = kwargs['location']
+        if 'name' in kwargs:
+            user.name = kwargs['name']
+        if 'lastName' in kwargs:
+            user.last_name = kwargs['lastName']
+        if 'gender' in kwargs:
+            user.gender = kwargs['gender']
+
         user.save(using=self._db)
         return user
+
 
     def create_superuser(self, fbid, password, date_of_birth):
         """
@@ -254,6 +267,7 @@ class GiviuUserManager(BaseUserManager):
             birthday=date_of_birth
         )
         user.is_admin = True
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
