@@ -84,6 +84,20 @@
         </div>
       </div>
     </header>
+        <nav class="mobile" style="display:none;">
+          <ul>
+            {% if user.is_authenticated %}
+            <li><a href="?session=off" >Cerrar sesion</a></li>
+            <li><a href="/user/calendar">Mis fechas</a></li>
+            <li><a href="/user/sender">Mis giftcards</a></li>
+            <li><a href="/user/profile"> Hola <strong>{{ user.name }}</strong></a></li>
+            {% else %}
+            <li><a href="/register">Ingresa</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+
+
     <div id="alertMessage" style="display:none;">
       <h2 id="alertTitle">alert</h2>
       <div class="close" data-close="alertMessage">
