@@ -53,6 +53,22 @@ class Discount(models.Model):
     class Meta:
         db_table = 'discount'
 
+class BuyIntention(models.Model):
+    uuid = models.CharField(max_length=36, unique=True)
+
+    # Following columns are foreign keys
+    #user = models.CharField()
+    #receiver = models.CharField()
+    #design = models.CharField()
+    #price = models.IntegerField()
+    #comment = models.IntegerField()
+    #giftcard = models.CharField()
+
+    # TODO: change to appropiate enum field
+    state = models.CharField(max_length=30)
+
+
+
 class GiftcardCategory(models.Model):
     giftcardcategory_id = models.IntegerField(db_column='category-id', primary_key=True)
     name = models.CharField(db_column='category-name', max_length=255)
