@@ -28,20 +28,28 @@
   function newuser() {
     FB.api('/me/', function(response) {
       $.ajax({
-        url: "test.html",
-        cache: false
-      })
-      .done(function( html ) {
-        $( "#results" ).append( html );
+        type: "GET",
+        url: "/api/users/exists-by-fb/"+response.id,
+        cache: false,
+        statusCode: {
+          200: function() {
+            $('#register').append('<input type="hidden" name="facebookId" value="'+response.id+'">');
+            $('#facebook-name').html('<strong>Bienvenido nuevamente</strong> '+response.first_name);
+          },
+          404:function(){
+            $('#register').append('<input type="hidden" name="name" value="'+response.first_name+'">');
+            $('#register').append('<input type="hidden" name="location" value="'+response.location.name+'">');
+            $('#register').append('<input type="hidden" name="lastName" value="'+response.last_name+'">');
+            $('#register').append('<input type="hidden" name="email" value="'+response.email+'">');
+            $('#register').append('<input type="hidden" name="gender" value="'+response.gender+'">');
+            $('#register').append('<input type="hidden" name="birth" value="'+response.birthday+'">');
+            $('#register').append('<input type="hidden" name="facebookId" value="'+response.id+'">');
+            $('#facebook-name').html(response.first_name);
+            $('#facebook-birth').html(response.birthday);
+            $('#facebook-email').html(email);
+          }
+        }
       });
-      
-      $('[name="name"]').val(response.first_name);
-      $('[name="location"]').val(response.location.name);
-      $('[name="lastName"]').val(response.last_name);
-      $('[name="username"]').val(response.email);
-      $('[name="gender"]').val(response.gender);
-      $('[name="birth"]').val(response.birthday);
-      $('[name="facebookId"]').val(response.id);
       $('#fb-show-sheet').remove();
       $('#btn-login').slideUp('fast');
       $('.confirm').slideDown('fast');
@@ -52,30 +60,9 @@
       }else{
         email = response.email;
       }
-      $('#facebook-name').html(response.first_name);
-      $('#facebook-birth').html(response.birthday);
-      $('#facebook-email').html(email);
+
       $('#facebook-avatar').attr('src','https://graph.facebook.com/'+response.id+'/picture?width=200&amp;height=200');
     }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
-  }
-
-  function birthday(id) {
-    FB.api('/'+id+'?fields=birthday', function(response) {
-      console.log(response);
-    }, {access_token:accesToken,scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
-  }
-
-
-  function login(){
-    FB.login();
-    $('.msg').hide();
-    $('.loader').show();
-  }
-
-  function changeAccount(){
-    $('#selecttype').removeClass('up');
-    $('#registercontent').removeClass('big');
-    FB.logout();
   }
 
   $('.confirmBtn').click(function(e){

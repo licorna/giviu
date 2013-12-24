@@ -70,7 +70,7 @@
             <li><a href="/logout" class="btn secondary logout"><span class="icon-close"></span></a></li>
             <li><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
             <li><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
-                <figure class="avatarHeader"></figure> 
+                <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fb_id }}/picture?width=40&amp;height=40"/></figure> 
                 <span class="name">Hola <strong id="session-name">{{ user.name }}</strong></span>
             </li>
             {% else %}
