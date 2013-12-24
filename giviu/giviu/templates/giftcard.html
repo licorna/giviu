@@ -19,6 +19,11 @@
       {% endfor %}
     </ul>
   </aside>
+  
+  <section class="special span6">
+    el mes de la carlota
+  </section>
+  
   <section class="span6" id="giftCardList" data-columns>
     {% for product in products %}
     <article class="giftCardModule" data-source-id="{{ product.product_id }}">
@@ -29,11 +34,13 @@
       <h2>{{ product.title }}</h2>
       <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
       {% if product.kind == '1' %}
-      <select class="span7 select" name="webmenu"  onchange="showValue(this.value)">
-        {% for price in product.get_price %}
-        <option value="{{ price }}">{{ price|clp }}</option>
-        {% endfor %}
-      </select>
+      <center>
+        <select class="" name="webmenu"  onchange="showValue(this.value)">
+          {% for price in product.get_price %}
+          <option value="{{ price }}">{{ price|clp }}</option>
+          {% endfor %}
+        </select>
+      </center>
       {% endif %}
       {% if product.kind == '0' %}
       <strong class="span9">{{ product.get_price|clp }}</strong>

@@ -3,7 +3,6 @@
 // Import external files
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,700,300);
 @import "base"; 
-@import "dd"; // dropdown menu
 @import "font.css"; 
 @import "tipsy.css";
 
@@ -1322,6 +1321,15 @@ nav{
   }
 }
 
+.special{
+    background-color:red;
+    argin:10px;
+    height:80px;
+    color:#fff;
+    text-align:center;
+    margin-bottom:10px;
+}
+
 .show{
   width:40%;
   max-width:500px;
@@ -1731,3 +1739,23 @@ span.tooltip {
 }
 
 
+select{
+  -webkit-appearance: none;
+  width: 90%;
+  background: url(//clande-img.s3.amazonaws.com/select-arrow.png) no-repeat center right;
+  border-top: 1px solid #cacbcc;
+  border-right: 1px solid @greyBorder;
+  border-left: 1px solid @greyBorder;
+  border-bottom: 1px solid @greyBorder;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4d4d4d;
+  text-shadow: 0 1px 0 #fff;
+  cursor: pointer;
+  padding:10px;
+  -webkit-transition: box-shadow 90ms ease-in;
+  -moz-transition: box-shadow 90ms ease-in;
+  transition: box-shadow 90ms ease-in;
+  background-color:#ecf0f1;
+  }
