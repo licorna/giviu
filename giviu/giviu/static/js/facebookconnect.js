@@ -44,7 +44,7 @@
             }else{
               first_name = response.first_name;
             }
-            if(response.location.name==undefined){
+            if(response.location==undefined){
               location_name = '';
             }else{
               location_name = response.location.name;
