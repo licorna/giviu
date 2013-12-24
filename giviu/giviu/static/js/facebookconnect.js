@@ -30,7 +30,7 @@
     FB.api('/me/', function(response) {
       $.ajax({
         type: "GET",
-        url: "/api/users/exists-by-fb/s"+response.id,
+        url: "/api/users/exists-by-fb/"+response.id,
         cache: false,
         statusCode: {
           200: function() {
@@ -94,7 +94,7 @@
      $('#register').submit(); 
   })
   function showPreload(){
-    $('#btn-login').slideUp('fast');
+    $('#btn-login').hide('fast');
     $('.loader').slideDown('fast');
   }
 
