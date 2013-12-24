@@ -67,28 +67,18 @@
         </div>
         <nav class="span7 col showyourlove">
           <ul>
-            <!--{% if user.is_authenticated %}
+            {% if user.is_authenticated %}
             <li><a href="/logout" class="btn secondary logout"><span class="icon-close"></span></a></li>
             <li><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
             <li><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
-            <li><a href="/user/profile" class="normal"><span class="icon-pencil"></span> Bienvenido {{ user.name }}</a></li>
+                <figure class="avatarHeader"></figure> 
+                <span class="name">Hola <strong id="session-name">{{ user.name }}</strong></span>
+            </li>
             {% else %}
             <li><a href="/register" class="btn secondary"> Regístrate</a></li>
             <li><a href="/login" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
             <li><a href="/pages/how" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
-            {% endif %}-->
-            <li class="logged"><a href="/logout" class="btn secondary logout"><span class="icon-close"></span></a></li>
-            <li class="logged"><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
-            <li class="logged"><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
-            <li class="logged" id="userInfo">
-              <a href="/user/profile" class="normal">
-                <figure class="avatarHeader"></figure> 
-                <span class="name">Hola <strong id="session-name"></strong></span>
-              </a>
-            </li>
-            
-            <li class="not-logged"><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
-            <li class="not-logged"><a href="/pages/how" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+            {% endif %}
          
           </ul>
         </nav>

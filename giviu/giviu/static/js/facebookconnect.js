@@ -27,6 +27,14 @@
 
   function newuser() {
     FB.api('/me/', function(response) {
+      $.ajax({
+        url: "test.html",
+        cache: false
+      })
+      .done(function( html ) {
+        $( "#results" ).append( html );
+      });
+      
       $('[name="name"]').val(response.first_name);
       $('[name="location"]').val(response.location.name);
       $('[name="lastName"]').val(response.last_name);
