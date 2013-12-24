@@ -3,7 +3,6 @@ $(document).ready(function(e){
     reviewListLikes();
     reviewLike();
 
-	$(".select").msDropDown();//custom drop down
 
     $(".like").click(function(){
         if($(this).hasClass('disabled')){
@@ -19,8 +18,6 @@ $(document).ready(function(e){
     $('.close').on('click',closeModal);
 
     $('.mobileActions').on('click',menuDisplay);
-
-
 
 	 $('.giftcardsDesign').carouFredSel({
         auto: false,
