@@ -16,6 +16,8 @@ $(document).ready(function(e){
 
     $('.close').on('click',closeModal);
 
+    $('#logout').click('click',logout);
+
     $('.mobileActions').on('click',menuDisplay);
 
 	 $('.giftcardsDesign').carouFredSel({
@@ -111,6 +113,19 @@ function reviewListLikes(){
         });
     });
     $('.nolike').tipsy();
+}
+
+function logout(e){
+    e.preventDefault();    
+    var url = $(this).attr('href');
+
+    if(typeof FB.logout == 'function'){
+        if (FB.getAuthResponse()) {
+         FB.logout(function(response) { window.location.href =url; }); 
+         return;
+        }  
+    };
+
 }
 
 function newLike(sourceId, sourceType,success,error){
