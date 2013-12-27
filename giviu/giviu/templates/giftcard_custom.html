@@ -37,8 +37,8 @@
         ¿Quieres agregarle un mensaje?
       </label>
       <textarea class="span9 required" name="comment" placeholder="Ej: Te deseo un muy feliz cumpleaños!"></textarea>
-      <input type="hidden" value="{{ product.product_id }}" name="product-id">
-      <input type="hidden" value="{{ product.merchant.merchant_id }}" name="product-merchant-id">
+      <input type="hidden" value="{{ product.id }}" name="product-id">
+      <input type="hidden" value="{{ product.merchant.id }}" name="product-merchant-id">
       <input type="hidden" value="1" name="giftcard-design">
       <input type="hidden" value="" name="product-price"/>
     </form>

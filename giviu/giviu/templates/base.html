@@ -72,8 +72,8 @@
             <li><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
             <li id="userInfo">
               <a href="/user">
-                <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fb_id }}/picture?width=40&amp;height=40"/></figure> 
-                <span class="name">Hola <strong id="session-name">{{ user.name }}</strong></span>
+                <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
+                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong></span>
               </a>
             </li>
             {% else %}

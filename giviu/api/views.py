@@ -13,7 +13,7 @@ def version(request):
 
 def user_exists_by_fbid(request, fbid):
     try:
-        user = Users.objects.get(fb_id__exact=fbid)
+        user = Users.objects.get(fbid__exact=fbid)
     except Users.DoesNotExist:
         return HttpResponse(
             json.dumps({'message': 'Not a corresponding user for this FB id.'}),
@@ -21,7 +21,7 @@ def user_exists_by_fbid(request, fbid):
             status=404
         )
     return HttpResponse(
-        json.dumps({'user_id': user.user_id}),
+        json.dumps({'user_id': user.id}),
         content_type='application/json',
         status=200
     )

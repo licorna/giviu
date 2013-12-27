@@ -19,16 +19,16 @@
       {% endfor %}
     </ul>
   </aside>
-  
+
   <section class="special span6">
     el mes de la carlota
   </section>
-  
+
   <section class="span6" id="giftCardList" data-columns>
     {% for product in products %}
-    <article class="giftCardModule" data-source-id="{{ product.product_id }}">
+    <article class="giftCardModule" data-source-id="{{ product.id }}">
       <figure>
-        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
+        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
         <img src="{{ product.image }}">
       </figure>
       <h2>{{ product.title }}</h2>
@@ -45,7 +45,7 @@
       {% if product.kind == '0' %}
       <strong class="span9">{{ product.get_price|clp }}</strong>
       {% endif %}
-      <a href="/giftcard/detail/{{ product.product_id }}" class="btn primary">Regalar</a>
+      <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
 
     </article>
     {% endfor %}
