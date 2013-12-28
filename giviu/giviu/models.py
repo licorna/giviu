@@ -320,7 +320,6 @@ class Merchants(models.Model):
     slug = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
     tags = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
     contact_email = models.CharField(max_length=255)
@@ -335,6 +334,7 @@ class Merchants(models.Model):
     lng = models.CharField(max_length=255, blank=True)
     class Meta:
         db_table = 'merchants'
+        verbose_name_plural = 'Merchants'
 
     def __unicode__(self):
         return self.name
