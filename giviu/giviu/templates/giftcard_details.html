@@ -12,12 +12,12 @@
 
   <div class="span5 giftcardImage">
     <figure class="span9">
-      <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
-      <img class="span9" src="{{ product.image }}">
+      <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ giftcard.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+      <img class="span9" src="{{ giftcard.image }}">
     </figure>
   </div>
   <div class="span4 col actions">
-    <h2>{{ product.title }}</h2>
+    <h2>{{ giftcard.title }}</h2>
     <div class="span9 col likescount">
       {% if likes > 0 %}
       <span class="icon-heart icolike"></span> A {{ likes }} le gusta este regalo <span class="amigos">
@@ -28,10 +28,10 @@
       </span>
       {% endif %}
     </div>
-    <p class="span9">{{ product.description }}</p>
+    <p class="span9">{{ giftcard.description }}</p>
     <div class="span9 value">
       <div class="span6">
-        {% if product.kind == '1' %}
+        {% if giftcard.kind == '1' %}
         Selecciona el valor de la giftcard
         {% else %}
         Valor giftcard
@@ -39,30 +39,29 @@
       </div>
       <form id="form">
         <div class="span3">
-          {% if product.kind == '1' %}
-          <select class="span9 select" name="product-price">
-            {% for price in product.price %}
+          {% if giftcard.kind == '1' %}
+          <select class="span9 select" name="giftcard-price">
+            {% for price in giftcard.get_price %}
             <option value="{{ price }}">{{ price|clp }}</option>
             {% endfor %}
           </select>
-
           {% else %}
-          <strong class="span9 productPrice">{{ product.price|clp }}</strong>
-          <input type="hidden" name="product-price" value="{{ product.price }}"/>
+          <strong class="span9 productPrice">{{ giftcard.get_price|clp }}</strong>
+          <input type="hidden" name="giftcard-price" value="{{ giftcard.price }}"/>
           {% endif %}
         </div>
-        <input type="hidden" name="product-id" value="{{ product.id }}"/>
+        <input type="hidden" name="giftcard-id" value="{{ giftcard.id }}"/>
       </form>
     </div>
 
     <div class="span9 stepAction">
-      <a href="/giftcard/custom/{{ product.id }}" class="span3 btn primary continue">
+      <a href="/giftcard/custom/{{ giftcard.id }}" class="span3 btn primary continue">
         Continuar
       </a>
     </div>
     <div class="span9 finePrint">
       <div class="span9 head"><span class="icon-menu"></span> Detalle</div>
-      {{ product.fine_print|safe }}
+      {{ giftcard.fine_print|safe }}
     </div>
   </div>
 </section>
@@ -70,12 +69,9 @@
 <script>
   $(document).ready(function(){
   $('.continue').click(function(e){
-  e.preventDefault();
-  var url = $(this).attr('href');
-  localStorage['product-info'] = $('form').serialize();
-  location.href=url;
-
+  localStorage.setItem('giftcard_price', $('[name="giftcard-price"]').val());
+  localStorage.setItem('giftcard_id', $('[name="giftcard-id"]').val());
   })
   });
-</script>
+</Script>
 {% endblock %}
