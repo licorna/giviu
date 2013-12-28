@@ -9,7 +9,7 @@
 	font-style: normal;
 }
 
-[class*="icon-"] {
+[class^="icon-"], [class*=" icon-"] {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -23,6 +23,9 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-trophy:before {
+	content: "\e680";
+}
 .icon-home:before {
 	content: "\e600";
 }
@@ -392,6 +395,15 @@
 .icon-skype:before {
 	content: "\e67d";
 }
+.icon-lightning:before {
+	content: "\e681";
+}
+.icon-rocket:before {
+	content: "\e682";
+}
+.icon-shop:before {
+	content: "\e67e";
+}
 .icon-transfer:before {
 	content: "\e63b";
 }
@@ -400,9 +412,6 @@
 }
 .icon-server:before {
 	content: "\e63a";
-}
-.icon-shop:before {
-	content: "\e67e";
 }
 .icon-paperplane:before {
 	content: "\e67f";
