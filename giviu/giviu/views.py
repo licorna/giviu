@@ -4,8 +4,8 @@ from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from models import (
-    GiftcardCategory, Products, Likes, Merchants, UserFriends, GiftcardStyle,
-    Users
+    GiftcardCategory, Giftcard, Likes, Merchants, Friend, GiftcardDesign,
+    Users,
 )
 from hashlib import md5
 
@@ -19,14 +19,15 @@ def do_register(request):
         if 'facebookId' in request.POST:
             fbid = request.POST['facebookId']
             try:
-                user = Users.objects.get(fb_id__exact=fbid)
+                user = Users.objects.get(fbid__exact=fbid)
             except Users.DoesNotExist:
                 bday = request.POST['birth']
+                bday = bday[6:] + '-' + bday[3:5] + '-' + bday[0:2]
                 user = Users.objects.create_user(fbid, fbid, bday,
                                                  email=request.POST['email'],
                                                  location=request.POST['location'],
-                                                 name=request.POST['name'],
-                                                 lastName=request.POST['lastName'],
+                                                 first_name=request.POST['name'],
+                                                 last_name=request.POST['lastName'],
                                                  gender=request.POST['gender'])
             if user:
                 user = authenticate(username=fbid, password=fbid)
@@ -43,24 +44,19 @@ def do_register(request):
     c.update(csrf(request))
     return render_to_response('register.html', c, context_instance=RequestContext(request))
 
-def attach_merchant_to_products(products):
-    for p in products:
-        p.merchant = Merchants.objects.get(pk=int(p.merchant_id))
-    return products
 
 def home(request, slug=None):
     categories = GiftcardCategory.objects.all()
     data = {}
     if slug:
         category = GiftcardCategory.objects.get(slug__exact=slug)
-        products = Products.objects.filter(category__exact=category.giftcardcategory_id)
+        products = Giftcard.objects.filter(category__exact=category.id)
         data = {
             'this_category': category,
         }
     else:
-        products = Products.objects.all()
-    all_product_len = Products.objects.count()
-    products = attach_merchant_to_products(products)
+        products = Giftcard.objects.all()
+    all_product_len = Giftcard.objects.count()
     data.update({
         'categories': categories,
         'products': products,
@@ -70,10 +66,9 @@ def home(request, slug=None):
 
 
 def giftcard_detail(request, gift_id):
-    product = Products.objects.get(pk=gift_id)
+    product = Giftcard.objects.get(pk=gift_id)
     if product.kind == '1':
         product.price = product.price.split(',')
-        product.merchant = Merchants.objects.get(pk=product.merchant_id)
     try:
         likes = Likes.objects.get(pk=gift_id)
         friends = UserFriends.objects.filter(user_friend_fb_id__exact=likes.like_user_fb_id)
@@ -89,8 +84,8 @@ def giftcard_detail(request, gift_id):
 
 
 def giftcard_custom(request, gift_id):
-    product = Products.objects.get(pk=gift_id)
-    style = GiftcardStyle.objects.all()
+    product = Giftcard.objects.get(pk=gift_id)
+    style = GiftcardDesign.objects.all()
     if product.kind == '1':
         product.price = product.price.split(',')
         product.merchant = Merchants.objects.get(pk=product.merchant_id)
@@ -106,6 +101,7 @@ def giftcard_custom(request, gift_id):
         'friends': friends,
         'styles': style,
     }
+
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
 
@@ -113,7 +109,7 @@ def giftcard_confirmation(request):
     if request.method != 'POST':
         return redirect('/')
 
-    product = Products.objects.get(pk=int(request.POST['product-id']))
+    product = Giftcard.objects.get(pk=int(request.POST['product-id']))
     merchant = Merchants.objects.get(pk=int(request.POST['product-merchant-id']))
 
     data = {

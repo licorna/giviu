@@ -14,230 +14,179 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from datetime import datetime
+from uuid import uuid4
+
 
 class Calendar(models.Model):
-    user_id = models.IntegerField(db_column='calendar-user-id')
-    user_fb_id = models.CharField(db_column='calendar-user-fb-id', max_length=25)
-    friend_fb_id = models.CharField(db_column='calendar-friend-fb-id', max_length=255)
-    month = models.CharField(db_column='calendar-month', max_length=2)
-    day = models.CharField(db_column='calendar-day', max_length=2)
-    title = models.CharField(db_column='calendar-title', max_length=255)
-    friend_gender = models.CharField(db_column='calendar-friend-gender', max_length=50)
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey('Users')
+    friend_fbid = models.CharField(max_length=255, blank=True)
+    when = models.DateField(blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True)
+    friend_gender = models.CharField(max_length=50, blank=True)
     class Meta:
         db_table = 'calendar'
 
-class Comunas(models.Model):
-    comuna_nombre = models.CharField(max_length=64)
-    provincia_id = models.IntegerField()
+class Provincia(models.Model):
+    id = models.IntegerField(primary_key=True)
+    nombre = models.CharField(max_length=64)
+    region = models.ForeignKey('Region')
     class Meta:
-        db_table = 'comunas'
+        db_table = 'provincia'
 
-class Customers(models.Model):
-    parent_id = models.IntegerField(db_column='customer-parent-id')
-    creation_date = models.DateTimeField(db_column='customer-creation-date')
-    name = models.CharField(db_column='customer-name', max_length=255)
-    last_name = models.CharField(db_column='customer-last-name', max_length=255)
-    email = models.CharField(db_column='customer-email', max_length=255)
-    birthday = models.CharField(db_column='customer-birthday', max_length=255)
-    phone = models.CharField(db_column='customer-phone', max_length=255)
-    hash = models.CharField(db_column='customer-hash', max_length=255)
+class Region(models.Model):
+    id = models.IntegerField(primary_key=True)
+    nombre = models.CharField(max_length=64)
+    ordinal = models.IntegerField()
     class Meta:
-        db_table = 'customers'
+        db_table = 'region'
+
+class Comuna(models.Model):
+    id = models.IntegerField(primary_key=True)
+    nombre = models.CharField(max_length=64)
+    provincia = models.ForeignKey('Provincia')
+    class Meta:
+        db_table = 'comuna'
+
+class Customer(models.Model):
+    id = models.IntegerField(primary_key=True)
+    parent_id = models.IntegerField()
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    birthday = models.DateField(blank=True, null=True)
+    phone = models.CharField(max_length=255)
+    hash = models.CharField(max_length=255)
+    created = models.DateTimeField()
+    class Meta:
+        db_table = 'customer'
+
 
 class Discount(models.Model):
-    user_id = models.IntegerField(db_column='discount-user-id')
-    quantity = models.IntegerField(db_column='discount-quantity')
-    start_date = models.DateField(db_column='discount-start-date')
-    end_date = models.DateField(db_column='discount-end-date')
-    status = models.CharField(db_column='discount-status', max_length=255)
-    reason = models.TextField(db_column='discount-reason')
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey('Users')
+    quantity = models.IntegerField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    status = models.CharField(max_length=255)
+    reason = models.TextField()
     class Meta:
         db_table = 'discount'
 
-class BuyIntention(models.Model):
-    uuid = models.CharField(max_length=36, unique=True)
-
-    # Following columns are foreign keys
-    #user = models.CharField()
-    #receiver = models.CharField()
-    #design = models.CharField()
-    #price = models.IntegerField()
-    #comment = models.IntegerField()
-    #giftcard = models.CharField()
-
-    # TODO: change to appropiate enum field
-    state = models.CharField(max_length=30)
-
-
 
 class GiftcardCategory(models.Model):
-    giftcardcategory_id = models.IntegerField(db_column='category-id', primary_key=True)
-    name = models.CharField(db_column='category-name', max_length=255)
-    slug = models.CharField(db_column='category-slug', max_length=255)
-    status = models.CharField(db_column='category-status', max_length=255)
-    parent_id = models.IntegerField(db_column='category-parent-id')
-    description = models.TextField(db_column='category-description')
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    parent_id = models.IntegerField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     def count(self):
-        return Products.objects.filter(category__exact=self.giftcardcategory_id).count()
+        return Giftcard.objects.filter(category__exact=self).count()
 
     class Meta:
-        db_table = 'giftcard-category'
-
-class GiftcardStyle(models.Model):
-    giftcardstyle_id = models.IntegerField(db_column='giftcard-style-id', primary_key=True)
-    category_id = models.IntegerField(db_column='giftcard-style-category-id')
-    image = models.CharField(db_column='giftcard-style-image', max_length=255)
-    status = models.CharField(db_column='giftcard-style-status', max_length=255)
-    class Meta:
-        db_table = 'giftcard-style'
-
-class Giftcards(models.Model):
-    _hash = models.CharField(db_column='giftcard-hash', max_length=255)
-    parent = models.IntegerField(db_column='giftcard-parent')
-    send_date = models.DateField(db_column='giftcard-send-date')
-    creation_date = models.DateTimeField(db_column='giftcard-creation-date')
-    to = models.CharField(db_column='giftcard-to', max_length=255)
-    to_mail = models.CharField(db_column='giftcard-to-mail', max_length=255)
-    comment = models.TextField(db_column='giftcard-comment')
-    status = models.CharField(db_column='giftcard-status', max_length=255)
-    id_sender = models.IntegerField(db_column='giftcard-id-sender')
-    expiration_date = models.DateField(db_column='giftcard-expiration-date')
-    validation_date = models.DateTimeField(db_column='giftcard-validation-date')
-    style = models.CharField(db_column='giftcard-style', max_length=255)
-    price = models.CharField(db_column='giftcard-price', max_length=255)
-    _type = models.CharField(db_column='giftcard-type', max_length=255)
-    product_id = models.CharField(db_column='giftcard-product-id', max_length=255)
-    class Meta:
-        db_table = 'giftcards'
-
-class Likes(models.Model):
-    likes_id = models.IntegerField(db_column='like-id', primary_key=True)
-    source_id = models.IntegerField(db_column='like-source-id')
-    user_id = models.IntegerField(db_column='like-user-id')
-    user_fb_id = models.CharField(db_column='like-user-fb-id', max_length=255)
-    source_type = models.IntegerField(db_column='like-source-type')
-    creation_date = models.DateTimeField(db_column='like-creation-date')
-    class Meta:
-        db_table = 'likes'
-
-class MerchantTabs(models.Model):
-    parent_id = models.IntegerField(db_column='merchant-tabs-parent-id')
-    title = models.CharField(db_column='merchant-tabs-title', max_length=255)
-    content = models.TextField(db_column='merchant-tabs-content')
-    class Meta:
-        db_table = 'merchant-tabs'
-
-class MerchantUsers(models.Model):
-    parent_id = models.ForeignKey('Merchants', db_column='merchant-users-parent-id')
-    store = models.IntegerField(db_column='merchant-users-store')
-    name = models.CharField(db_column='merchant-users-name', max_length=255)
-    username = models.CharField(db_column='merchant-users-username', max_length=255)
-    email = models.CharField(db_column='merchant-users-email', max_length=255)
-    phone = models.CharField(db_column='merchant-users-phone', max_length=255)
-    password = models.CharField(db_column='merchant-users-password', max_length=255)
-    permission = models.IntegerField(db_column='merchant-users-permission')
-    class Meta:
-        db_table = 'merchant-users'
-
-class Merchants(models.Model):
-    merchant_id = models.IntegerField(db_column='merchant-id', primary_key=True)
-    creation_date = models.DateTimeField(db_column='merchant-creation-date')
-    name = models.CharField(db_column='merchant-name', max_length=255)
-    slug = models.CharField(db_column='merchant-slug', max_length=255)
-    address = models.CharField(db_column='merchant-address', max_length=255)
-    country = models.CharField(db_column='merchant-country', max_length=255)
-    category = models.CharField(db_column='merchant-category', max_length=255)
-    tags = models.CharField(db_column='merchant-tags', max_length=255)
-    contact_name = models.CharField(db_column='merchant-contact-name', max_length=255)
-    contact_email = models.CharField(db_column='merchant-contact-email', max_length=255)
-    contact_phone = models.CharField(db_column='merchant-contact-phone', max_length=255)
-    contact_rut = models.CharField(db_column='merchant-contact-rut', max_length=255)
-    rut = models.CharField(db_column='merchant-rut', max_length=255)
-    website = models.CharField(db_column='merchant-website', max_length=255)
-    plan = models.CharField(db_column='merchant-plan', max_length=255)
-    description = models.TextField(db_column='merchant-description')
-    logo = models.CharField(db_column='merchant-logo', max_length=255)
-    lat = models.CharField(db_column='merchant-lat', max_length=255)
-    lon = models.CharField(db_column='merchant-long', max_length=255)
-    class Meta:
-        db_table = 'merchants'
-
-class Products(models.Model):
-    product_id = models.IntegerField(db_column='product-id', primary_key=True)
-    merchant_id = models.CharField(db_column='product-merchant-id', max_length=255)
-    creation_date = models.DateField(db_column='product-creation-date')
-    publication_date = models.DateField(db_column='product-publication-date')
-    unpublish_date = models.DateField(db_column='product-unpublish-date')
-    title = models.CharField(db_column='product-title', max_length=255)
-    kind = models.CharField(db_column='product-type', max_length=255)
-    description = models.TextField(db_column='product-description')
-    category = models.CharField(db_column='product-category', max_length=255)
-    price = models.CharField(db_column='product-price', max_length=255)
-    quantity = models.CharField(db_column='product-quantity', max_length=255)
-    image = models.CharField(db_column='product-image', max_length=255)
-    stores = models.TextField(db_column='product-stores')
-    status = models.IntegerField(db_column='product-status')
-    sold_quantity = models.IntegerField(db_column='product-sold-quantity')
-    gender = models.CharField(db_column='product-gender', max_length=10)
-    comuna = models.CharField(db_column='product-comuna', max_length=5)
-    provincia = models.CharField(db_column='product-provincia', max_length=5)
-    region = models.CharField(db_column='product-region', max_length=5)
-    fine_print = models.TextField(db_column='product-fine-print')
-    class Meta:
-        db_table = 'products'
+        db_table = 'giftcard_category'
+        verbose_name_plural = 'Giftcard Categories'
 
     def __unicode__(self):
-        return str(self.product_id) + ': ' + self.title
+        return self.name
+
+class GiftcardDesign(models.Model):
+    id = models.AutoField(primary_key=True)
+    category = models.ForeignKey(GiftcardCategory)
+    image = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    class Meta:
+        db_table = 'giftcard_design'
+        verbose_name_plural = 'Giftcard Designs'
+
+    def __unicode__(self):
+        return self.image
+
+
+class Giftcard(models.Model):
+    id = models.AutoField(primary_key=True)
+    merchant = models.ForeignKey('Merchants', db_column='merchant_id')
+    created = models.DateField()
+    publication_date = models.DateField()
+    unpublish_date = models.DateField()
+    title = models.CharField(max_length=255)
+    kind = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.ForeignKey('GiftcardCategory', db_column='category_id')
+    price = models.CharField(max_length=255)
+    quantity = models.IntegerField()
+    image = models.CharField(max_length=255)
+    stores = models.TextField(blank=True)
+    status = models.IntegerField()
+    sold_quantity = models.IntegerField()
+    gender = models.CharField(max_length=20, blank=True)
+    comuna = models.CharField(max_length=5, blank=True)
+    provincia = models.CharField(max_length=5, blank=True)
+    region = models.CharField(max_length=5, blank=True)
+    fine_print = models.TextField()
+
+    def __unicode__(self):
+        return self.title
 
     def get_price(self):
         if ',' in self.price:
             return self.price.split(',')
         return self.price
 
-class Provincias(models.Model):
-    nombre = models.CharField(max_length=64)
-    region_id = models.IntegerField()
     class Meta:
-        db_table = 'provincias'
+        db_table = 'giftcard'
 
-class Regiones(models.Model):
-    nombre = models.CharField(max_length=64)
-    ordinal = models.CharField(max_length=4)
-    class Meta:
-        db_table = 'regiones'
 
-class Services(models.Model):
-    assigned = models.CharField(db_column='service-assigned', max_length=11)
-    token = models.CharField(db_column='service-token', max_length=255)
-    expiration_date = models.DateField(db_column='service-expiration-date')
-    class Meta:
-        db_table = 'services'
 
-class UserFriends(models.Model):
-    user_friends_id = models.IntegerField(db_column='user-friends-id', primary_key=True)
-    me_fb_id = models.CharField(db_column='user-friend-me-fb-id', max_length=25)
-    fb_id = models.CharField(db_column='user-friend-fb-id', max_length=25)
-    name = models.CharField(db_column='user-friend-name', max_length=255)
-    month = models.CharField(db_column='user-friend-month', max_length=40)
-    day = models.CharField(db_column='user-friend-day', max_length=40)
-    birthday = models.CharField(db_column='user-friend-birthday', max_length=25)
-    gender = models.CharField(db_column='user-friend-gender', max_length=100)
+class Product(models.Model):
+    id = models.IntegerField(primary_key=True)
+    hash = models.CharField(max_length=255)
+    parent = models.IntegerField()
+    send_date = models.DateField()
+    created = models.DateTimeField()
+    giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
+    giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
+    comment = models.TextField()
+    status = models.CharField(max_length=255)
+    expiration_date = models.DateField()
+    validation_date = models.DateTimeField(blank=True, null=True)
+    design = models.ForeignKey(GiftcardDesign, db_column='design')
+    price = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    giftcard = models.ForeignKey(Giftcard)
     class Meta:
-        db_table = 'user-friends'
+        db_table = 'product'
+
+class Service(models.Model):
+    id = models.IntegerField(primary_key=True)
+    assigned = models.CharField(max_length=11)
+    token = models.CharField(max_length=255)
+    expiration_date = models.DateField()
+    class Meta:
+        db_table = 'service'
+
+class Friend(models.Model):
+    id = models.IntegerField(primary_key=True)
+    me_fbid = models.CharField(max_length=25)
+    fbid = models.CharField(max_length=25)
+    name = models.CharField(max_length=255)
+    month = models.CharField(max_length=40)
+    day = models.CharField(max_length=40)
+    birthday = models.DateField()
+    gender = models.CharField(max_length=100)
+    class Meta:
+        db_table = 'friend'
 
 class GiviuUserManager(BaseUserManager):
-    def create_user(self, fbid, password, date_of_birth, **kwargs):
-        """
-        Creates and saves a User with the given email, date of
-        birth and password.
-        """
+    def create_user(self, fbid, password, birthday, **kwargs):
         if not fbid:
             raise ValueError('Users must have an email address')
 
         user = self.model(
-            fb_id=fbid,
-            birthday=date_of_birth,
+            fbid=fbid,
+            birthday=birthday,
         )
 
         user.set_password(password)
@@ -246,10 +195,10 @@ class GiviuUserManager(BaseUserManager):
             user.email = kwargs['email']
         if 'location' in kwargs:
             user.location = kwargs['location']
-        if 'name' in kwargs:
-            user.name = kwargs['name']
-        if 'lastName' in kwargs:
-            user.last_name = kwargs['lastName']
+        if 'first_name' in kwargs:
+            user.first_name = kwargs['first_name']
+        if 'last_name' in kwargs:
+            user.last_name = kwargs['last_name']
         if 'gender' in kwargs:
             user.gender = kwargs['gender']
 
@@ -257,14 +206,10 @@ class GiviuUserManager(BaseUserManager):
         return user
 
 
-    def create_superuser(self, fbid, password, date_of_birth):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
+    def create_superuser(self, fbid, password, birthday):
         user = self.create_user(fbid,
             password=password,
-            birthday=date_of_birth
+            birthday=birthday
         )
         user.is_admin = True
         user.set_password(password)
@@ -274,32 +219,29 @@ class GiviuUserManager(BaseUserManager):
 def get_today():
     return datetime.now().strftime('%Y-%m-%d')
 
+
 class Users(AbstractBaseUser):
+    id = models.IntegerField(primary_key=True)
+    first_name = models.CharField(max_length=80, blank=True)
+    last_name = models.CharField(max_length=80, blank=True)
+    email = models.CharField(unique=True, max_length=255, blank=True)
+    birthday = models.DateField()
+    gender = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=20, blank=True)
+    region = models.CharField(max_length=255, blank=True)
+    provincia = models.CharField(max_length=255, blank=True)
+    comuna = models.CharField(max_length=255, blank=True)
+    friends = models.TextField(blank=True)
+    created = models.DateField(blank=True, null=True)
+    avatar = models.CharField(max_length=255, blank=True)
+    last_purchase = models.DateField(blank=True, null=True)
+    hash = models.CharField(max_length=255, blank=True)
+    fbid = models.CharField(unique=True, max_length=25, blank=True)
+    is_active = models.IntegerField(blank=True, null=True)
+    is_admin = models.IntegerField(blank=True, null=True)
 
-    user_id = models.IntegerField(db_column='user-id', primary_key=True)
-    name = models.CharField(db_column='user-name', max_length=255)
-    last_name = models.CharField(db_column='user-last-name', max_length=255)
-    email = models.CharField(db_column='user-email', max_length=255, unique=True)
-    birthday = models.CharField(db_column='user-birthday', max_length=255)
-    gender = models.CharField(db_column='user-gender', max_length=255)
-    country = models.CharField(db_column='user-country', max_length=255)
-    region = models.CharField(db_column='user-region', max_length=255)
-    provincia = models.CharField(db_column='user-provincia', max_length=255)
-    comuna = models.CharField(db_column='user-comuna', max_length=255)
-    gpassword = models.CharField(db_column='user-password', max_length=255)
-    friends = models.TextField(db_column='user-friends')
-    creation_date = models.DateField(db_column='user-creation-date', default=lambda:get_today())
-    last_log_off = models.DateField(db_column='user-last-log-off', default=lambda:get_today())
-    avatar = models.CharField(db_column='user-avatar', max_length=255)
-    last_purchase = models.DateField(db_column='user-last-purchase', default=lambda:get_today())
-    _hash = models.CharField(db_column='user-hash', max_length=255)
-    fb_id = models.CharField(db_column='user-fb-id', max_length=25, unique=True)
-
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
     objects = GiviuUserManager()
-
-    USERNAME_FIELD = 'fb_id'
+    USERNAME_FIELD = 'fbid'
     REQUIRED_FIELDS = ['birthday']
 
     def get_full_name(self):
@@ -332,3 +274,67 @@ class Users(AbstractBaseUser):
 
     class Meta:
         db_table = 'users'
+        verbose_name_plural = 'Users'
+
+
+class Likes(models.Model):
+    id = models.IntegerField(primary_key=True)
+    source_id = models.IntegerField()
+    user = models.ForeignKey('Users')
+    user_fbid = models.CharField(max_length=255)
+    source_type = models.IntegerField()
+    created = models.DateTimeField()
+    class Meta:
+        db_table = 'likes'
+        verbose_name_plural = 'Likes'
+
+class MerchantTabs(models.Model):
+    id = models.IntegerField(primary_key=True)
+    parent_id = models.IntegerField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    class Meta:
+        db_table = 'merchant_tabs'
+        verbose_name_plural = 'Merchant Tabs'
+
+
+class MerchantUsers(models.Model):
+    id = models.IntegerField(primary_key=True)
+    merchant = models.ForeignKey('Merchants')
+    store = models.IntegerField()
+    name = models.CharField(max_length=255)
+    username = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    permission = models.IntegerField()
+    class Meta:
+        db_table = 'merchant_users'
+        verbose_name_plural = 'Merchant Users'
+
+
+class Merchants(models.Model):
+    id = models.AutoField(primary_key=True)
+    created = models.DateTimeField()
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
+    tags = models.CharField(max_length=255)
+    contact_name = models.CharField(max_length=255)
+    contact_email = models.CharField(max_length=255)
+    contact_phone = models.CharField(max_length=255)
+    contact_rut = models.CharField(max_length=255, blank=True)
+    rut = models.CharField(max_length=255, blank=True)
+    website = models.CharField(max_length=255, blank=True)
+    plan = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
+    logo = models.CharField(max_length=255, blank=True)
+    lat = models.CharField(max_length=255, blank=True)
+    lng = models.CharField(max_length=255, blank=True)
+    class Meta:
+        db_table = 'merchants'
+        verbose_name_plural = 'Merchants'
+
+    def __unicode__(self):
+        return self.name

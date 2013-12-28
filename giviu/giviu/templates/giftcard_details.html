@@ -12,7 +12,7 @@
 
   <div class="span5 giftcardImage">
     <figure class="span9">
-      <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ product.product_id }}" data-source-type="1"><span class="icon-heart"></span></span>
+      <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
       <img class="span9" src="{{ product.image }}">
     </figure>
   </div>
@@ -51,12 +51,12 @@
           <input type="hidden" name="product-price" value="{{ product.price }}"/>
           {% endif %}
         </div>
-        <input type="hidden" name="product-id" value="{{ product.product_id }}"/>
+        <input type="hidden" name="product-id" value="{{ product.id }}"/>
       </form>
     </div>
 
     <div class="span9 stepAction">
-      <a href="/giftcard/custom/{{ product.product_id }}" class="span3 btn primary continue">
+      <a href="/giftcard/custom/{{ product.id }}" class="span3 btn primary continue">
         Continuar
       </a>
     </div>
