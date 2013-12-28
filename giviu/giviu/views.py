@@ -5,10 +5,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from models import (
     GiftcardCategory, Giftcard, Likes, Merchants, Friend, GiftcardDesign,
-    Users,
+    Users, Product
 )
 from hashlib import md5
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_POST
 
 def do_logout(request):
     logout(request)
@@ -66,9 +68,7 @@ def home(request, slug=None):
 
 
 def giftcard_detail(request, gift_id):
-    product = Giftcard.objects.get(pk=gift_id)
-    if product.kind == '1':
-        product.price = product.price.split(',')
+    giftcard = Giftcard.objects.get(pk=gift_id)
     try:
         likes = Likes.objects.get(pk=gift_id)
         friends = UserFriends.objects.filter(user_friend_fb_id__exact=likes.like_user_fb_id)
@@ -76,19 +76,16 @@ def giftcard_detail(request, gift_id):
         likes = 0
         friends = 0
     data = {
-        'product': product,
+        'giftcard': giftcard,
         'likes': likes,
-        'friends': friends,
+        'friends': friends
     }
     return render_to_response('giftcard_details.html', data, context_instance=RequestContext(request))
 
 
 def giftcard_custom(request, gift_id):
-    product = Giftcard.objects.get(pk=gift_id)
+    giftcard = Giftcard.objects.get(pk=gift_id)
     style = GiftcardDesign.objects.all()
-    if product.kind == '1':
-        product.price = product.price.split(',')
-        product.merchant = Merchants.objects.get(pk=product.merchant_id)
     try:
         likes = Likes.objects.get(pk=gift_id)
         friends = UserFriends.objects.filter(user_friend_fb_id__exact=likes.like_user_fb_id)
@@ -96,7 +93,7 @@ def giftcard_custom(request, gift_id):
         likes = 0
         friends = 0
     data = {
-        'product': product,
+        'giftcard': giftcard,
         'likes': likes,
         'friends': friends,
         'styles': style,
@@ -104,24 +101,57 @@ def giftcard_custom(request, gift_id):
 
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
-
+@require_POST
 def giftcard_confirmation(request):
-    if request.method != 'POST':
-        return redirect('/')
+    for datum in ['giftcard-id', 'product-merchant-id', 'email-to']:
+        if datum not in request.POST:
+            return HttpResponseBadRequest()
+    email_to = request.POST['email-to']
+    name_to = request.POST['name-to']
+    comment = request.POST['comment']
+    price = request.POST['giftcard-price']
+    design = request.POST['giftcard-design']
+    date = request.POST['send-when']
+    try:
+        validate_email(email_to)
+    except ValidationError:
+        return HttpResponseBadRequest()
 
-    product = Giftcard.objects.get(pk=int(request.POST['product-id']))
-    merchant = Merchants.objects.get(pk=int(request.POST['product-merchant-id']))
+    try:
+        giftcard = Giftcard.objects.get(pk=int(request.POST['giftcard-id']))
+    except Giftcard.DoesNotExist:
+        return HttpResponseBadRequest()
+
+    design = GiftcardDesign.objects.get(pk=int(design))
+    product = Product(giftcard_from=request.user,
+                      giftcard_to_email=email_to,
+                      giftcard_to_name=name_to,
+                      price=price,
+                      design=design,
+                      send_date=date,
+                      comment=comment,
+                      giftcard=giftcard
+    )
+    product.save()
+    product_id = product.id
 
     data = {
-        'send_to': request.POST['send-to'],
-        'email_to': request.POST['email-to'],
-        'send_date': request.POST['send-date'],
-        'comment': request.POST['comment'],
-        'price': request.POST['product-price'],
+        'name_to': name_to,
+        'email_to': email_to,
+        'send_date': date,
+        'comment': comment,
+        'price': price,
         'giftcard_design': request.POST['giftcard-design'],
-        'product': product,
-        'merchant': merchant
+        'giftcard': giftcard,
+        'product_id': product_id,
     }
     data.update(csrf(request))
 
-    return render_to_response('pay_confirmation.html', data, context_instance=RequestContext(request))
+    return render_to_response('checkout_confirmation.html', data, context_instance=RequestContext(request))
+
+
+def giftcard_error(request):
+    return HttpResponse('El PSP respondio: No autorizado')
+
+def giftcard_success(request):
+    return HttpResponse('El PSP autorizo el cobro!')

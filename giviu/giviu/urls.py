@@ -11,9 +11,14 @@ urlpatterns = patterns('',
     url(r'^giftcard/custom/(?P<gift_id>\d+)$', 'giviu.views.giftcard_custom', name='giftcard_custom'),
     url(r'^logout$', 'giviu.views.do_logout', name='logout'),
     url(r'^register$', 'giviu.views.do_register', name='register'),
-    url(r'^giftcard/pay$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),
+    url(r'^giftcard/checkout$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),
+
+    url(r'^giftcard/success$', 'giviu.views.giftcard_success', name='giftcard_success'),
+    url(r'^giftcard/error$', 'giviu.views.giftcard_error', name='giftcard_error'),
 
     url(r'^api/', include('api.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^psp/', include('psp.urls')),
 )

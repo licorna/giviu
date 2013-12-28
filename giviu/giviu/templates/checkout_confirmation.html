@@ -18,12 +18,12 @@
 
     </div>
     <div class="span6 col">
-      <h3>{{ product.merchant.name }}</h3>
+      <h3>{{ giftcard.merchant.name }}</h3>
 
       <strong class="price">{{ price|clp }}</strong>
 
       <ul>
-        <li><strong>Se le enviara a: </strong> {{ send_to }}</li>
+        <li><strong>Se le enviara a: </strong> {{ name_to }}</li>
         <li><strong>Al correo: </strong> {{ email_to }}</li>
         <li><strong>El día: </strong> {{ send_date }}</li>
         <li><strong>Mensaje: </strong> {{ comment }}</li>
@@ -31,15 +31,16 @@
     </div>
   </div>
   <div class="span9 stepAction">
-    <form method="post" action="/giftcard/create/">
-      <input type="hidden" name="parentId" value="{{ product.merchant.id }}">
+    <form method="post" action="/psp/pay">
+      {% csrf_token %}
+      <input type="hidden" name="parentId" value="{{ giftcard.merchant.id }}">
       <input type="hidden" name="sendDate" value="{{ send_date }}">
-      <input type="hidden" name="giftcardTo" value="{{ send_to }}">
+      <input type="hidden" name="giftcardTo" value="{{ name_to }}">
       <input type="hidden" name="giftcardEmail" value="{{ email_to }}">
       <input type="hidden" name="giftcardComment" value="{{ comment }}">
       <input type="hidden" name="giftcardStyle" value="{{ giftcard_design }}">
       <input type="hidden" name="giftcardprice" value="{{ price }}">
-      <input type="hidden" name="giftcardProductId" value="{{ product.product_id }}">
+      <input type="hidden" name="giftcardProductId" value="{{ giftcard.id }}">
       <input type="submit" value="Pagar"  class="span2 btn primary">
     </form>
 
