@@ -13,9 +13,8 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
-from datetime import datetime
 from uuid import uuid4
-
+from utils import get_today, get_one_month
 
 class Calendar(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -138,26 +137,31 @@ class Giftcard(models.Model):
     class Meta:
         db_table = 'giftcard'
 
-
-
 class Product(models.Model):
     id = models.IntegerField(primary_key=True)
     hash = models.CharField(max_length=255)
-    parent = models.IntegerField()
-    send_date = models.DateField()
-    created = models.DateTimeField()
-    giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
+    uuid = models.CharField(max_length=40, default=lambda:str(uuid4()))
+    #parent = models.IntegerField()
+    send_date = models.DateField(blank=True)
+    created = models.DateTimeField(default=lambda:get_today())
+    # giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
+    giftcard_to_email = models.CharField(db_column='to_email', max_length=255)
+    giftcard_to_name = models.CharField(db_column='to_name', max_length=40)
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
     comment = models.TextField()
     status = models.CharField(max_length=255)
-    expiration_date = models.DateField()
+    expiration_date = models.DateField(default=lambda:get_one_month())
     validation_date = models.DateTimeField(blank=True, null=True)
     design = models.ForeignKey(GiftcardDesign, db_column='design')
     price = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
-    giftcard = models.ForeignKey(Giftcard)
+    giftcard = models.ForeignKey(Giftcard, db_column='giftcard_id')
+
+    state = models.CharField(max_length=40, default='preparing')
+
     class Meta:
         db_table = 'product'
+
 
 class Service(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -215,10 +219,6 @@ class GiviuUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-
-def get_today():
-    return datetime.now().strftime('%Y-%m-%d')
-
 
 class Users(AbstractBaseUser):
     id = models.IntegerField(primary_key=True)
