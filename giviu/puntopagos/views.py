@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseBadRequest
 from giviu.models import PaymentTransaction
-import django.core.exceptions.MultipleObjectsReturned
+from django.core.exceptions import MultipleObjectsReturned
 import json
 
 from django.conf import settings
