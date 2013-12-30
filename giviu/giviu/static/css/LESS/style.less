@@ -301,8 +301,50 @@ footer{
 }
 
 aside{
-  border-right: 1px solid @greyBorder;
-  padding-right:10px;
+    position:relative;
+    padding:10px;
+
+    margin-bottom:10px;
+  .dates{
+    text-align:right;
+      li{
+        height:45px;
+        text-align:left;
+        figure{
+          width:30px!important;
+          border-radius:50%;
+          border:2px solid @greyBorder;
+          overflow:hidden;
+          float:left;
+          margin-right:10px;
+        }
+
+      }
+  }
+
+  &:after, &.arrow:before {
+    left: 100%;
+    top: 30px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #fff;
+    border-width: 5px;
+    margin-top: -5px;
+  }
+  &:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-left-color: #fff;
+    border-width: 10px;
+    margin-top: -10px;
+  }
   .search{
     margin-bottom:15px;
     input[type="submit"]{
@@ -316,6 +358,7 @@ aside{
   ul{
     li{
       border-bottom:1px solid @greyBorder;
+      font-size:0.8em;
       a{
         padding:10px 0px 12px; 
         display:block;
@@ -324,8 +367,6 @@ aside{
         transition:0.2s linear all;
         border-left:none;
         &:hover{
-          border-left:5px solid @insideAction;
-          padding-left:5px;
           span{
             background-color:@insideAction;
             color:#fff;

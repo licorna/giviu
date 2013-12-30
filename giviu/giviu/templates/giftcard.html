@@ -5,21 +5,45 @@
   ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
 </section>
 <section class="container">
+  <div class="span2">
+    <aside class="span9">
+      <form class="span9 search" action="/giftcard/search" method="get">
+        <input type="text" class="span6" name="s" placeholder="¿Que estas buscando?"/>
+        <input type="submit" class="span3 col btn inside" value="Buscar"/>
+      </form>
+      <h3>Categorías</h3>
+      <ul class="span9">
+        <li class="span9 {% if not this_category %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
+        {% for category in categories %}
+        <li class="span9 category {% if this_category.name == category.name %}selected{% endif %}"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}">{{ category.count }}</span></a></li>
+        {% endfor %}
+      </ul>
+    </aside>    
+    <aside class="span9">
+      <center>
+        <strong>Cumpleaños de este mes</strong>
+      </center>
+      <ul class="dates">
+        <li>
+          <a href="#">
+            <figure class="avatar friends">
+              <img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+            </figure> 
+            {{ user.first_name }}
+          </a>
+        </li>        
+        <li>
+          <a href="#">
+            <figure class="avatar friends">
+              <img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+            </figure> 
+            {{ user.first_name }}
+          </a>
+        </li>
+      </ul>
+    </aside>
+  </div>
 
-  <aside class="span2">
-    <form class="span9 search" action="/giftcard/search" method="get">
-      <input type="text" class="span6" name="s" placeholder="¿Que estas buscando?"/>
-      <input type="submit" class="span3 col btn inside" value="Buscar"/>
-    </form>
-    <h3>Categorías</h3>
-    <ul class="span9">
-      <li class="span9 {% if not this_category %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
-      {% for category in categories %}
-      <li class="span9 category {% if this_category.name == category.name %}selected{% endif %}"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}">{{ category.count }}</span></a></li>
-      {% endfor %}
-    </ul>
-  </aside>
-  
   <!--<section class="special span6">
     el mes de la carlota
   </section>-->
