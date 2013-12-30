@@ -72,8 +72,6 @@
           <ul>
             {% if user.is_authenticated %}
             <li><a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a></li>
-            <li><a href="/user/calendar" class="btn secondary">Mis fechas</a></li>
-            <li><a href="/user/sender" class="btn secondary">Mis giftcards</a></li>
             <li id="userInfo">
               <a href="/user">
                 <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
@@ -95,8 +93,6 @@
           <ul>
             {% if user.is_authenticated %}
             <li><a href="?session=off" >Cerrar sesion</a></li>
-            <li><a href="/user/calendar">Mis fechas</a></li>
-            <li><a href="/user/sender">Mis giftcards</a></li>
             <li><a href="/user/profile"> Hola <strong>{{ user.name }}</strong></a></li>
             {% else %}
             <li><a href="/register">Ingresa</a></li>

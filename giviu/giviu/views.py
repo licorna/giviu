@@ -102,17 +102,20 @@ def giftcard_custom(request, gift_id):
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
 def user(request):
-    categories = GiftcardCategory.objects.all()
     data = {}
-    products = Giftcard.objects.all()
-    all_product_len = Giftcard.objects.count()
-    data.update({
-        'categories': categories,
-        'products': products,
-        'all_products_len': all_product_len,
-    })
 
     return render_to_response('user.html',data,context_instance=RequestContext(request))
+
+def sent(request):
+    data = {}
+
+    return render_to_response('user_sent.html',data,context_instance=RequestContext(request))
+
+    
+def calendar(request):
+    data = {}
+
+    return render_to_response('user_calendar.html',data,context_instance=RequestContext(request))
 
 @require_POST
 def giftcard_confirmation(request):
