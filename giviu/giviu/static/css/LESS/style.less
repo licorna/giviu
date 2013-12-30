@@ -1705,6 +1705,57 @@ span.tooltip {
 
 }
 
+.payment_response{
+    h3{
+      margin-top:10px;
+    }
+    .ico{
+      font-size:10em;
+      &.success{
+        color:#c0392b;
+      }
+    }
+    .giftcardDetail{
+      padding:5px;
+      background-color:#fff;
+      margin-bottom:15px;
+    }
+    ul{
+      li{
+        .gift{
+          color:@principalActions;
+          font-size:1.4em;
+        }
+      }
+    }
+  .social{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    padding:10px;
+    margin-right:5px;
+    text-align:center;
+    color:#fff;
+    font-size:1.2em;
+    transition:all 0.3s linear;
+    display:inline-block;
+    &.facebook{
+      background-color:#3b5998;
+    }
+    &.twitter{
+      background-color:#2c77ba;
+    }    
+    &.google{
+      background-color:#c0392b;
+    }
+    &:hover{
+      -webkit-box-shadow: inset 0px 0px 7px 1px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0px 0px 7px 1px rgba(0, 0, 0, 0.3);
+    }  
+  }
+
+}
+
 /* Custom Breakpoints */
 
 @media screen and (max-width: 480px) {
