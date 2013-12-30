@@ -345,8 +345,8 @@ class PaymentTransaction(models.Model):
                       'NOTIFIED_BY_PP']
 
     id = models.AutoField(primary_key=True)
-    transaction_uuid = models.CharField(max_length=35)
-    origin_datetime = models.CharField(max_length=60)
+    transaction_uuid = models.CharField(max_length=40)
+    origin_timestamp = models.CharField(max_length=60)
     auth_header = models.CharField(max_length=127)
     payment_method = models.CharField(max_length=40)
     operation_number = models.CharField(max_length=20)
@@ -362,3 +362,7 @@ class PaymentTransaction(models.Model):
             self.save()
             return last_state
         return False
+
+    class Meta:
+        db_table = 'payment_transaction'
+        verbose_name_plural = 'Payment Transactions'
