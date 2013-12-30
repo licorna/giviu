@@ -103,6 +103,8 @@ def giftcard_custom(request, gift_id):
 
 @require_POST
 def giftcard_confirmation(request):
+    from puntopagos import transaction_create
+
     for datum in ['giftcard-id', 'product-merchant-id', 'email-to']:
         if datum not in request.POST:
             return HttpResponseBadRequest()
@@ -135,6 +137,13 @@ def giftcard_confirmation(request):
     product.save()
     product_id = product.id
 
+    response = transaction_create(price)
+    try:
+        trx_id = response['trx_id']
+    except KeyError:
+        #TODO: patalear
+        pass
+
     data = {
         'name_to': name_to,
         'email_to': email_to,
@@ -144,6 +153,8 @@ def giftcard_confirmation(request):
         'giftcard_design': request.POST['giftcard-design'],
         'giftcard': giftcard,
         'product_id': product_id,
+        'token': token,
+        'trx_id': trx_id
     }
     data.update(csrf(request))
 

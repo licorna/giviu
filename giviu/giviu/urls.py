@@ -21,4 +21,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^psp/', include('psp.urls')),
+    url(r'^puntopagos/', include('puntopagos.urls')),
 )

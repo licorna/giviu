@@ -141,10 +141,8 @@ class Product(models.Model):
     id = models.IntegerField(primary_key=True)
     hash = models.CharField(max_length=255)
     uuid = models.CharField(max_length=40, default=lambda:str(uuid4()))
-    #parent = models.IntegerField()
     send_date = models.DateField(blank=True)
     created = models.DateTimeField(default=lambda:get_today())
-    # giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
     giftcard_to_email = models.CharField(db_column='to_email', max_length=255)
     giftcard_to_name = models.CharField(db_column='to_name', max_length=40)
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
@@ -338,3 +336,29 @@ class Merchants(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class PaymentTransaction(models.Model):
+    ALLOWED_STATES = ['PREPARING',
+                      'CREATED_IN_PP',
+                      'CLIENT_BEING_SENT_TO_PP',
+                      'NOTIFIED_BY_PP']
+
+    id = models.AutoField(primary_key=True)
+    transaction_uuid = models.CharField(max_length=35)
+    origin_datetime = models.CharField(max_length=60)
+    auth_header = models.CharField(max_length=127)
+    payment_method = models.CharField(max_length=40)
+    operation_number = models.CharField(max_length=20)
+    authorization_code = models.CharField(max_length=20)
+    amount = models.CharField(max_length=10)
+    state = models.CharField(max_length=20, default='PREPARING')
+    psp_token = models.CharField(max_length=60)
+
+    def set_state(self, state):
+        last_state = self.state
+        if state in ALLOWED_STATES:
+            self.state = state
+            self.save()
+            return last_state
+        return False
