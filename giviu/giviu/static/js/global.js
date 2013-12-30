@@ -41,7 +41,19 @@ $(document).ready(function(e){
 
 });
 
-function give(e){
+function sendInviteFriends(e){
+    if(e.to.length>=50){
+        FB.ui({method: 'apprequests',
+          message: 'Busca, personaliza y envia regalos a quien quieras cuando quieras. www.giviu.com',
+          to: e.to,
+          title:'Ven a conocer giviu'        
+      }, confirmSendInviteFriends);
+    }else{
+        alert('Debes invitar almenos a 50 amigos');
+    }
+}
+
+function confirmSendInviteFriends(e){
     console.log(e);
 }
 

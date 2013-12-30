@@ -6,7 +6,7 @@
 </section>
 <section class="container">
 
-  <aside class="span3">
+  <aside class="span2">
     <form class="span9 search" action="/giftcard/search" method="get">
       <input type="text" class="span6" name="s" placeholder="¿Que estas buscando?"/>
       <input type="submit" class="span3 col btn inside" value="Buscar"/>
@@ -25,7 +25,7 @@
   </section>-->
 
 
-  <section class="span6" id="giftCardList" data-columns>
+  <section class="span7" id="giftCardList" data-columns>
     {% for product in products %}
     <article class="giftCardModule" data-source-id="{{ product.id }}">
       <figure>

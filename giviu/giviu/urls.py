@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^giftcard/success$', 'giviu.views.giftcard_success', name='giftcard_success'),
     url(r'^giftcard/error$', 'giviu.views.giftcard_error', name='giftcard_error'),
 
+    url(r'^user$', 'giviu.views.user', name='user'),
+
     url(r'^api/', include('api.urls')),
 
     url(r'^admin/', include(admin.site.urls)),

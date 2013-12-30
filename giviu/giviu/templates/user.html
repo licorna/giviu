@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load locale_price %}
+{% block content %}
+<section class="container profile">
+	<div class="span2">
+		<div class="userSide span9 arrow">
+			<figure class="avatar">
+				<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+				<!--<a class="btn secondary changeImage"><span class="icon-camera"></span> Cambiar imagen</a>-->
+			</figure>
+			<ul class="userInfo">
+				<li><span class="icon-user"></span> {{ user.first_name }} </li>
+				<li>{{ user.birthday }} </li>
+				<li>{{ user.email }} </li>
+				<li><a href="/user/calendar" class="btn primary">Mis fechas</a> </li>
+			</ul>		
+		</div>		
+		<div class="userSide span9">
+			<center>
+				<strong>Cumpleaños de este mes</strong>
+			</center>
+			<ul class="userInfo friendList">
+				<li>
+					<a href="#">
+						<figure class="avatar friends">
+							<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+						</figure> 
+						<span class="name">{{ user.first_name }} </span>
+					</a>
+				</li>
+			</ul>		
+		</div>
+	</div>
+	<div class="span7 col userContent">
+		<div class="msg success">
+			</span> ¿Quieres Ganar dinero para comprar en Giviu?
+		</div>
+		<div class="inviteFriends span9">
+			<ul class="span9">
+				<li class="facebook span5" onclick="FB.ui({method: 'apprequests',message: 'Invita a tus amigos a Giviu.com'}, sendInviteFriends);"><span class="icon-facebook ico"></span> Invita a 50 amigos de facebook <span class="win">$1000</span></li>
+				<!--<li class="mail"><span class="icon-paperplane ico"></span> Invita a 20 amigos por correo electrónico<span class="win">$500</span></li>
+				<li class="twitter"><span class="icon-twitter ico"></span> Twitea con tu cuenta de twitter <span class="win">$500</span></li>-->
+				<li class="edit span4 col"><span class="icon-pencil ico"></span> Completa tu perfíl <span class="win">$500</span></li>
+			</ul>
+		</div>
+		<div class="span9" id="giftCardList" data-columns>
+			Estas giftcards pueden interesarte
+
+		    {% for product in products %}
+		    <article class="giftCardModule" data-source-id="{{ product.id }}">
+		      <figure>
+		        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+		        <img src="{{ product.image }}">
+		      </figure>
+		      <h2>{{ product.title }}</h2>
+		      <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+		      {% if product.kind == '1' %}
+		      <center>
+		        <select class="" name="webmenu"  onchange="showValue(this.value)">
+		          {% for price in product.get_price %}
+		          <option value="{{ price }}">{{ price|clp }}</option>
+		          {% endfor %}
+		        </select>
+		      </center>
+		      {% endif %}
+		      {% if product.kind == '0' %}
+		      <strong class="span9">{{ product.get_price|clp }}</strong>
+		      {% endif %}
+		      <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
+
+		    </article>
+		    {% endfor %}
+
+		</div>
+	</div>
+</section>
+{% endblock %}

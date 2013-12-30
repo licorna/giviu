@@ -101,6 +101,19 @@ def giftcard_custom(request, gift_id):
 
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
+def user(request):
+    categories = GiftcardCategory.objects.all()
+    data = {}
+    products = Giftcard.objects.all()
+    all_product_len = Giftcard.objects.count()
+    data.update({
+        'categories': categories,
+        'products': products,
+        'all_products_len': all_product_len,
+    })
+
+    return render_to_response('user.html',data,context_instance=RequestContext(request))
+
 @require_POST
 def giftcard_confirmation(request):
     from puntopagos import transaction_create
@@ -169,3 +182,5 @@ def giftcard_error(request):
 def giftcard_success(request):
     # return HttpResponse('El PSP autorizo el cobro!')
     return render_to_response('giftcard_success.html')
+
+
