@@ -352,12 +352,12 @@ class PaymentTransaction(models.Model):
     operation_number = models.CharField(max_length=20)
     authorization_code = models.CharField(max_length=20)
     amount = models.CharField(max_length=10)
-    state = models.CharField(max_length=20, default='PREPARING')
+    state = models.CharField(max_length=30, default='PREPARING')
     psp_token = models.CharField(max_length=60)
 
     def set_state(self, state):
         last_state = self.state
-        if state in ALLOWED_STATES:
+        if state in PaymentTransaction.ALLOWED_STATES:
             self.state = state
             self.save()
             return last_state

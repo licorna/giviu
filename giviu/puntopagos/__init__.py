@@ -87,11 +87,6 @@ def transaction_create(amount):
         'Content-Type': 'application/json; charset=utf-8',
         'Accept': 'application/json'
     }
-    # data = json.dumps({
-    #     'trx_id': int(trx_id),
-    #     'medio_pago': payment_method,
-    #     'monto': amount
-    # })
 
     data = '''{"trx_id":%s,"medio_pago":"%s","monto":%s}'''
     data = data % (trx_id, payment_method, amount)

@@ -22,7 +22,7 @@ def first_stage(request):
 
     token = request.POST['token']
     trx_id = request.POST['trx_id']
-    redirect_to = PUNTO_PAGOS_PHASE3_URL + '/transaccion/procesar/' + token
+    redirect_to = PUNTO_PAGOS_PHASE3_URL + '/' + token
     redirect_head = '<meta http-equiv="refresh" content="4; %s" />'
 
     try:
@@ -30,6 +30,7 @@ def first_stage(request):
         payment = PaymentTransaction.objects.get(transaction_uuid=trx_id)
         last_state = payment.set_state('CLIENT_BEING_SENT_TO_PP')
     except MultipleObjectsReturned:
+        print 'multipleobjectreturned'
         #TODO: Error grave
         pass
 
