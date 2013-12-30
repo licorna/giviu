@@ -24,7 +24,7 @@ def do_register(request):
                 user = Users.objects.get(fbid__exact=fbid)
             except Users.DoesNotExist:
                 bday = request.POST['birth']
-                bday = bday[6:] + '-' + bday[3:5] + '-' + bday[0:2]
+                bday = bday[6:] + '-' + bday[0:2] + '-' + bday[3:5]
                 user = Users.objects.create_user(fbid, fbid, bday,
                                                  email=request.POST['email'],
                                                  location=request.POST['location'],
@@ -169,4 +169,3 @@ def giftcard_error(request):
 def giftcard_success(request):
     # return HttpResponse('El PSP autorizo el cobro!')
     return render_to_response('giftcard_success.html')
-
