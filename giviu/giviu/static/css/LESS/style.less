@@ -321,30 +321,6 @@ aside{
 
       }
   }
-
-  &:after, &.arrow:before {
-    left: 100%;
-    top: 30px;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-  }
-
-  &:after {
-    border-color: rgba(136, 183, 213, 0);
-    border-left-color: #fff;
-    border-width: 5px;
-    margin-top: -5px;
-  }
-  &:before {
-    border-color: rgba(194, 225, 245, 0);
-    border-left-color: #fff;
-    border-width: 10px;
-    margin-top: -10px;
-  }
   .search{
     margin-bottom:15px;
     input[type="submit"]{
@@ -489,7 +465,7 @@ aside{
 
     &.arrow:after, &.arrow:before {
       left: 100%;
-      top: 100px;
+      top: 20px;
       border: solid transparent;
       content: " ";
       height: 0;
@@ -509,6 +485,73 @@ aside{
       border-left-color: #fff;
       border-width: 10px;
       margin-top: -10px;
+    }
+  }
+
+  .calendarAside{
+    border-right:1px dotted @greyBorder;
+    ul{
+      li{
+        margin-bottom:1px;
+        font-size:0.8em;
+        text-align:center;
+        a{
+          padding:3px 5px;
+          color:#fff;
+          background-color:@greyBorder;
+          display:block;
+          position:relative;
+          &.actual{
+            background-color:@principalActions; 
+          }
+          &:hover{
+            background-color:@grayDarkText; 
+          }
+          &.actual:after, &.arrow:before {
+            left: 100%;
+            top: 15px;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+          }
+
+          &.actual:after {
+            border-color: rgba(136, 183, 213, 0);
+            border-left-color:@principalActions;
+            border-width: 5px;
+            margin-top: -5px;
+          }
+          &.actual:before {
+            border-color: rgba(194, 225, 245, 0);
+            border-left-color:@principalActions;
+            border-width: 10px;
+            margin-top: -10px;
+          }
+        }
+      }
+    }
+  }
+  .friendBirth{
+    background-color:#fff;
+    padding:5px;
+    border-bottom:1px solid @greyBorder;
+    .avatar{
+      width:50px;
+    }
+    span{
+      float: left;
+      margin-left: 10px;
+      margin-top: 10px;
+    }    
+    strong{
+      &.date{
+        float:right;
+        font-size:3em;
+        margin:8px;
+      }
     }
   }
   .userContent{

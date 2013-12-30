@@ -47,17 +47,66 @@
 			<section class="giftcardsProfile span9">
 				<section class="span9">
 					<ul class="tabs span9">
-						<li class="tab"><a href="/user">Recibidas</a></li>
-						<li clasS="tab"><a href="/user/sent">Regaladas</a></li>
+						<li class="tab"><a href="/user">Giftcards recibidas</a></li>
+						<li clasS="tab"><a href="/user/sent">Giftcards regaladas</a></li>
 						<li clasS="tab selected"><a href="/user/calendar">Mis fechas</a></li>
 					</ul>
-
 					<div class="span9">
-
+						<div class="calendarAside span2">
+							<ul>
+								<li><a class="actual" href="#">Enero</a></li>
+								<li><a href="#">Febrero</a></li>
+								<li><a href="#">Marzo</a></li>
+								<li><a href="#">Abril</a></li>
+								<li><a href="#">Mayo</a></li>
+								<li><a href="#">Junio</a></li>
+								<li><a href="#">Julio</a></li>
+								<li><a href="#">Agosto</a></li>
+								<li><a href="#">Septiembre</a></li>
+								<li><a href="#">Octubre</a></li>
+								<li><a href="#">Noviembre</a></li>
+								<li><a href="#">Diciembre</a></li>
+							</ul>
+						</div>
+						<section class="span7 col">
+							<article class="span9 friendBirth">
+								<figure class="avatar span2">
+									<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+								</figure>
+								<span>Sebastian Duran</span>
+								<strong class="date">24</strong>
+							</article>							
+							<article class="span9 friendBirth">
+								<figure class="avatar span2">
+									<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+								</figure>
+								<span>Sebastian Duran</span>
+								<strong class="date">24</strong>
+							</article>							
+							<article class="span9 friendBirth">
+								<figure class="avatar span2">
+									<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+								</figure>
+								<span>Sebastian Duran</span>
+								<strong class="date">24</strong>
+							</article>
+							<article class="span9 friendBirth">
+								<figure class="avatar span2">
+									<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
+								</figure>
+								<span>Sebastian Duran</span>
+								<strong class="date">24</strong>
+							</article>
+						</section>
 					</div>
+
 				</section>
 			</section> 
 		</div>
 	</div>
 </section>
+
+<style>
+
+</style>
 {% endblock %}
