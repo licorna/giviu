@@ -16,7 +16,8 @@ $(document).ready(function(e){
 
     $('.close').on('click',closeModal);
 
-    $('#logout').click('click',logout);
+    $('#logout').on('click',logout);
+    $('.share').on('click',share);
 
     $('.mobileActions').on('click',menuDisplay);
 
@@ -39,6 +40,16 @@ $(document).ready(function(e){
 
 
 });
+
+function give(e){
+    console.log(e);
+}
+
+function share(e){
+    e.preventDefault();
+    var url =   $(this).attr('href');
+    window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=650');
+}
 
 function menuDisplay(e){
     $('.mobile').slideToggle('fast');

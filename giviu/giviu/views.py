@@ -151,7 +151,11 @@ def giftcard_confirmation(request):
 
 
 def giftcard_error(request):
-    return HttpResponse('El PSP respondio: No autorizado')
+    # return HttpResponse('El PSP respondio: No autorizado')
+    return render_to_response('giftcard_error.html')
+
 
 def giftcard_success(request):
-    return HttpResponse('El PSP autorizo el cobro!')
+    # return HttpResponse('El PSP autorizo el cobro!')
+    return render_to_response('giftcard_success.html')
+

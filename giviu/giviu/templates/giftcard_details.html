@@ -24,9 +24,18 @@
         {% for friend in friends %}
         <a href="/user/preferences/{{ friend.user_friend_fb_id }}"><img src="https://graph.facebook.com/{{ friend.user_friend_fb_id }}/picture?width=20&height=20"></a>
         {% endfor %}
-
       </span>
       {% endif %}
+      comparte:           
+        <a class="social facebook share" href="http://www.facebook.com/sharer.php?u=http://www.giviu.com">
+          <span class="icon-facebook"></span>
+        </a>                  
+        <a class="social twitter share" href="https://twitter.com/intent/tweet?url=http://www.giviu.com&text={{ giftcard.title }}&via=giviuchile" >
+          <span class="icon-twitter"></span>
+        </a>                     
+        <a class="social google share" href="https://plus.google.com/share?url=http://www.giviu.com">
+          <span class="icon-google-plus"></span>
+        </a>
     </div>
     <p class="span9">{{ giftcard.description }}</p>
     <div class="span9 value">
