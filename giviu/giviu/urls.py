@@ -22,8 +22,10 @@ urlpatterns = patterns('',
 
     url(r'^api/', include('api.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^merchant/', include('merchant.urls')),
 
+    url(r'^admin/', include(admin.site.urls)),
+    
     url(r'^psp/', include('psp.urls')),
     url(r'^puntopagos/', include('puntopagos.urls')),
 )

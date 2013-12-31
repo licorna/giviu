@@ -497,15 +497,17 @@ aside{
         text-align:center;
         a{
           padding:3px 5px;
-          color:#fff;
+          color:@grayText;
           background-color:@greyBorder;
           display:block;
           position:relative;
           &.actual{
             background-color:@principalActions; 
+            color:#fff;
           }
           &:hover{
             background-color:@grayDarkText; 
+            color:#fff;
           }
           &.actual:after, &.arrow:before {
             left: 100%;
@@ -540,6 +542,11 @@ aside{
     border-bottom:1px solid @greyBorder;
     .avatar{
       width:50px;
+    }
+    a{
+      span{
+        color:@grayText;
+      }
     }
     span{
       float: left;

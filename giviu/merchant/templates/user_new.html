@@ -1,0 +1,97 @@
+{% extends "base_merchant.html" %}
+{% block content %}
+	<div id="content">		
+		
+		<div id="content-header">
+			<h1><i class="fa fa-user"></i> Nuevo usuario</h1>
+		</div> <!-- #content-header -->	
+
+		<div id="content-container">
+			<form class="form-horizontal" role="form" id="newUserForm" method="post" action="/merchant/newuser">
+						<div class="form-group">
+							<label class="col-md-2">Nombre completo</label>
+
+							<div class="col-md-5">
+							  <input type="text" name="name" class="form-control" placeholder="Ej: Juan perez" required="required">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-2">Nombre de usuario</label>
+
+							<div class="col-md-5">
+							  <input type="text" name="username" class="form-control" placeholder="Ej: jperez" required="required">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-2">Correo electronico</label>
+
+							<div class="col-md-5">
+							  <input type="text" name="mail" class="form-control mail" placeholder="Ej: jperez@tuempresa.com" required="required">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2">Teléfono</label>
+
+							<div class="col-md-5">
+							  <input type="text" name="phone" class="form-control" placeholder="Ej: (+56) 2 1234 1234">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-2">Password</label>
+
+							<div class="col-md-5">
+							  <input type="password" name="pass" class="form-control" required="required">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-2">Permisos</label>
+							<div class="col-md-5">
+								<select  class="form-control" name="permission" required="required">
+									<option value="0">Admin</option>
+									<option value="1">Validador</option>
+									<option value="2">Ver reportes</option>
+								</select>
+							</div>
+						</div>
+
+						<input type="hidden" value="<? echo $_SESSION['merchant-id']; ?>" name="merchantUsersId">
+						<input type="submit" class="btn btn-success" valuw="crear">
+
+					</form>
+
+		</div>
+
+	</div> <!-- #content -->	
+</div> <!-- #wrapper -->
+<script>
+$(document).ready(function(){
+		$('#newUserForm').validate();
+
+	$('[name="username"]').focusout(function(){
+		
+		var username = $(this).val();
+		$('#newUserForm input[type="text"],#newUserForm input[type="password"],#newUserForm input[type="submit"]').attr('disabled','disabled');
+		$.get( "/merchant/verifyUser/", { u: username } )
+		  .done(function( data ) {
+		    var data = data.replace(/^\s+/, '');
+		    console.log(data);
+		    if(data=="1"){
+		    	alert('Ese nombre de usuario ya esta registrado en el administrador');
+			    $('[name="username"]').val('');
+			    $('[name="username"]').focus();
+		    }
+
+		    $('#newUserForm input[type="text"],#newUserForm input[type="password"],#newUserForm input[type="submit"]').removeAttr('disabled','disabled');
+
+		 });
+
+	
+	});
+
+})
+</script>
+{% endblock %}

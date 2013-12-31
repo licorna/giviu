@@ -1,0 +1,32 @@
+
+<!-- saved from url=(0045)http://www.w3schools.com/js/tryjs_switch2.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></head><body>
+
+<p>Click the button to display a message based on what day it is today.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<p id="demo">Looking forward to the Weekend</p>
+
+<script>
+function myFunction()
+{
+var x;
+var d=new Date().getDay();
+switch (d)
+  {
+  case 6:
+    x="Today it's Saturday";
+    break;
+  case 0:
+    x="Today it's Sunday";
+    break;
+  default:
+    x="Looking forward to the Weekend";
+  }
+document.getElementById("demo").innerHTML=x;
+}
+</script>
+
+
+</body></html>

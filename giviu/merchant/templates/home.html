@@ -1,0 +1,169 @@
+{% extends "base_merchant.html" %}
+{% block content %}
+	<div id="content">		
+		
+		<div id="content-header">
+			<h1><i class="fa fa-dashboard"></i> Inicio</h1>
+		</div> <!-- #content-header -->	
+		<div id="content-container">
+			<!-- validar giftcard 		
+			<form id="support-search" class="form">
+				<div class="form-group">
+					<div class="input-group">
+						<input id="support-search-field" type="text" class="form-control input-lg" name="search" placeholder="Ingresa aquí el código de la giftcard">
+						<span class="input-group-btn">
+							<button id="support-search-btn" class="btn btn-primary btn-lg" type="button"><i class="fa fa-search"></i>&nbsp; Search</button>
+						</span>
+					</div>
+				</div>
+			</form>
+		 	Fin validar giftcard -->
+			<div class="row">
+
+				<div class="col-md-3 col-sm-6">
+					<a href="javascript:;" class="dashboard-stat tertiary">
+						<div class="visual">
+							<i class="fa fa-gift"></i>
+						</div> <!-- /.visual -->
+						<div class="details">
+							<span class="content">Giftcards vendidas</span>
+
+							<span class="value">5</span>
+						</div> <!-- /.details -->
+						<i class="fa fa-play-circle more"></i>
+					</a> <!-- /.dashboard-stat -->
+				</div> <!-- /.col-md-3 -->
+
+				<div class="col-md-3 col-sm-6">
+					<a href="javascript:;" class="dashboard-stat primary">
+						<div class="visual">
+							<i class="fa fa-check"></i>
+						</div> <!-- /.visual -->
+						<div class="details">
+							<span class="content">Giftcards Validadas</span>
+							<span class="value">4</span>
+						</div> <!-- /.details -->
+						<i class="fa fa-play-circle more"></i>
+					</a> <!-- /.dashboard-stat -->
+				</div> <!-- /.col-md-3 -->
+
+				<div class="col-md-3 col-sm-6">
+					<a href="javascript:;" class="dashboard-stat secondary">
+						<div class="visual">
+							<i class="fa fa-exclamation-circle"></i>
+						</div> <!-- /.visual -->
+						<div class="details">
+							<span class="content">Giftcards por validar</span>
+							<span class="value">10</span>
+						</div> <!-- /.details -->
+						<i class="fa fa-play-circle more"></i>
+					</a> <!-- /.dashboard-stat -->
+				</div> <!-- /.col-md-3 -->
+
+				<div class="col-md-3 col-sm-6">
+					<a href="javascript:;" class="dashboard-stat giviu">
+						<div class="visual">
+							<i class="fa fa-money"></i>
+						</div> <!-- /.visual -->
+						<div class="details">
+							<span class="content">Total Vendido</span>
+							<span class="value">$ 5.000</span>
+						</div> <!-- /.details -->
+						<i class="fa fa-play-circle more"></i>
+					</a> <!-- /.dashboard-stat -->
+				</div> <!-- /.col-md-9 -->
+			</div>
+
+			<hr/>
+
+
+			<div class="row">
+
+				<div class="col-md-4 col-sm-4">
+					<div class="portlet">
+						<div class="portlet-header">
+							<h3>
+								<i class="fa fa-bar-chart-o"></i>
+								Ventas por servicio
+							</h3>
+						</div> <!-- /.portlet-header -->
+						<div class="portlet-content">
+
+							<div id="solds" style="height: 250px;"></div>
+
+						</div> <!-- /.portlet-content -->
+					</div> <!-- /.portlet -->
+				</div><!-- /.col -->
+				
+				
+				<div class="col-md-8 col-sm-8">
+					<div class="portlet">
+						<div class="portlet-header">
+							<h3>
+								Ultimas Ventas
+							</h3>
+						</div> <!-- /.portlet-header -->
+						<div class="portlet-content">					
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td style="width: 125px;">25/12/2013</td>
+										<td>
+											<p><strong>Masaje de relajación</strong></p>
+											<p>Regalado a: Sebastian</p>
+										</td>
+										<td>
+											<div class="thumbnail pull-right" style="width: 60px;">
+												<img src="https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-ash3/9107_10151731050713413_903996314_n.jpg" alt="Avatar">
+											</div>
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+							<a href="javascript:;" class="btn btn-secondary btn-xs pull-right"><i class="fa fa-expand-o"></i> &nbsp; Ver todas las ventas</a>
+
+						</div> <!-- /.portlet-content -->
+					</div> <!-- /.portlet -->
+				</div><!-- /.col -->
+
+			</div>
+
+			<hr/>
+
+
+		</div>	
+	</div> <!-- #content -->	
+</div> <!-- #wrapper -->
+
+<script>
+$(document).ready(function(){
+$(function () {
+	
+    if (!$('#solds').length) { return false; }
+
+	donut ();
+
+	$(window).resize (App.debounce (donut, 500));
+
+});
+
+function donut () {
+	$('#solds').empty ();
+
+	Morris.Donut({
+        element: 'solds',
+        data: [
+			{label: 'masajes', value: 5 },
+			{label: 'masajes 2', value: 10 },
+        ],
+        colors: App.chartColors,
+        hideHover: true,
+
+        formatter: function (y, data) { return data.value  +' vendidos'}
+    });
+}
+});
+</script>
+
+{% endblock %}
