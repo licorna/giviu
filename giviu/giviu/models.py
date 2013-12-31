@@ -16,6 +16,7 @@ from django.contrib.auth.models import (
 from uuid import uuid4
 from utils import get_today, get_one_month
 
+
 class Calendar(models.Model):
     id = models.IntegerField(primary_key=True)
     user = models.ForeignKey('Users')
@@ -23,29 +24,37 @@ class Calendar(models.Model):
     when = models.DateField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True)
     friend_gender = models.CharField(max_length=50, blank=True)
+
     class Meta:
         db_table = 'calendar'
+
 
 class Provincia(models.Model):
     id = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=64)
     region = models.ForeignKey('Region')
+
     class Meta:
         db_table = 'provincia'
+
 
 class Region(models.Model):
     id = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=64)
     ordinal = models.IntegerField()
+
     class Meta:
         db_table = 'region'
+
 
 class Comuna(models.Model):
     id = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=64)
     provincia = models.ForeignKey('Provincia')
+
     class Meta:
         db_table = 'comuna'
+
 
 class Customer(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -57,6 +66,7 @@ class Customer(models.Model):
     phone = models.CharField(max_length=255)
     hash = models.CharField(max_length=255)
     created = models.DateTimeField()
+
     class Meta:
         db_table = 'customer'
 
@@ -69,6 +79,7 @@ class Discount(models.Model):
     end_date = models.DateField()
     status = models.CharField(max_length=255)
     reason = models.TextField()
+
     class Meta:
         db_table = 'discount'
 
@@ -91,11 +102,13 @@ class GiftcardCategory(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class GiftcardDesign(models.Model):
     id = models.AutoField(primary_key=True)
     category = models.ForeignKey(GiftcardCategory)
     image = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
+
     class Meta:
         db_table = 'giftcard_design'
         verbose_name_plural = 'Giftcard Designs'
@@ -137,6 +150,7 @@ class Giftcard(models.Model):
     class Meta:
         db_table = 'giftcard'
 
+
 class Product(models.Model):
     id = models.IntegerField(primary_key=True)
     hash = models.CharField(max_length=255)
@@ -166,8 +180,10 @@ class Service(models.Model):
     assigned = models.CharField(max_length=11)
     token = models.CharField(max_length=255)
     expiration_date = models.DateField()
+
     class Meta:
         db_table = 'service'
+
 
 class Friend(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -178,8 +194,10 @@ class Friend(models.Model):
     day = models.CharField(max_length=40)
     birthday = models.DateField()
     gender = models.CharField(max_length=100)
+
     class Meta:
         db_table = 'friend'
+
 
 class GiviuUserManager(BaseUserManager):
     def create_user(self, fbid, password, birthday, **kwargs):
@@ -207,16 +225,15 @@ class GiviuUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
     def create_superuser(self, fbid, password, birthday):
         user = self.create_user(fbid,
-            password=password,
-            birthday=birthday
-        )
+                                password=password,
+                                birthday=birthday)
         user.is_admin = True
         user.set_password(password)
         user.save(using=self._db)
         return user
+
 
 class Users(AbstractBaseUser):
     id = models.IntegerField(primary_key=True)
@@ -282,15 +299,18 @@ class Likes(models.Model):
     user_fbid = models.CharField(max_length=255)
     source_type = models.IntegerField()
     created = models.DateTimeField()
+
     class Meta:
         db_table = 'likes'
         verbose_name_plural = 'Likes'
+
 
 class MerchantTabs(models.Model):
     id = models.IntegerField(primary_key=True)
     parent_id = models.IntegerField()
     title = models.CharField(max_length=255)
     content = models.TextField()
+
     class Meta:
         db_table = 'merchant_tabs'
         verbose_name_plural = 'Merchant Tabs'
@@ -306,6 +326,7 @@ class MerchantUsers(models.Model):
     phone = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     permission = models.IntegerField()
+
     class Meta:
         db_table = 'merchant_users'
         verbose_name_plural = 'Merchant Users'
@@ -330,6 +351,7 @@ class Merchants(models.Model):
     logo = models.CharField(max_length=255, blank=True)
     lat = models.CharField(max_length=255, blank=True)
     lng = models.CharField(max_length=255, blank=True)
+
     class Meta:
         db_table = 'merchants'
         verbose_name_plural = 'Merchants'
@@ -342,7 +364,10 @@ class PaymentTransaction(models.Model):
     ALLOWED_STATES = ['PREPARING',
                       'CREATED_IN_PP',
                       'CLIENT_BEING_SENT_TO_PP',
-                      'NOTIFIED_BY_PP']
+                      'NOTIFIED_BY_PP',
+                      'INFO_REQUESTED_TO_PP',
+                      'RESPONSE_FROM_PP_SUCCESS',
+                      'RESPONSE_FROM_PP_ERROR']
 
     id = models.AutoField(primary_key=True)
     transaction_uuid = models.CharField(max_length=40)

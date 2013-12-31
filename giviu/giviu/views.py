@@ -111,7 +111,7 @@ def sent(request):
 
     return render_to_response('user_sent.html',data,context_instance=RequestContext(request))
 
-    
+
 def calendar(request):
     data = {}
 
@@ -186,5 +186,3 @@ def giftcard_error(request):
 def giftcard_success(request):
     # return HttpResponse('El PSP autorizo el cobro!')
     return render_to_response('giftcard_success.html')
-
-
