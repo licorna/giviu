@@ -1,19 +1,21 @@
 from django.shortcuts import render, redirect, render_to_response
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.conf import settings
 from giviu.models import PaymentTransaction
 from django.core.exceptions import MultipleObjectsReturned
-
-import random
 
 if settings.DEVELOPMENT:
     from giviu.settings_development import *
 else:
     from giviu.settings_production import *
 
+
 @require_POST
 def first_stage(request):
+    if settings.ENVIRONMENT != 'pretesting':
+        return HttpResponse('Sitio de Pruebas')
+
     if 'token' not in request.POST:
         return HttpResponseBadRequest()
 
