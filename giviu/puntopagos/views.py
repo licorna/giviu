@@ -28,26 +28,27 @@ def notify(request):
         received['token'],
         received['trx_id'],
         received['amount'],
-        request.META['FECHA']
+        request.META['Fecha']
     )
-
-    if 'trx_id' in received:
-        try:
-            payment = PaymentTransaction.object.get(transaction_uuid__exact=trx_id)
-        except MultipleObjectsReturned:
-            #TODO: Error y log
-            pass
-        #TODO: Validar que todos estos parametros se pasen como datos POST
-        # Utilizando (puede ser) un frozenset y 'issubset'
-        payment.operation_number = request.POST['numero_operacion']
-        payment.authorization_code = request.POST['codigo_autorizacion']
-        payment.set_state('NOTIFIED_BY_PP')
-        payment.save()
 
     received_client_id, received_auth = request.META['Autorizacion'][3:].split(':')
     if received_auth != my_auth or received_client_id != PUNTO_PAGOS_CLIENTID:
+        print 'La autorizacion no es valida'
         # TODO: Loguear problema
         return HttpResponseBadRequest()
+
+    try:
+        payment = PaymentTransaction.object.get(transaction_uuid__exact=trx_id)
+    except MultipleObjectsReturned:
+        print 'multiples objetos con el mismo trx_id'
+        #TODO: Error y log
+        pass
+    #TODO: Validar que todos estos parametros se pasen como datos POST
+    # Utilizando (puede ser) un frozenset y 'issubset'
+    payment.operation_number = request.POST['numero_operacion']
+    payment.authorization_code = request.POST['codigo_autorizacion']
+    payment.set_state('NOTIFIED_BY_PP')
+    payment.save()
 
     data = {
         'respuesta': '00',
