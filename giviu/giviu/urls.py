@@ -23,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^page/como-funciona$', 'giviu.views.page_who_its_work', name='page_who_its_work'),
     url(r'^page/preguntas-frecuentes$', 'giviu.views.page_faq', name='page_faq'),
     url(r'^page/empresas$', 'giviu.views.page_enterprise', name='page_enterprise'),
+    url(r'^page/contacto$', 'giviu.views.page_contact', name='page_contact'),
+    url(r'^page/terminos-y-condiciones$', 'giviu.views.page_terms', name='page_terms'),
 
     url(r'^api/', include('api.urls')),
 

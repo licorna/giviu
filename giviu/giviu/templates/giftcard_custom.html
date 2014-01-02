@@ -22,17 +22,17 @@
     <form class="span9" method="post" action="/giftcard/checkout" id="customForm">
       {% csrf_token %}
       <label class="span9">
-        ¿A quien le enviaras esta giftcard?
+        ¿Cual es el nombre de quien recibirá esta giftcard?
       </label>
       <input type="text" class="span9 nameTo required" name="name-to">
       <label class="span9">
-        ¿Cual es el correo electronico de <strong class="name_to">Juan</strong>?
+        ¿Cual es el correo electronico de <strong class="name_to"></strong>?
       </label>
       <input type="text" class="span9 required email" name="email-to">
       <label class="span9">
         ¿En que fecha quieres enviarla?
       </label>
-      <input type="text" class="span9 required" name="send-when" id="datepicker" value="{% now "SHORT_DATE_FORMAT" %}" name="send-date">
+      <input type="text" class="span9 required" name="send-when" id="datepicker" value="" name="send-date">
       <label class="span9">
         ¿Quieres agregarle un mensaje?
       </label>
@@ -76,7 +76,7 @@
   var giftcard_price = localStorage.getItem('giftcard_price');
   var giftcard_id = localStorage.getItem('giftcard_id');
 
-  $('#price').html("$"+giftcard_price);
+  $('#price').html('$'+moneyFormat(giftcard_price));
   $('[name="giftcard-price"]').val(giftcard_price)
 
   $('.nameTo').keyup(function(){

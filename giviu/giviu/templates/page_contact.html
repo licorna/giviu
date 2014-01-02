@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container contact">
+<h1>Contáctanos</h1>
+	<section class="span4 image">
+		<span class="icon-paperplane"></span>
+	</section>	
+	<section class="span5">
+		<form>
+			<label class="span9">Tu nombre</label>
+			<input type="text" class="span8"/>		
+			<label class="span9">Tu correo electrónico</label>
+			<input type="text" class="span8"/>		
+			<label class="span9">¿Porque quieres contactarnos?</label>
+			<select class="span8 col"  onchange="showValue(this.value)">
+				<option value="calendar">Sugerencia</option>
+				<option value="calendar">Reclamo</option>
+				<option value="calendar">Quiero publicar con ustedes</option>
+			</select>
+			<label class="span9">¿Que tienes para decirnos?</label>
+			<textarea class="span8"></textarea>	
+			<div class="span8" style="text-align:right;">
+				<input type="submit" value="Contactar" class="btn inside">
+			</div>
+		</form>
+	</section>
+
+</section>
+{% endblock %}
