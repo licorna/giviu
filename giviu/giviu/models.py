@@ -191,6 +191,9 @@ class Product(models.Model):
             return last_state
         return False
 
+    def is_closed(self):
+        return self.state[:8] == 'RESPONSE'
+
     class Meta:
         db_table = 'product'
 
@@ -408,6 +411,9 @@ class PaymentTransaction(models.Model):
             self.save()
             return last_state
         return False
+
+    def is_closed(self):
+        return self.state[:8] == 'RESPONSE'
 
     class Meta:
         db_table = 'payment_transaction'
