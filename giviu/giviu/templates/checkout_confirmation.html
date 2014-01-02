@@ -43,6 +43,7 @@
       <input type="hidden" name="giftcardProductId" value="{{ giftcard.id }}">
       <input type="hidden" name="token" value="{{ token }}">
       <input type="hidden" name="trx_id" value="{{ trx_id }}">
+      <input type="hidden" name="product_id" value="{{ product_id }}">
       <input type="submit" value="Pagar"  class="span2 btn primary">
     </form>
 
@@ -52,4 +53,9 @@
   </div>
 
 </section>
+<script>
+  $(document).ready(function(){
+  localStorage.setItem('product_id', $('[name="product_id"]').val());
+  });
+</script>
 {% endblock %}

@@ -1,20 +1,23 @@
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 from models import (
-    GiftcardCategory, Giftcard, Likes, Merchants, Friend, GiftcardDesign,
+    GiftcardCategory, Giftcard, Likes, GiftcardDesign,
     Users, Product
 )
-from hashlib import md5
+
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 
+
 def do_logout(request):
     logout(request)
     return redirect('/')
+
 
 def do_register(request):
     if request.method == 'POST':
@@ -64,14 +67,14 @@ def home(request, slug=None):
         'products': products,
         'all_products_len': all_product_len,
     })
-    return render_to_response('giftcard.html', data, context_instance=RequestContext(request))
+    return render_to_response('giftcard.html', data,
+                              context_instance=RequestContext(request))
 
 
 def giftcard_detail(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
     try:
         likes = Likes.objects.get(pk=gift_id)
-        friends = UserFriends.objects.filter(user_friend_fb_id__exact=likes.like_user_fb_id)
     except Likes.DoesNotExist:
         likes = 0
         friends = 0
@@ -101,23 +104,30 @@ def giftcard_custom(request, gift_id):
 
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
+
 def user(request):
     data = {}
+    return render_to_response('user.html',
+                              data,
+                              context_instance=RequestContext(request))
 
-    return render_to_response('user.html',data,context_instance=RequestContext(request))
 
 def sent(request):
     data = {}
-
-    return render_to_response('user_sent.html',data,context_instance=RequestContext(request))
+    return render_to_response('user_sent.html',
+                              data,
+                              context_instance=RequestContext(request))
 
 
 def calendar(request):
     data = {}
+    return render_to_response('user_calendar.html',
+                              data,
+                              context_instance=RequestContext(request))
 
-    return render_to_response('user_calendar.html',data,context_instance=RequestContext(request))
 
 @require_POST
+@login_required
 def giftcard_confirmation(request):
     from puntopagos import transaction_create
 
@@ -141,6 +151,15 @@ def giftcard_confirmation(request):
         return HttpResponseBadRequest()
 
     design = GiftcardDesign.objects.get(pk=int(design))
+
+    #TODO: Comprobar que la transaccion fue creada exitosamente
+    response, transaction = transaction_create(price)
+    try:
+        trx_id = response['trx_id']
+    except KeyError:
+        #TODO: patalear
+        pass
+
     product = Product(giftcard_from=request.user,
                       giftcard_to_email=email_to,
                       giftcard_to_name=name_to,
@@ -148,18 +167,10 @@ def giftcard_confirmation(request):
                       design=design,
                       send_date=date,
                       comment=comment,
-                      giftcard=giftcard
-    )
+                      giftcard=giftcard,
+                      transaction=transaction)
     product.save()
-    product_id = product.id
-
-    #TODO: Comprobar que la transaccion fue creada exitosamente
-    response = transaction_create(price)
-    try:
-        trx_id = response['trx_id']
-    except KeyError:
-        #TODO: patalear
-        pass
+    product_id = product.uuid
 
     data = {
         'name_to': name_to,
@@ -175,7 +186,9 @@ def giftcard_confirmation(request):
     }
     data.update(csrf(request))
 
-    return render_to_response('checkout_confirmation.html', data, context_instance=RequestContext(request))
+    return render_to_response('checkout_confirmation.html',
+                              data,
+                              context_instance=RequestContext(request))
 
 
 def giftcard_error(request):

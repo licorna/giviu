@@ -51,53 +51,18 @@ def authorization_header(trx_id, amount, date):
 
 
 def authorization_header_phase5(token, trx_id, amount, date):
-    message = Tempalte('transaccion/traer\n$token\n$trx_id\n$amount\n$date')
+    message = Template('transaccion/traer\n$token\n$trx_id\n$amount\n$date')
     message = message.substitute(token=token,
                                  trx_id=trx_id,
                                  amount=amount,
                                  date=date)
 
-    digest = base64.b64encode(hmax.new(PUNTO_PAGOS_SECRET, message, sha1).digest())
+    digest = base64.b64encode(hmac.new(PUNTO_PAGOS_SECRET, message, sha1).digest())
     return 'PP %s:%s' % (PUNTO_PAGOS_CLIENTID, digest)
 
 
 def get_punto_pago_payment_method():
     return PUNTO_PAGOS_PMETHOD
-
-
-def transaction_check(token, trx_id, amount, date):
-    '''
-    Transaction Check corresponds to the phase 6 of the Non-SSL
-    documentation. In this scenario the local business (Giviu)
-    won't be notified about the state of the transaction, but it
-    will have to pull this information from the server, once
-    the transaction comes back redirected from Punto Pagos.
-    '''
-    amount = get_normalized_amount(amount)
-    date = now_rfc1123()
-    authorization = authorization_header_phase5(token, trx_id, amount, date)
-    headers = {
-        'Fecha': date,
-        'Authorization': authorization,
-        'Accept': 'application/json'
-    }
-
-    payment = PaymentTransaction.objects.get(psp_token__exact=token)
-    payment.set_state('INFO_REQUESTED_TO_PP')
-
-    r = requests.get(PUNTO_PAGOS_PHASE5_URL + token, headers=headers)
-    try:
-        response = json.loads(r.body)
-    except ValueError:
-        print 'Error decodificando JSON'
-        return False
-
-    if response['respuesta'] == '00':
-        payments.set_state('RESPONSE_FROM_PP_SUCCESS')
-        return True
-
-    payments.set_state('RESPONSE_FROM_PP_ERROR')
-    return False
 
 
 def transaction_create(amount):
@@ -156,7 +121,7 @@ def transaction_create(amount):
         pass
     payment.set_state('CREATED_IN_PP')
 
-    return response
+    return response, payment
 
 
 def notify_check(token, trx_id, amount, date):
@@ -167,3 +132,33 @@ def notify_check(token, trx_id, amount, date):
                                  date=date)
 
     return base64.b64encode(hmac.new(PUNTO_PAGOS_SECRET, message).digest())
+
+
+def transaction_check(token, trx_id, amount, date):
+    '''
+    Transaction Check corresponds to the phase 6 of the Non-SSL
+    documentation. In this scenario the local business (Giviu)
+    won't be notified about the state of the transaction, but it
+    will have to pull this information from the server, once
+    the transaction comes back redirected from Punto Pagos.
+    '''
+    amount = get_normalized_amount(amount)
+    date = now_rfc1123()
+    authorization = authorization_header_phase5(token, trx_id, amount, date)
+    headers = {
+        'Fecha': date,
+        'Autorizacion': authorization,
+        'Accept': 'application/json'
+    }
+
+    payment = PaymentTransaction.objects.get(psp_token__exact=token)
+    payment.set_state('INFO_REQUESTED_TO_PP')
+
+    r = requests.get(PUNTO_PAGOS_PHASE5_URL + token, headers=headers)
+    try:
+        response = json.loads(r.text)
+    except ValueError:
+        print 'Error decodificando JSON'
+        return False
+
+    return response['respuesta'] == '00', response
