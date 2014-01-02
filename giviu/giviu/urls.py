@@ -18,6 +18,11 @@ urlpatterns = patterns('',
     url(r'^user$', 'giviu.views.user', name='user'),
     url(r'^user/sent$', 'giviu.views.sent', name='user_sent'),
     url(r'^user/calendar$', 'giviu.views.calendar', name='user_calendar'),
+    
+    url(r'^page/giviu$', 'giviu.views.page_who_we_are', name='page_who_we_are'),
+    url(r'^page/como-funciona$', 'giviu.views.page_who_its_work', name='page_who_its_work'),
+    url(r'^page/preguntas-frecuentes$', 'giviu.views.page_faq', name='page_faq'),
+    url(r'^page/empresas$', 'giviu.views.page_enterprise', name='page_enterprise'),
 
     url(r'^api/', include('api.urls')),
 

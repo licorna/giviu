@@ -13,8 +13,8 @@ else:
 
 @require_POST
 def first_stage(request):
-    if settings.ENVIRONMENT != 'pretesting':
-        return HttpResponse('Sitio de Pruebas')
+    # if settings.ENVIRONMENT != 'pretesting':
+    #     return HttpResponse('Sitio de Pruebas')
 
     if 'token' not in request.POST:
         return HttpResponseBadRequest()

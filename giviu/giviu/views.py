@@ -182,7 +182,25 @@ def giftcard_error(request):
     # return HttpResponse('El PSP respondio: No autorizado')
     return render_to_response('giftcard_error.html')
 
-
 def giftcard_success(request):
     # return HttpResponse('El PSP autorizo el cobro!')
     return render_to_response('giftcard_success.html')
+
+def page_who_we_are(request):
+    # return HttpResponse('El PSP respondio: No autorizado')
+    return render_to_response('page_who_we_are.html')
+    
+def page_who_its_work(request):
+    # return HttpResponse('El PSP respondio: No autorizado')
+    return render_to_response('page_who_its_work.html')
+
+def page_faq(request):
+    # return HttpResponse('El PSP respondio: No autorizado')
+    return render_to_response('page_faq.html')
+
+
+def page_enterprise(request):
+    # return HttpResponse('El PSP respondio: No autorizado')
+    return render_to_response('page_enterprise.html')
+
+

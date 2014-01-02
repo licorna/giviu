@@ -35,7 +35,7 @@
         <img src="{{ product.image }}">
       </figure>
       <h2>{{ product.title }}</h2>
-      <h4><a href="http://www.gifty.dev/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+      <h4><a href="/partner/name/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
       {% if product.kind == '1' %}
       <center>
         <select class="" name="webmenu"  onchange="showValue(this.value)">

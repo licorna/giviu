@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container enterprise">
+	<aside class="span3">
+		<ul>
+			<li  class="selected"><a href="/enterprise/publish">Publica con nosotros</a></li>
+			<li><a href="/enterprise/why">Porque elegir <strong>Giviu</strong></a></li>
+			<li><a href="/enterprise/benefits">En que beneficia <strong>Giviu</strong> a mi negocio</a></li>
+			<li><a href="/enterprise/price">Valores y comisiones</a></li>
+		</ul>
+		<br/>
+		<br/>
+		<center>
+			<a href="/enterprise/publish" class="btn primary">
+				Publica con nosotros
+			</a>
+			<br/><br/>
+			¡Comienza hoy!
+		</center>
+	</aside>
+	</div>
+	<div class="span6 col publish">
+		<h1>Publica con nosotros</h1>
+		<p>Llena este sencillo formulario para poder comunicarnos contigo a la brevedad.</p>
+		<form>
+			<label class="span9">Nombre de tu empresa</label>
+			<input type="text" class="span8"/>				
+			<label class="span9">Tu nombre</label>
+			<input type="text" class="span8"/>		
+			<label class="span9">Tu correo electrónico</label>
+			<input type="text" class="span8"/>				
+			<label class="span9">Teléfono</label>
+			<input type="text" class="span8"/>		
+			<label class="span9">Categoria de tu negocio</label>
+			<select class="span8 col"  onchange="showValue(this.value)">
+				<option value="calendar">Belleza</option>
+				<option value="calendar">Tecnologia</option>
+				<option value="calendar">Aire libre</option>
+				<option value="calendar">Restaurant</option>
+				<option value="calendar">Deporte</option>
+			</select>
+			<div class="span8" style="text-align:right;">
+				<input type="submit" value="Enviar información" class="btn primary">
+			</div>
+			
+		</form>
+	</div>
+</section>
+{% endblock %}
