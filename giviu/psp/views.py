@@ -49,9 +49,9 @@ def first_stage(request):
         pass
 
     data = {
-        'additional_head': redirect_head % (redirect_to, )
+        'additional_head': redirect_head % (redirect_to, ),
     }
-    return render_to_response('success.html', data)
+    return render_to_response('waiting.html', data)
 
 
 @require_GET
