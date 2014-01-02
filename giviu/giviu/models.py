@@ -379,6 +379,7 @@ class PaymentTransaction(models.Model):
     amount = models.CharField(max_length=10)
     state = models.CharField(max_length=30, default='PREPARING')
     psp_token = models.CharField(max_length=60)
+    raw_response = models.TextField(blank=True)
 
     def set_state(self, state):
         last_state = self.state
