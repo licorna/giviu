@@ -14,7 +14,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from uuid import uuid4
-from utils import get_today, get_one_month
+from utils import get_one_month, get_now
 
 
 class Calendar(models.Model):
@@ -152,11 +152,19 @@ class Giftcard(models.Model):
 
 
 class Product(models.Model):
+    # Los estados finales deberian ser cambiados
+    # por estados que tengan sentido para un producto
+    # y no necesariamente para una transaccion
+    ALLOWED_STATES = ['PREPARING',
+                      'WAITING_CONFIRMATION_FROM_PP',
+                      'RESPONSE_FROM_PP_SUCCESS',
+                      'RESPONSE_FROM_PP_ERROR']
+
     id = models.IntegerField(primary_key=True)
     hash = models.CharField(max_length=255)
     uuid = models.CharField(max_length=40, default=lambda:str(uuid4()))
     send_date = models.DateField(blank=True)
-    created = models.DateTimeField(default=lambda:get_today())
+    created = models.DateTimeField(default=lambda:get_now())
     giftcard_to_email = models.CharField(db_column='to_email', max_length=255)
     giftcard_to_name = models.CharField(db_column='to_name', max_length=40)
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
@@ -169,7 +177,19 @@ class Product(models.Model):
     type = models.CharField(max_length=255)
     giftcard = models.ForeignKey(Giftcard, db_column='giftcard_id')
 
-    state = models.CharField(max_length=40, default='preparing')
+    transaction = models.ForeignKey('PaymentTransaction',
+                                    db_column='transaction_id',
+                                    related_name='+')
+
+    state = models.CharField(max_length=40, default='PREPARING')
+
+    def set_state(self, state):
+        last_state = self.state
+        if state in Product.ALLOWED_STATES:
+            self.state = state
+            self.save()
+            return last_state
+        return False
 
     class Meta:
         db_table = 'product'

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, render_to_response
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST, require_GET
 from django.conf import settings
-from giviu.models import PaymentTransaction
+from giviu.models import PaymentTransaction, Product
 from django.core.exceptions import MultipleObjectsReturned
 from puntopagos import transaction_check
 
@@ -23,6 +23,16 @@ def first_stage(request):
     if 'trx_id' not in request.POST:
         return HttpResponseBadRequest()
 
+    if 'product_id' not in request.POST:
+        return HttpResponseBadRequest()
+
+    try:
+        product = Product.objects.get(uuid=request.POST['product_id'])
+    except Product.DoesNotExist:
+        return HttpResponseBadRequest()
+
+    product.set_state('WAITING_CONFIRMATION_FROM_PP')
+
     token = request.POST['token']
     trx_id = request.POST['trx_id']
     redirect_to = PUNTO_PAGOS_PHASE3_URL + '/' + token
@@ -32,6 +42,7 @@ def first_stage(request):
         #TODO: Log
         payment = PaymentTransaction.objects.get(transaction_uuid=trx_id)
         last_state = payment.set_state('CLIENT_BEING_SENT_TO_PP')
+
     except MultipleObjectsReturned:
         print 'multipleobjectreturned'
         #TODO: Error grave
@@ -42,8 +53,10 @@ def first_stage(request):
     }
     return render_to_response('success.html', data)
 
+
 @require_GET
-def success(request, token):
+def pp_response(request, token, **kwargs):
+    status = kwargs.get('status', 'error') == 'success'
     try:
         transaction = PaymentTransaction.objects.get(psp_token__exact=token)
     except PaymentTransaction.DoesNotExist:
@@ -57,14 +70,25 @@ def success(request, token):
         transaction.origin_timestamp
     )
 
+    try:
+        product = Product.objects.get(transaction=transaction)
+    except DoesNotExist:
+        #TODO: Esto no puede ocurrir, porque violaria una restriccion de MySQL
+        return HttpResponseBadRequest()
+    except MultipleObjectsReturned:
+        return HttpResponseBadRequest()
+        #TODO: Error grave
+
     if status is True:
+        product.set_state('RESPONSE_FROM_PP_SUCCESS')
         transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
+        transaction.operation_number = response['numero_operacion']
+        transaction.authorization_code = response['codigo_autorizacion']
     else:
+        product.set_state('RESPONSE_FROM_PP_ERROR')
         transaction.set_state('RESPONSE_FROM_PP_ERROR')
 
     transaction.raw_response = response
-    transaction.operation_number = response['numero_operacion']
-    transaction.authorization_code = response['codigo_autorizacion']
     transaction.save()
 
     return HttpResponse('Este es el token siiii' + token)

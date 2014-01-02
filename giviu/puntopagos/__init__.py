@@ -121,7 +121,7 @@ def transaction_create(amount):
         pass
     payment.set_state('CREATED_IN_PP')
 
-    return response
+    return response, payment
 
 
 def notify_check(token, trx_id, amount, date):
@@ -161,7 +161,4 @@ def transaction_check(token, trx_id, amount, date):
         print 'Error decodificando JSON'
         return False
 
-    if response['respuesta'] == '00':
-        return True, response
-
-    return False, response
+    return response['respuesta'] == '00', response
