@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 import json
 from django.conf import settings
 
@@ -8,9 +8,6 @@ def get_git_index_sha():
 
 
 def index(request):
-    if request.META['REMOTE_ADDR'] != settings.BALANCER_ADDR:
-        return HttpResponseBadRequest()
-
     data = {
         'git_index_sha': get_git_index_sha(),
         'database': {
