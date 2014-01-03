@@ -103,13 +103,14 @@
         <img src="/static/img/mail.png">
       </center>
     </div>
-    <form class="span5 col" action="mail.php" method="post">
+    <form class="span5 col" method="post">
+      {% csrf_token %}
       <label class="span9">Nombre</label>
       <input type="text" class="span7" name="name" placeholder="Tu nombre aquí" required/>
       <label class="span9">Email</label>
-      <input type="email"  class="span7"name="email" placeholder="name@example.com" required/>
+      <input type="email"  class="span7"name="email" placeholder="Tu email" required/>
       <label class="span9">Contáctanos</label>
-      <textarea name="contact" class="span7"></textarea>
+      <textarea name="comment" class="span7"></textarea>
       <input type="submit" value="Enviar"  class="span7" required/>
     </form>
 
