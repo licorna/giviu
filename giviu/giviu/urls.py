@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'giviu.views.home', name='home'),
+    url(r'^$', 'landing.views.home', name='landing_home'),
     url(r'^giftcard/detail/(?P<gift_id>\d+)$', 'giviu.views.giftcard_detail', name='giftcard_detail'),
     url(r'^giftcard/category/(?P<slug>[a-z-]+)$', 'giviu.views.home', name='giftcard_category'),
     url(r'^giftcard/custom/(?P<gift_id>\d+)$', 'giviu.views.giftcard_custom', name='giftcard_custom'),
@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^user$', 'giviu.views.user', name='user'),
     url(r'^user/sent$', 'giviu.views.sent', name='user_sent'),
     url(r'^user/calendar$', 'giviu.views.calendar', name='user_calendar'),
-    
+
     url(r'^page/giviu$', 'giviu.views.page_who_we_are', name='page_who_we_are'),
     url(r'^page/como-funciona$', 'giviu.views.page_who_its_work', name='page_who_its_work'),
     url(r'^page/preguntas-frecuentes$', 'giviu.views.page_faq', name='page_faq'),
