@@ -62,8 +62,7 @@ def pp_response(request, token, **kwargs):
         if transaction.is_closed():
             #TODO: La transaccion ya fue procesada, debe ser dirigido a
             #la pagina de checkout o la pagina de giftcards de usuarios.
-            #return HttpResponse('Redirigir a /user/giftcard o algo')
-            return redirect('/')
+            return HttpResponse('Redirigir a /user/giftcard o algo')
 
     except PaymentTransaction.DoesNotExist:
         #TODO: Log
@@ -96,5 +95,7 @@ def pp_response(request, token, **kwargs):
 
     transaction.raw_response = response
     transaction.save()
-    data = {}
+    data = {
+        'transaction' : response
+    }
     return render_to_response('success.html', data)

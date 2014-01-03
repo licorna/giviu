@@ -190,12 +190,12 @@ def giftcard_confirmation(request):
                               data,
                               context_instance=RequestContext(request))
 
-
-def giftcard_error(request):
-    return render_to_response('giftcard_error.html')
-
 def giftcard_success(request):
-    return render_to_response('giftcard_success.html')
+    response = {'medio_pago': '3', 'codigo_autorizacion': '139854', 'medio_pago_descripcion': 'WebPay Transbank', 'tipo_pago': None, 'respuesta': '00', 'monto': 5000.0, 'num_cuotas': 0, 'tipo_cuotas': 'D\xe9bito', 'fecha_aprobacion': '2014-01-03T00:50:02', 'primer_vencimiento': None, 'numero_operacion': '8708574924', 'token': 'MYSUDGS2KCARM77R', 'trx_id': '5107689342', 'error': None, 'numero_tarjeta': '6623', 'valor_cuota': 0}
+    data ={
+        'transaction': response
+    }
+    return render_to_response('borrar_success.html',data)
 
 def page_who_we_are(request):
     return render_to_response('page_who_we_are.html')
