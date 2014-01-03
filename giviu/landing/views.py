@@ -1,10 +1,19 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseBadRequest
 from django.template import RequestContext
+from django.contrib.auth.models import AnonymousUser
 from landing.models import BetaRegisteredUser
+from django.conf import settings
+from datetime import datetime
+from giviu.views import home as main_home
 
 
 def home(request):
+
+    now = datetime.now()
+    if now > settings.LAUNCH_DAY or not isinstance(request.user, AnonymousUser):
+        return main_home(request)
+
     data = {}
     if request.method == 'POST':
         if 'name' not in request.POST or 'email' not in request.POST:
@@ -12,9 +21,6 @@ def home(request):
 
         email = request.POST['email']
         name = request.POST['name']
-        comment = ''
-        if 'comment' in request.POST:
-            comment = request.POST['comment']
         ip = request.META['REMOTE_ADDR']
         try:
             user = BetaRegisteredUser.objects.get(email__exact=email)
@@ -27,7 +33,7 @@ def home(request):
                 email=email,
                 name=name,
                 ip=ip,
-                comment=comment
+                comment=request.POST.get('comment', None)
             )
             user.save()
             data['user_created'] = True
