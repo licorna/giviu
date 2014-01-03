@@ -24,9 +24,9 @@
   <meta name="google-site-verification" content="xRtB_K0Azs8vEsau5QyO4uzCu28wEt9RCoLU378CV28" />
   <meta property="og:url" content="http://www.giviu.com" />
 
-  <link rel="stylesheet/less" type="text/css" href="/static/LESS/style.less"/>
-  <script src="/static/js/less-1.3.3.min.js"></script>
-  <script src="/static/js/prefixfree.min.js"></script>
+  <link rel="stylesheet/less" type="text/css" href="{% static "LESS/style.less" %}"/>
+  <script src="{% static "js/less-1.3.3.min.js" %}"></script>
+  <script src="{% static "js/prefixfree.min.js" %}"></script>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js"></script>
@@ -64,7 +64,7 @@
         {% csrf_token %}
         <center>
           <br>
-          <img src="/static/img/logo.png">
+          <img src="{% static "img/logo.png" %}">
           <br>
         </center>
         <label class="span9">
@@ -93,7 +93,7 @@
     <div class="slide second">
     <h2>¿Que es giviu?</h2>
     <p style="font-size:16px;">Giviu es la forma mas fácil de <strong>Buscar</strong>, <strong>Personalizar</strong> y <strong>Enviar</strong> giftcards a quien quieras y cuando quieras.</p>
-    <img src="/static/img/info.png">
+    <img src="{% static "img/info.png" %}">
     </div>
   </div> <!--! end of #container -->
 
@@ -104,7 +104,7 @@
     </center>
     <div class="span4">
       <center>
-        <img src="/static/img/mail.png">
+        <img src="{% static "img/mail.png" %}">
       </center>
     </div>
     <form class="span5 col" method="post">
