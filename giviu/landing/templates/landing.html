@@ -44,18 +44,22 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
+  {% if user_already_exist %}
+  <div class="span9 mensaje">
+    El email ya existe!
+  </div>
+  {% endif %}
+  {% if user_created %}
+  <div class="span9 mensaje">
+    Tu email ha sido agregado
+  </div>
+  {% endif %}
   <div class="container cf firts">
     <div class="slide">
       <center>
         <h1>Estamos a muy poco de estar online</h1>
         <h2>Inscribete para ser el primero en usar giviu</h2>
       </center>
-      {% if user_already_exist %}
-      <h2>El email ya existe!</h2>
-      {% endif %}
-      {% if user_created %}
-      <h2>Tu email ha sido agregado</h2>
-      {% endif %}
       <form id="subscribe" method="post">
         {% csrf_token %}
         <center>
