@@ -1,0 +1,156 @@
+{% load staticfiles %}
+<!doctype html>  
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  
+  <title>Giviu - Busca, personaliza y envia giftcards a quien quieras</title>
+
+  <meta property="fb:admins" content="esteldesign"/>
+  <meta itemprop="name" content="Giviu - Busca, personaliza y envia giftcards a quien quieras">
+  <meta itemprop="description" content="Giviu - Busca, personaliza y envia giftcards a quien quieras">
+  <meta name="description" content="Giviu - Busca, personaliza y envia giftcards a quien quieras" />
+  <meta name="news_keywords" content="Giviu, giftcards, regalos, gift" />
+  <meta property="og:site_name" content="Giviu.com" />
+
+  <meta property="og:image" content="http://www.giviu.com/static/img/logofacebook.png" />
+  <meta property="og:title" content="Giviu.com" />
+  <meta property="og:description" content="Giviu - Busca, personaliza y envia giftcards a quien quieras" />
+  <meta name="google-site-verification" content="xRtB_K0Azs8vEsau5QyO4uzCu28wEt9RCoLU378CV28" />
+  <meta property="og:url" content="http://www.giviu.com" />
+
+  <link rel="stylesheet/less" type="text/css" href="/static/LESS/style.less"/>  
+  <script src="/static/js/less-1.3.3.min.js"></script>
+  <script src="/static/js/prefixfree.min.js"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js"></script>
+
+</head>
+
+<body class="cf">
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1&appId=557904127610693";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="container cf firts">  
+    <div class="slide">
+      <center>
+        <h1>Estamos a muy poco de estar online</h1>
+        <h2>Inscribete para ser el primero en usar giviu</h2>
+      </center>
+      <form action="new.php" id="subscribe" method="post">
+        <center>
+          <br>
+          <img src="/static/img/logo.png">
+          <br>
+        </center>
+        <label class="span9">
+        Nombre
+        </label>
+        <input type="text" name="name" class="span9" required/>      
+        <label class="span9">
+        Email
+        </label>
+        <input type="email" name="email" class="span9" required/>
+        <input type="submit" value="Registrarme" class="span9"/>
+        <small class="">
+          <center>
+            <a href="info">¿Que es giviu?</a>
+            <div class="share">
+               <a href="https://twitter.com/share" class="twitter-share-button" data-via="Giviuchile" data-lang="es" data-related="Giviuchile">Twittear</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.giviu.com" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+            </div>
+          </center>
+        </small>
+      </form>
+    </div>
+  </div> <!--! end of #container -->
+  <div class="container cf" id="info">  
+    <div class="slide second">
+    <h2>¿Que es giviu?</h2>
+    <p style="font-size:16px;">Giviu es la forma mas fácil de <strong>Buscar</strong>, <strong>Personalizar</strong> y <strong>Enviar</strong> giftcards a quien quieras y cuando quieras.</p>
+    <img src="/static/img/info.png">
+    </div>
+  </div> <!--! end of #container -->  
+
+  <div class="container cf third" id="contact">  
+    <div class="slide contact">
+    <center>
+      <h2>¿Quieres mas información de giviu?</h2>
+    </center>
+    <div class="span4">
+      <center>
+        <img src="/static/img/mail.png">
+      </center>
+    </div>
+    <form class="span5 col" action="mail.php" method="post">
+      <label class="span9">Nombre</label>
+      <input type="text" class="span7" name="name" placeholder="Tu nombre aquí" required/>      
+      <label class="span9">Email</label>
+      <input type="email"  class="span7"name="email" placeholder="name@example.com" required/>
+      <label class="span9">Contáctanos</label>
+      <textarea name="contact" class="span7"></textarea> 
+      <input type="submit" value="Enviar"  class="span7" required/>
+    </form>
+
+    </div>
+  </div> <!--! end of #container -->
+
+  <footer>
+    
+  </footer>
+
+  <script>
+    $(document).ready(function(){
+      $('a').click(function(e){
+        e.preventDefault();
+        positionTop = $(this).attr('href');
+        positionTop = "#"+positionTop;
+        positionTop = $(positionTop).offset();
+        positionTop = positionTop.top;
+        $("html:not(:animated),body:not(:animated)").animate({ scrollTop: positionTop}, 500 )
+      })
+
+      $('#subscribe input[type="submit"]').click(function(e){
+        e.preventDefault();
+        $('input[type="submit"]').attr('disabled','disabled');
+        $.post( "new.php", { name: $('#subscribe [name="name"]').val(), email: $('#subscribe [name="email"]').val() })
+        .done(function(data) {
+          var data = data.replace(/\s/g,"");
+          if(data=="1"){
+            alert('Ya hemos agregado tu correo a nuestra lista de espera');
+            $('input[type="submit"]').removeAttr('disabled','disabled');
+            $('input[type="text"],input[type="email"]').val('');
+          }
+        });
+      })
+
+
+    })
+  </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46002547-1', 'giviu.com');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
+

@@ -29,6 +29,8 @@ urlpatterns = patterns('',
 
     url(r'^merchant/', include('merchant.urls')),
 
+    url(r'^l/', include('landing.urls')),
+
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^psp/', include('psp.urls')),
