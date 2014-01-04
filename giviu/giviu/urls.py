@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^page/terminos-y-condiciones$', 'giviu.views.page_terms', name='page_terms'),
 
     url(r'^api/', include('api.urls')),
+    url(r'^status/', include('status.urls')),
 
     url(r'^merchant/', include('merchant.urls')),
 
