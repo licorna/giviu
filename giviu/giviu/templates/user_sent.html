@@ -53,7 +53,6 @@
 					</ul>
 
 					<div class="span9">
-
 						{% for product in products %}
 						<div class="span9 giftcardList">
 							<figure class="span2">
@@ -62,20 +61,18 @@
 									<span class='icon-paperplane'></span> Enviada
 								</figcaption>
 
-
 							</figure>
 							<div class="span6 col">
 								<h3>{{ product.giftcard }}</h3>
 								<strong class="price">{{ product.price|clp }}</strong>
 								<ul>
 									<li><strong>Enviado a: </strong> <strong>{{ product.giftcard_to_name }}</strong> ({{ product.giftcard_to_email }})</li>
-									<li><strong>Recibida el: </strong> ({{ product.send_date }})</li>
+									<li><strong>Enviada el: </strong> {{ product.send_date|date:"d /m/ Y" }}</li>
 								</ul>
 							</div>
 							<a href="/giftcard/show/" target="_blank" class="btn primary verGift">Ver giftcard</a>
 						</div>
 						{% endfor %}
-
 					</div>
 				</section>
 			</section> 

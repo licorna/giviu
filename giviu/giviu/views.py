@@ -106,24 +106,19 @@ def giftcard_custom(request, gift_id):
 
 
 def user(request):
-
-    data = {
-    }
+    data = {}
     return render_to_response('user.html',
                               data,
                               context_instance=RequestContext(request))
 
-
 def sent(request):
-    products = Product.objects.filter(giftcard_from=request.user)
-
+    products = Product.objects.filter(giftcard_from=request.user, state='RESPONSE_FROM_PP_SUCCESS')
     data = {
         'products':products,
     }
     return render_to_response('user_sent.html',
                               data,
                               context_instance=RequestContext(request))
-
 
 def calendar(request):
     data = {}
