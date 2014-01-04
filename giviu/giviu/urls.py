@@ -11,12 +11,15 @@ urlpatterns = patterns('',
     url(r'^logout$', 'giviu.views.do_logout', name='logout'),
     url(r'^register', 'giviu.views.do_register', name='register'),
     url(r'^giftcard/checkout$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),
+    url(r'^product/show/(?P<uuid>\S+)$', 'giviu.views.product_show', name='product_show'),
 
     # url(r'^giftcard/success$', 'giviu.views.giftcard_success', name='giftcard_success'),
 
     url(r'^user$', 'giviu.views.user', name='user'),
     url(r'^user/sent$', 'giviu.views.sent', name='user_sent'),
     url(r'^user/calendar$', 'giviu.views.calendar', name='user_calendar'),
+
+    url(r'^partner/(?P<merchant_slug>\S+)$', 'giviu.views.partner_info', name='partner_info'),
 
     url(r'^page/giviu$', 'giviu.views.page_who_we_are', name='page_who_we_are'),
     url(r'^page/como-funciona$', 'giviu.views.page_who_its_work', name='page_who_its_work'),
