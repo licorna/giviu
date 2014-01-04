@@ -18,10 +18,13 @@ def home(request):
     if request.method == 'POST':
         if 'name' not in request.POST or 'email' not in request.POST:
             return HttpResponseBadRequest()
+        try:
+            real_ip = request.META['HTTP_X_FORWARDED_FOR']
+        except KeyError:
+            real_ip = request.META['REMOTE_ADDR']
 
         email = request.POST['email']
         name = request.POST['name']
-        ip = request.META['REMOTE_ADDR']
         try:
             user = BetaRegisteredUser.objects.get(email__exact=email)
             data['user_already_exist'] = True
@@ -32,7 +35,7 @@ def home(request):
             user = BetaRegisteredUser(
                 email=email,
                 name=name,
-                ip=ip,
+                ip=real_ip,
                 comment=request.POST.get('comment', None)
             )
             user.save()
