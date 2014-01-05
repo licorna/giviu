@@ -57,19 +57,15 @@ class Comuna(models.Model):
         db_table = 'comuna'
 
 
-class Customer(models.Model):
+class CustomerInfo(models.Model):
     id = models.IntegerField(primary_key=True)
-    parent_id = models.IntegerField()
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    birthday = models.DateField(blank=True, null=True)
-    phone = models.CharField(max_length=255)
-    hash = models.CharField(max_length=255)
+    merchant = models.ForeignKey(Merchants, db_column='merchant_id', related_name='+')
+    user = models.ForeignKey('Users', db_column='user_id', related_name='+')
+    data = models.TextField(blank=True)
     created = models.DateTimeField()
 
     class Meta:
-        db_table = 'customer'
+        db_table = 'customer_info'
 
 
 class Discount(models.Model):
@@ -202,6 +198,11 @@ class Product(models.Model):
         self.validation_code = self.uuid[:8]
         super(Product, self).save(*args, **kwargs)
 
+    def get_validation_date(self):
+        if self.validation_date is None:
+            return 'No ha sido validada'
+        return self.validation_date
+
     class Meta:
         db_table = 'product'
 
@@ -271,6 +272,7 @@ class Users(AbstractBaseUser):
     first_name = models.CharField(max_length=80, blank=True)
     last_name = models.CharField(max_length=80, blank=True)
     email = models.CharField(unique=True, max_length=255, blank=True)
+    phone = models.CharField(max_length=16, blank=True)
     birthday = models.DateField()
     gender = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=20, blank=True)

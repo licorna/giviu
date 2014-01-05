@@ -1,9 +1,10 @@
-from django.shortcuts import render_to_response, redirect
-from django.http import HttpResponseBadRequest, HttpResponse
+from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseNotFound
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from giviu.models import Users, Giftcard, Product
+from giviu.models import Users, Giftcard, Product, CustomerInfo
+import json
 
 
 def do_login(request):
@@ -62,22 +63,49 @@ def validate(request):
 
 
 def customers(request):
-    customers = request.user.merchant.get_customers()
+    customers = CustomerInfo.objects.filter(merchant=request.user.merchant)
     data = {
         'customers': customers
     }
     return render_to_response('customers.html', data,
                               context_instance=RequestContext(request))
 
-def customer_profile(request):
-    data = {}
 
-    return render_to_response('customer_profile.html')
+def customer_profile(request, customer_id):
+    try:
+        customer = CustomerInfo.objects.get(pk=customer_id)
+    except CustomerInfo.DoesNotExist:
+        return HttpResponseNotFound()
 
-def customer_edit(request):
-    data = {}
+    products = Product.objects.filter(giftcard_from=customer.user,
+                                      state='RESPONSE_FROM_PP_SUCCESS')
 
-    return render_to_response('customer_edit.html')
+    data = {
+        'customer': customer,
+        'products': products
+    }
+
+    return render_to_response('customer_profile.html', data,
+                              context_instance=RequestContext(request))
+
+
+def customer_edit(request, customer_id):
+    customer = get_object_or_404(CustomerInfo, pk=customer_id)
+    if request.method == 'POST':
+        details = {}
+        for k, v in request.POST.iteritems():
+            details[k] = v
+        customer.data = json.dumps(details)
+        customer.save()
+
+    data = {
+        'customer': customer,
+        'customer_data': json.loads(customer.data)
+    }
+
+    return render_to_response('customer_edit.html', data,
+                              context_instance=RequestContext(request))
+
 
 def users(request):
     data = {}

@@ -1,62 +1,57 @@
 {% extends "base_merchant.html" %}
-{% block content %}	
-	<div id="content">		
-		
-		<div id="content-header">
-			<h1><i class="fa fa-user"></i> Editar Cliente</h1>
-		</div> <!-- #content-header -->	
+{% block content %}
+<div id="content">
 
-		<div id="content-container">
-						
-			<div class="row">
+  <div id="content-header">
+    <h1><i class="fa fa-user"></i> Editar Cliente</h1>
+  </div> <!-- #content-header -->
 
-						<div class="col-md-4 col-sm-5">
+  <div id="content-container">
+    <div class="row">
+      <div class="col-md-4 col-sm-5">
+        <div class="thumbnail">
+          <img src="https://graph.facebook.com/esteldesign/picture?width=300&amp;height=300" alt="Profile Picture">
+        </div>
+        <br>
+      </div>
 
-							<div class="thumbnail">
-								<img src="https://graph.facebook.com/esteldesign/picture?width=300&amp;height=300" alt="Profile Picture">
-							</div> 
+      <div class="col-md-6 col-sm-12">
 
-							<br>
+        <form action="" method="post" >
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="text-input">Nombre</label>
+            <input type="text" id="text-input" name="first_name" value="{{ customer_data.first_name }}" class="form-control col-md-6 col-sm-12">
+          </div>
+          <div class="form-group">
+            <label for="text-input">Apellido</label>
+            <input type="text" id="text-input" name="last_name" value="{{ customer_data.last_name }}" class="form-control col-md-6 col-sm-12">
+          </div>
+          <div class="form-group">
+            <label for="text-input">Fecha de nacimiento</label>
+            <div id="dp-ex-2" class="input-group date">
+              <input class="form-control ui-datepicker" type="text" name="birthday" value="{{ customer_data.birthday }}">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
 
-						</div>
+          </div>
+          <div class="form-group">
+            <label for="text-input">Teléfono</label>
+            <input type="text" id="text-input" name="phone" class="form-control col-md-6 col-sm-12" value="{{ customer_data.phone }}">
+          </div>
+          <input type="hidden" name="hash" value=""/>
 
-
-						<div class="col-md-6 col-sm-12">
-
-						<form action="" method="post" >
-							<div class="form-group">
-								<label for="text-input">Nombre</label>
-								<input type="text" id="text-input" name="name" value="" class="form-control col-md-6 col-sm-12">
-							</div>							
-							<div class="form-group">
-								<label for="text-input">Apellido</label>
-								<input type="text" id="text-input" name="lastname" value="" class="form-control col-md-6 col-sm-12">
-							</div>							
-							<div class="form-group">
-								<label for="text-input">Fecha de nacimiento</label>
-	                            <div id="dp-ex-2" class="input-group date">
-	                                <input class="form-control ui-datepicker" type="text" name="birthday" value="">
-	                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-	                            </div>
-
-							</div>							
-							<div class="form-group">
-								<label for="text-input">Teléfono</label>
-								<input type="text" id="text-input" name="phone" class="form-control col-md-6 col-sm-12" value="">
-							</div>
-							<input type="hidden" name="hash" value=""/> 
-
-							<button type="submit" class="btn btn-success">Guardar</button>
-						</form>
+          <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
 
 
 
-						</div>
+      </div>
 
-					</div>
+    </div>
 
-		</div>
+  </div>
 
-	</div> <!-- #content -->	
+</div> <!-- #content -->
 </div> <!-- #wrapper -->
 {% endblock %}

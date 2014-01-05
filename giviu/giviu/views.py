@@ -6,8 +6,9 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from models import (
     GiftcardCategory, Giftcard, Likes, GiftcardDesign,
-    Users, Product, Merchants, MerchantTabs
+    Users, Product
 )
+from merchant.models import MerchantTabs, Merchants
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -192,23 +193,16 @@ def giftcard_confirmation(request):
                               data,
                               context_instance=RequestContext(request))
 
-# def giftcard_success(request):
-#     response = {'medio_pago': '3', 'codigo_autorizacion': '139854', 'medio_pago_descripcion': 'WebPay Transbank', 'tipo_pago': None, 'respuesta': '00', 'monto': 5000.0, 'num_cuotas': 0, 'tipo_cuotas': 'D\xe9bito', 'fecha_aprobacion': '2014-01-03T00:50:02', 'primer_vencimiento': None, 'numero_operacion': '8708574924', 'token': 'MYSUDGS2KCARM77R', 'trx_id': '5107689342', 'error': None, 'numero_tarjeta': '6623', 'valor_cuota': 0}
 
-#     data ={
-#         'transaction': response,
-#     }
-#     return render_to_response('borrar_success.html',data)
-
-def product_show(request,uuid):
+def product_show(request, uuid):
     product = Product.objects.get(uuid__exact=uuid)
     data = {
         'product': product,
-        'hash':uuid.split('-')[0]
-        
+        'hash': uuid.split('-')[0]
+
     }
 
-    return render_to_response('product_show.html',data,
+    return render_to_response('product_show.html', data,
                               context_instance=RequestContext(request))
 
 
@@ -216,19 +210,19 @@ def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
     product = Giftcard.objects.filter(merchant=merchant.id)
-    data= {
-        'merchant': merchant,        
-        'products': product,  
+    data = {
+        'merchant': merchant,
+        'products': product,
         'tabs': tabs,
     }
 
-    return render_to_response('partner_info.html',data,
+    return render_to_response('partner_info.html', data,
                               context_instance=RequestContext(request))
 
 
 def page_who_we_are(request):
     return render_to_response('page_who_we_are.html')
-    
+
 def page_who_its_work(request):
     return render_to_response('page_who_its_work.html')
 

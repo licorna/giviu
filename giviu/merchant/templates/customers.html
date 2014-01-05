@@ -19,10 +19,10 @@
         {% for customer in customers %}
         <tr>
           <td>
-            <a href="/merchant/customer/profile/{{ customer.id }}" title="">{{ customer.get_full_name }}</a>
-            <p>{{ customer.birthday }}</p>
+            <a href="/merchant/customer/profile/{{ customer.id }}" title="">{{ customer.user.get_full_name }}</a>
+            <p>{{ customer.user.birthday }}</p>
           </td>
-          <td>{{ customer.email }}</td>
+          <td>{{ customer.user.email }}</td>
 
           <td class="text-center">
             <a class="btn btn-xs btn-primary" href="/merchant/customer/edit/{{ customer.id }}"><i class="fa fa-pencil"></i></a>
