@@ -11,13 +11,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="">
   <meta name="author" content="" />
-  
+
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,800italic,400,600,800" type="text/css">
 
-  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />   
-  <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css" />  
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/static/js/libs/css/ui-lightness/jquery-ui-1.9.2.custom.css" type="text/css" />
-    
+
   <link rel="stylesheet" href="/static/js/plugins/icheck/skins/minimal/blue.css" type="text/css" />
   <link rel="stylesheet" href="/static/js/plugins/select2/select2.css" type="text/css" />
   <link rel="stylesheet" href="/static/js/plugins/fullcalendar/fullcalendar.css" type="text/css" />
@@ -38,7 +38,7 @@
           <a href="./index.html">
             <img src="/static/img/img/logo.png" alt="Site Logo" />
           </a>
-        </h1> 
+        </h1>
 
         <a href="javascript:;" data-toggle="collapse" data-target=".top-bar-collapse" id="top-bar-toggle" class="navbar-toggle collapsed">
           <i class="fa fa-cog"></i>
@@ -55,18 +55,18 @@
         <ul class="nav navbar-nav pull-left">
           <li class="">
             <a href="/merchant/home">
-              <i class="fa fa-home"></i> 
+              <i class="fa fa-home"></i>
               Home
             </a>
           </li>
-            
+
         </ul>
 
         <ul class="nav navbar-nav pull-right">
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
               <i class="fa fa-user"></i>
-                  usuario (nombre empresa) 
+              {{ user.first_name }} ({{ user.merchant.name }})
                   <span class="caret"></span>
               </a>
 
@@ -74,7 +74,7 @@
 
                   <li>
                     <a href="/?session=off">
-                      <i class="fa fa-sign-out"></i> 
+                      <i class="fa fa-sign-out"></i>
                       &nbsp;&nbsp;Cerrar session
                     </a>
                   </li>
@@ -85,43 +85,43 @@
       </nav> <!-- /#top-bar -->
 
       <div id="sidebar-wrapper" class="collapse sidebar-collapse">
-      
+
         <div id="search">
           <form>
             <input class="form-control input-sm" type="text" name="search" placeholder="Search..." />
 
             <button type="submit" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
-          </form>   
+          </form>
         </div> <!-- #search -->
-      
-        <nav id="sidebar">    
-          <ul id="main-nav" class="open-active"> 
+
+        <nav id="sidebar">
+          <ul id="main-nav" class="open-active">
             <li>
               <a href="/merchant/home">
                 <i class="fa fa-dashboard"></i>
                 Inicio
-              </a>                
-            </li> 
+              </a>
+            </li>
 
-            <li>       
+            <li>
               <a href="/merchant/validate">
                 <i class="fa fa-check"></i>
                 Validar Giftcard
-              </a>        
+              </a>
             </li>
-                
+
             <li>
               <a href="/merchant/customers">
-                <i class="fa fa-user"></i> 
+                <i class="fa fa-user"></i>
                 Clientes
               </a>
             </li>
 
             <li>
               <a href="/merchant/reports">
-                <i class="fa fa-bar-chart-o"></i> 
+                <i class="fa fa-bar-chart-o"></i>
                 Reporte de pagos
-              </a>  
+              </a>
             </li>
 
             <li class="dropdown">
@@ -130,19 +130,19 @@
                 Configuracion
                 <span class="caret"></span>
               </a>
-              
+
               <ul class="sub-nav">
                 <li>
                   <a href="/merchant/users">
-                    <i class="fa fa-user"></i> 
+                    <i class="fa fa-user"></i>
                     Usuarios
                   </a>
-                </li>   
-              </ul>      
+                </li>
+              </ul>
             </li>
 
 
-          </ul>              
+          </ul>
         </nav> <!-- #sidebar -->
 
       </div> <!-- /#sidebar-wrapper -->
@@ -172,7 +172,7 @@
           </li>
         </ul>
       </footer>
-    </div> <!-- /container -->       
+    </div> <!-- /container -->
 
     <script src="/static/js/libs/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="/static/js/libs/bootstrap.min.js"></script>
@@ -201,5 +201,3 @@
 
   </body>
 </html>
-
-
