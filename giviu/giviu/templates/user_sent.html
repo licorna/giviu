@@ -57,10 +57,9 @@
 						<div class="span9 giftcardList">
 							<figure class="span2">
 								<img class="span9" src="/static/img/giftcards/{{ product.design }}">
-								<figcaption class="status span9 validated">
+								<!-- <figcaption class="status span9 validated">
 									<span class='icon-paperplane'></span> Enviada
-								</figcaption>
-
+								</figcaption>-->
 							</figure>
 							<div class="span6 col">
 								<h3>{{ product.giftcard }}</h3>
@@ -70,7 +69,7 @@
 									<li><strong>Enviada el: </strong> {{ product.send_date|date:"d /m/ Y" }}</li>
 								</ul>
 							</div>
-							<a href="/giftcard/show/" target="_blank" class="btn primary verGift">Ver giftcard</a>
+							<a href="product/show/{{ product.uuid }}" target="_blank" class="btn primary verGift">Ver giftcard</a>
 						</div>
 						{% endfor %}
 					</div>

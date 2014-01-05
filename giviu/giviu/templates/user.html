@@ -43,6 +43,7 @@
 				</ul>
 			</div>
 		</div>-->
+
 		<div class="span9">
 			<section class="giftcardsProfile span9">
 				<section class="span9">
@@ -53,24 +54,28 @@
 					</ul>
 
 					<div class="span9">
+						{% for product in products %}
 						<div class="span9 giftcardList">
 							<figure class="span2">
-								<img class="span9" src="http://commondatastorage.googleapis.com/site-images/giftcards/giftcards/birthday.png">
+								<img class="span9" src="/static/img/giftcards/{{ product.design }}">
 							</figure>
 							<div class="span6 col">
-								<h3>Los insasiables</h3>
+								<h3>{{ product.giftcard }}</h3>
 								<strong class="price">$2.000</strong>
 								<ul>
-									<li><strong>Enviado por: </strong> <strong>sebastian</strong> (seba@oflow.cl)</li>
-									<li><strong>Recibida el: </strong> (21/06/1987)</li>
+									<li><strong>Enviado por: </strong> <strong>sebastian</strong> ({{ product.giftcard_from }})</li>
+									<li><strong>Recibida el: </strong> ({{ product.send_date }})</li>
 								</ul>
 							</div>
 							<a href="/giftcard/show/" target="_blank" class="btn primary verGift">Ver giftcard</a>
 						</div>
+						{% endfor %}
+
 					</div>
 				</section>
 			</section> 
 		</div>
 	</div>
 </section>
+
 {% endblock %}

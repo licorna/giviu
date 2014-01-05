@@ -606,7 +606,28 @@ aside{
       }
     }
   }
-
+  .tabLink{
+    text-transform:capitalize;
+  }
+  .enterpriseTab{
+    display:none;
+    &:first-child{
+      display:block;
+    }
+    h3{
+      text-transform:capitalize;
+    }
+    ul{
+      li{
+        border-bottom:1px dotted #ccc;
+        span{ 
+          &.price{
+            float:right;
+          }
+        }
+      }
+    }
+  }
 }
 
 header h1{
@@ -1531,6 +1552,7 @@ nav{
   .giftcardcontainer{
     border-bottom:3px solid @principalActions;
     margin-bottom:10px;
+    margin-top:20px;
     .giftCardStyle{
       width:100%;
       figcaption{
@@ -1545,7 +1567,7 @@ nav{
       }
     }
     .title{
-      font-size:1.1em;
+      font-size:1.3em;
       strong{
         color:@principalActions;
       }
@@ -1583,6 +1605,12 @@ nav{
       h3{
         font-size:1.2em;
         margin-bottom:10px;
+      }
+    }
+    .fine-print{
+      ul{
+        list-style:disc;
+        list-style-position:inside;
       }
     }
     .principalInfo{

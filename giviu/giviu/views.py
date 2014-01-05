@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from models import (
     GiftcardCategory, Giftcard, Likes, GiftcardDesign,
-    Users, Product
+    Users, Product, Merchants, MerchantTabs
 )
 
 from django.core.validators import validate_email
@@ -104,13 +104,13 @@ def giftcard_custom(request, gift_id):
 
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
-
+@login_required
 def user(request):
     data = {}
     return render_to_response('user.html',
                               data,
                               context_instance=RequestContext(request))
-
+@login_required
 def sent(request):
     products = Product.objects.filter(giftcard_from=request.user, state='RESPONSE_FROM_PP_SUCCESS')
     data = {
@@ -120,6 +120,7 @@ def sent(request):
                               data,
                               context_instance=RequestContext(request))
 
+@login_required
 def calendar(request):
     data = {}
     return render_to_response('user_calendar.html',
@@ -198,6 +199,32 @@ def giftcard_confirmation(request):
 #         'transaction': response,
 #     }
 #     return render_to_response('borrar_success.html',data)
+
+def product_show(request,uuid):
+    product = Product.objects.get(uuid__exact=uuid)
+    data = {
+        'product': product,
+        'hash':uuid.split('-')[0]
+        
+    }
+
+    return render_to_response('product_show.html',data,
+                              context_instance=RequestContext(request))
+
+
+def partner_info(request, merchant_slug):
+    merchant = Merchants.objects.get(slug__exact=merchant_slug)
+    tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
+    product = Giftcard.objects.filter(merchant=merchant.id)
+    data= {
+        'merchant': merchant,        
+        'products': product,  
+        'tabs': tabs,
+    }
+
+    return render_to_response('partner_info.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_who_we_are(request):
     return render_to_response('page_who_we_are.html')

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load locale_price %}
+{% block content %}
+
+<section class="container profile">
+	<div class="span2">
+		<div class="userSide span9 arrow">
+			<figure class="avatar">
+				<img class="span9" src="{{ merchant.logo }}">
+				<!--<a class="btn secondary changeImage"><span class="icon-camera"></span> Cambiar imagen</a>-->
+			</figure>
+			<ul class="userInfo">
+				<li><strong>{{ merchant.name }}</strong></li>
+				<li>{{ merchant.description }}</li>
+				<li><a hrfe="http://{{ merchant.website }}" target="_blank">{{ merchant.website }}</a></li>
+				<li>{{ merchant.contact_email }} </li>
+				<li><a class="tabLink" href="giftcards">Giftcards</a></li>
+				{% for tab in tabs %}
+				<li><a class="tabLink" href="tab{{ tab.id }}">{{ tab.title}}</a></li>
+				{% endfor %}
+			</ul>		
+		</div>		
+		<div class="userSide span9">
+			<center>
+				<strong>Dirección</strong>
+			</center>
+			<ul class="userInfo">
+				<li>
+					<a href="https://www.google.com/maps?q={{ merchant.address }}&hl=es&ie=UTF8&t=m&z=16" target="_blank"><img class="span9" src="http://maps.googleapis.com/maps/api/staticmap?center={{ merchant.address }}&zoom=18&size=400x400&maptype=roadmap&markers=color:blue%7Clabel:S%7C{{ merchant.address }}&sensor=false&scale=2"></a>
+					<small class="address span9"><span class="icon-location"></span> {{ merchant.address }}</small>
+				</li>
+			</ul>		
+		</div>
+	</div>
+	<div class="span7 col userContent">
+
+		<div class="span9">
+			<section class="giftcardsProfile span9">
+				<section class="span9">
+					<section class="span9 enterpriseTab" data-tab="giftcards" id="giftCardList" data-columns>
+					    {% for product in products %}
+					    <article class="giftCardModule" data-source-id="{{ product.id }}">
+					      <figure>
+					        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+					        <img src="{{ product.image }}">
+					      </figure>
+					      <h2>{{ product.title }}</h2>
+					      {% if product.kind == '1' %}
+					      <center>
+					        <select class="" name="webmenu"  onchange="showValue(this.value)">
+					          {% for price in product.get_price %}
+					          <option value="{{ price }}">{{ price|clp }}</option>
+					          {% endfor %}
+					        </select>
+					      </center>
+					      {% endif %}
+					      {% if product.kind == '0' %}
+					      <strong class="span9">{{ product.get_price|clp }}</strong>
+					      {% endif %}
+					      <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
+
+					    </article>
+					    {% endfor %}
+					</section>
+				</section>
+				{% for tab in tabs %}
+					<section data-tab="tab{{ tab.id }}" class="span9 enterpriseTab col">
+						<h3>{{ tab.title }}</h3>
+						{{ tab.content|safe }}
+					</section>
+				{% endfor %}
+			</section> 
+
+		</div>
+	</div>
+</section>
+
+<script>
+$(document).ready(function(){
+	$('.tabLink').on('click',showTab);
+	defaultTab()
+	function defaultTab(){
+		var url = document.URL;
+        var url = url.split('#');
+		$('.enterpriseTab').hide();
+		$('[data-tab="'+url[1]+'"]').show();	
+	}
+
+	function showTab(e){
+		e.preventDefault();
+		$('.enterpriseTab').hide();
+		$('[data-tab="'+$(this).attr('href')+'"]').show();	
+		var stateObj = { foo: "a" };
+		history.pushState(stateObj, "page 2", "/partner/{{ merchant.slug }}#"+$(this).attr('href'));	
+	}
+
+});
+</script>
+{% endblock %}
