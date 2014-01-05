@@ -2,6 +2,7 @@ $(document).ready(function(e){
 
     //reviewListLikes();
     //reviewLike();
+    reviewSpecialOut();
 
     $(".like").click(function(){
         if($(this).hasClass('disabled')){
@@ -13,6 +14,8 @@ $(document).ready(function(e){
             $(this).addClass('active');    
         }
     });
+
+    $('.special .close').on('click',specialOut);
 
     $('.close').on('click',closeModal);
 
@@ -41,20 +44,36 @@ $(document).ready(function(e){
 
 });
 
-function sendInviteFriends(e){
-    if(e.to.length>=50){
-        FB.ui({method: 'apprequests',
-          message: 'Busca, personaliza y envia regalos a quien quieras cuando quieras. www.giviu.com',
-          to: e.to,
-          title:'Ven a conocer giviu'        
-      }, confirmSendInviteFriends);
-    }else{
-        alert('Debes invitar almenos a 50 amigos');
+function reviewSpecialOut(){
+    if(localStorage.special_status){
+        specialStatus = localStorage.special_status.split(',');
+        campaign = specialStatus[0];
+        status = specialStatus[1];
+        if(status=='out'){
+            $('#'+campaign).addClass('out');
+        }
     }
 }
 
+function specialOut(){
+    campaign = $(this).parent().attr('id');
+    campaign = [campaign,'out']
+    localStorage.setItem('special_status', campaign);
+    $('.special').addClass('out');
+}
+
+
+function sendInviteFriends(e){
+    FB.ui({method: 'apprequests',
+        message: 'Busca, personaliza y envia regalos a quien quieras cuando quieras. www.giviu.com',
+        to: e.to,
+        title:'Ven a conocer giviu'        
+    }, confirmSendInviteFriends);
+
+}
+
 function confirmSendInviteFriends(e){
-    console.log(e);
+    $('#alertMessage').fadeOut();
 }
 
 function share(e){
@@ -73,7 +92,6 @@ function alertMessage(title,content){
     $('#alertMessage').fadeIn('fast');
 
 }
-
 
 function closeModal(e){
     var closeTo = $(this).attr('data-close');
