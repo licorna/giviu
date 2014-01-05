@@ -16,6 +16,7 @@ from django.contrib.auth.models import (
 from uuid import uuid4
 from utils import get_one_month, get_now
 from merchant.models import Merchants
+from hashlib import sha224
 
 
 class Calendar(models.Model):
@@ -163,8 +164,7 @@ class Product(models.Model):
     validation_code = models.CharField(max_length=8)
     send_date = models.DateField(blank=True)
     created = models.DateTimeField(default=lambda: get_now())
-    giftcard_to_email = models.CharField(db_column='to_email', max_length=255)
-    giftcard_to_name = models.CharField(db_column='to_name', max_length=40)
+    giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
     comment = models.TextField()
     status = models.CharField(max_length=255)
@@ -232,6 +232,18 @@ class Friend(models.Model):
 
 
 class GiviuUserManager(BaseUserManager):
+    def create_inactive_user(self, email):
+        user = self.model(
+            email=email,
+            fbid=sha224(email).hexdigest(),
+        )
+        #user.set_password()
+        user.is_active = False
+        user.is_receiving = True
+        user.save()
+        print 'user id', user.id
+        return user
+
     def create_user(self, fbid, password, birthday, **kwargs):
         if not fbid:
             raise ValueError('Users must have an email address')
@@ -287,6 +299,7 @@ class Users(AbstractBaseUser):
     fbid = models.CharField(unique=True, max_length=56, blank=True)
     is_active = models.IntegerField(blank=True, null=True)
     is_admin = models.IntegerField(blank=True, null=True)
+    is_receiving = models.IntegerField(blank=True, null=True)
     is_merchant = models.IntegerField(blank=True)
     merchant = models.ForeignKey(Merchants, blank=True, db_column='merchant_id')
 

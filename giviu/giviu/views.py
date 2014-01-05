@@ -105,21 +105,25 @@ def giftcard_custom(request, gift_id):
 
     return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
 
+
 @login_required
 def user(request):
     data = {}
     return render_to_response('user.html',
                               data,
                               context_instance=RequestContext(request))
+
+
 @login_required
 def sent(request):
     products = Product.objects.filter(giftcard_from=request.user, state='RESPONSE_FROM_PP_SUCCESS')
     data = {
-        'products':products,
+        'products': products,
     }
     return render_to_response('user_sent.html',
                               data,
                               context_instance=RequestContext(request))
+
 
 @login_required
 def calendar(request):
@@ -163,9 +167,14 @@ def giftcard_confirmation(request):
         #TODO: patalear
         pass
 
+    try:
+        customer = Users.objects.get(email=email_to)
+    except Users.DoesNotExist:
+        customer = Users.objects.create_inactive_user(email_to)
+        customer = Users.objects.get(email=email_to)
+
     product = Product(giftcard_from=request.user,
-                      giftcard_to_email=email_to,
-                      giftcard_to_name=name_to,
+                      giftcard_to=customer,
                       price=price,
                       design=design,
                       send_date=date,

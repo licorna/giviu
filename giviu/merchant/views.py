@@ -98,9 +98,13 @@ def customer_edit(request, customer_id):
         customer.data = json.dumps(details)
         customer.save()
 
+    try:
+        customer_data = json.loads(customer.data)
+    except ValueError:
+        customer_data = {}
     data = {
         'customer': customer,
-        'customer_data': json.loads(customer.data)
+        'customer_data': customer_data
     }
 
     return render_to_response('customer_edit.html', data,
