@@ -3,6 +3,8 @@ $(document).ready(function(e){
     //reviewListLikes();
     //reviewLike();
     reviewSpecialOut();
+    reviewModalCampaign();
+    $('.lb-close').on('click',setCampaign);
 
     $(".like").click(function(){
         if($(this).hasClass('disabled')){
@@ -47,7 +49,7 @@ $(document).ready(function(e){
 function reviewSpecialOut(){
     if(localStorage.special_status){
         specialStatus = localStorage.special_status.split(',');
-        campaign = specialStatus[0];
+        var campaign = specialStatus[0];
         status = specialStatus[1];
         if(status=='out'){
             $('#'+campaign).addClass('out');
@@ -56,12 +58,36 @@ function reviewSpecialOut(){
 }
 
 function specialOut(){
-    campaign = $(this).parent().attr('id');
-    campaign = [campaign,'out']
+    var campaign = $(this).parent().attr('id');
+    var campaign = [campaign,'out']
     localStorage.setItem('special_status', campaign);
     $('.special').addClass('out');
 }
 
+function setCampaign(){
+    var d = new Date(); 
+    var hoy= new Date(d.getFullYear()+ "/" + (d.getMonth() + 1 ) + "/" + d.getDate());            
+    var campaign = [hoy,'out']
+    localStorage.setItem('special_modal_status',campaign);
+}
+
+function reviewModalCampaign(){
+    if(localStorage.special_modal_status){
+        var modalStatus = localStorage.special_modal_status.split(',');
+        var d = new Date(); 
+        var fechaInicio= new Date(modalStatus[0]);
+        var hoy= new Date(d.getFullYear()+ "/" + (d.getMonth() + 1 ) + "/" + d.getDate());            
+        var fechaResta= hoy-fechaInicio;
+        fechaResta=(((fechaResta/1000)/60)/60)/24;   
+        fechaResta = parseInt(fechaResta);         
+        if(fechaResta>=2) {
+            $('[data-lightbox="campaign"]').trigger('click');
+        }
+    }else{
+        $('[data-lightbox="campaign"]').trigger('click');
+    }
+
+}
 
 function sendInviteFriends(e){
     FB.ui({method: 'apprequests',

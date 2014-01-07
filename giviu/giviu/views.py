@@ -88,7 +88,7 @@ def giftcard_detail(request, gift_id):
 
 def giftcard_custom(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
-    style = GiftcardDesign.objects.all()
+    style = GiftcardDesign.objects.filter(status='publish')
     try:
         likes = Likes.objects.get(pk=gift_id)
         friends = UserFriends.objects.filter(user_friend_fb_id__exact=likes.like_user_fb_id)

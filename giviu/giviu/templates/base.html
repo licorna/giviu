@@ -16,7 +16,7 @@
     <script src="{% static "js/jquery-ui.js" %}"></script>
     <script src="{% static "js/jquery.carouFredSel-5.6.2.js" %}"></script>
     <script src="{% static "js/jquery.validate.js" %}"></script>
-    <script src="{% static "js/jquery.tipsy.js" %}"></script>
+    <script src="{% static "js/lightbox-2.6.min.js" %}"></script>
     <script src="{% static "js/modernizr.min.js" %}"></script>
     <script src="{% static "js/global.js" %}"></script>
 
@@ -98,7 +98,7 @@
             {% endif %}
           </ul>
         </nav>
-
+{% block content %}<h1> CONTENIDO </h1>{% endblock %}
 
     <div id="alertMessage" style="display:none;">
       <h2 id="alertTitle">alert</h2>
@@ -124,9 +124,6 @@
         </div>
       </div>
     </span>
-
-
-{% block content %}<h1> CONTENIDO </h1>{% endblock %}
 
     <footer class="span9">
       <section class="container">
@@ -161,5 +158,4 @@
 
 
   </body>
-
 </html>
