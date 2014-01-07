@@ -53,7 +53,7 @@ def validate_giftcard(request, giftcard):
     data = {
         'uuid': giftcard,
         'from': product.giftcard_from.email,
-        'to': product.giftcard_to_email,
+        'to': product.giftcard_to.email,
         'already_validated': product.validated == 1,
         'giftcard-price': int(product.price),
     }
