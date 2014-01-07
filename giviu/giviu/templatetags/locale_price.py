@@ -1,11 +1,14 @@
 from django import template
-import locale
+from django.template.defaultfilters import stringfilter
+
 
 register = template.Library()
 
 @register.filter
+@stringfilter
 def clp(price):
     price = price.strip()
+
     def insert_thousand_separator(s, separator='.'):
         i = len(s)
         j = 0

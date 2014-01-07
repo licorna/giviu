@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST, require_GET
 from django.conf import settings
-from giviu.models import PaymentTransaction, Product
+from giviu.models import PaymentTransaction, Product, CustomerInfo
 from django.core.exceptions import MultipleObjectsReturned
 from puntopagos import transaction_check
 
@@ -87,6 +87,15 @@ def pp_response(request, token, **kwargs):
     if status is True:
         product.set_state('RESPONSE_FROM_PP_SUCCESS')
         transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
+
+        try:
+            customer = CustomerInfo.objects.get(user=product.giftcard_to,
+                                                merchant=product.giftcard.merchant)
+        except CustomerInfo.DoesNotExist:
+            customer = CustomerInfo(user=product.giftcard_to,
+                                    merchant=product.giftcard.merchant)
+            customer.save()
+
         transaction.operation_number = response['numero_operacion']
         transaction.authorization_code = response['codigo_autorizacion']
     else:

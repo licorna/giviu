@@ -15,6 +15,8 @@ from django.contrib.auth.models import (
 )
 from uuid import uuid4
 from utils import get_one_month, get_now
+from merchant.models import Merchants
+from hashlib import sha224
 
 
 class Calendar(models.Model):
@@ -56,19 +58,15 @@ class Comuna(models.Model):
         db_table = 'comuna'
 
 
-class Customer(models.Model):
+class CustomerInfo(models.Model):
     id = models.IntegerField(primary_key=True)
-    parent_id = models.IntegerField()
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    birthday = models.DateField(blank=True, null=True)
-    phone = models.CharField(max_length=255)
-    hash = models.CharField(max_length=255)
+    merchant = models.ForeignKey(Merchants, db_column='merchant_id', related_name='+')
+    user = models.ForeignKey('Users', db_column='user_id', related_name='+')
+    data = models.TextField(blank=True)
     created = models.DateTimeField()
 
     class Meta:
-        db_table = 'customer'
+        db_table = 'customer_info'
 
 
 class Discount(models.Model):
@@ -119,7 +117,7 @@ class GiftcardDesign(models.Model):
 
 class Giftcard(models.Model):
     id = models.AutoField(primary_key=True)
-    merchant = models.ForeignKey('Merchants', db_column='merchant_id')
+    merchant = models.ForeignKey(Merchants, db_column='merchant_id')
     created = models.DateField()
     publication_date = models.DateField()
     unpublish_date = models.DateField()
@@ -162,20 +160,22 @@ class Product(models.Model):
 
     id = models.IntegerField(primary_key=True)
     hash = models.CharField(max_length=255)
-    uuid = models.CharField(max_length=40, default=lambda:str(uuid4()))
+    uuid = models.CharField(max_length=40, default=lambda: str(uuid4()))
+    validation_code = models.CharField(max_length=8)
     send_date = models.DateField(blank=True)
-    created = models.DateTimeField(default=lambda:get_now())
-    giftcard_to_email = models.CharField(db_column='to_email', max_length=255)
-    giftcard_to_name = models.CharField(db_column='to_name', max_length=40)
+    created = models.DateTimeField(default=lambda: get_now())
+    giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
     comment = models.TextField()
     status = models.CharField(max_length=255)
-    expiration_date = models.DateField(default=lambda:get_one_month())
+    expiration_date = models.DateField(default=lambda: get_one_month())
     validation_date = models.DateTimeField(blank=True, null=True)
     design = models.ForeignKey(GiftcardDesign, db_column='design')
     price = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     giftcard = models.ForeignKey(Giftcard, db_column='giftcard_id')
+
+    validated = models.IntegerField(default=0)
 
     transaction = models.ForeignKey('PaymentTransaction',
                                     db_column='transaction_id',
@@ -193,6 +193,15 @@ class Product(models.Model):
 
     def is_closed(self):
         return self.state[:8] == 'RESPONSE'
+
+    def save(self, *args, **kwargs):
+        self.validation_code = self.uuid[:8]
+        super(Product, self).save(*args, **kwargs)
+
+    def get_validation_date(self):
+        if self.validation_date is None:
+            return 'No ha sido validada'
+        return self.validation_date
 
     class Meta:
         db_table = 'product'
@@ -223,6 +232,18 @@ class Friend(models.Model):
 
 
 class GiviuUserManager(BaseUserManager):
+    def create_inactive_user(self, email):
+        user = self.model(
+            email=email,
+            fbid=sha224(email).hexdigest(),
+        )
+        #user.set_password()
+        user.is_active = False
+        user.is_receiving = True
+        user.save()
+        print 'user id', user.id
+        return user
+
     def create_user(self, fbid, password, birthday, **kwargs):
         if not fbid:
             raise ValueError('Users must have an email address')
@@ -263,6 +284,7 @@ class Users(AbstractBaseUser):
     first_name = models.CharField(max_length=80, blank=True)
     last_name = models.CharField(max_length=80, blank=True)
     email = models.CharField(unique=True, max_length=255, blank=True)
+    phone = models.CharField(max_length=16, blank=True)
     birthday = models.DateField()
     gender = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=20, blank=True)
@@ -274,45 +296,62 @@ class Users(AbstractBaseUser):
     avatar = models.CharField(max_length=255, blank=True)
     last_purchase = models.DateField(blank=True, null=True)
     hash = models.CharField(max_length=255, blank=True)
-    fbid = models.CharField(unique=True, max_length=25, blank=True)
+    fbid = models.CharField(unique=True, max_length=56, blank=True)
     is_active = models.IntegerField(blank=True, null=True)
     is_admin = models.IntegerField(blank=True, null=True)
+    is_receiving = models.IntegerField(blank=True, null=True)
+    is_merchant = models.IntegerField(blank=True)
+    merchant = models.ForeignKey(Merchants, blank=True, db_column='merchant_id')
 
     objects = GiviuUserManager()
     USERNAME_FIELD = 'fbid'
     REQUIRED_FIELDS = ['birthday']
 
     def get_full_name(self):
-        # The user is identified by their email address
-        return self.email
+        return self.first_name + ' ' + self.last_name
 
     def get_short_name(self):
-        # The user is identified by their email address
-        return self.email
+        return self.first_name
 
-    # On Python 3: def __str__(self):
     def __unicode__(self):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
         return True
+
+    def get_related_merchant(self):
+        if self.is_merchant:
+            return self.admin_of
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
         return self.is_admin
 
     class Meta:
         db_table = 'users'
         verbose_name_plural = 'Users'
+
+
+class GiviuAuthenticationBackend(object):
+    def authenticate(self, username=None, password=None):
+        try:
+            if '@' in username:
+                user = Users.objects.get(email__exact=username)
+            else:
+                user = Users.objects.get(fbid__exact=username)
+            if user.check_password(password):
+                return user
+        except Users.DoesNotExist:
+            return None
+
+    def get_user(self, user_id):
+        try:
+            return Users.objects.get(pk=user_id)
+        except Users.DoesNotExist:
+            return None
 
 
 class Likes(models.Model):
@@ -326,61 +365,6 @@ class Likes(models.Model):
     class Meta:
         db_table = 'likes'
         verbose_name_plural = 'Likes'
-
-
-class MerchantTabs(models.Model):
-    id = models.IntegerField(primary_key=True)
-    parent_id = models.IntegerField()
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-
-    class Meta:
-        db_table = 'merchant_tabs'
-        verbose_name_plural = 'Merchant Tabs'
-
-
-class MerchantUsers(models.Model):
-    id = models.IntegerField(primary_key=True)
-    merchant = models.ForeignKey('Merchants')
-    store = models.IntegerField()
-    name = models.CharField(max_length=255)
-    username = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
-    permission = models.IntegerField()
-
-    class Meta:
-        db_table = 'merchant_users'
-        verbose_name_plural = 'Merchant Users'
-
-
-class Merchants(models.Model):
-    id = models.AutoField(primary_key=True)
-    created = models.DateTimeField()
-    name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    country = models.CharField(max_length=255)
-    tags = models.CharField(max_length=255)
-    contact_name = models.CharField(max_length=255)
-    contact_email = models.CharField(max_length=255)
-    contact_phone = models.CharField(max_length=255)
-    contact_rut = models.CharField(max_length=255, blank=True)
-    rut = models.CharField(max_length=255, blank=True)
-    website = models.CharField(max_length=255, blank=True)
-    plan = models.CharField(max_length=255, blank=True)
-    description = models.TextField(blank=True)
-    logo = models.CharField(max_length=255, blank=True)
-    lat = models.CharField(max_length=255, blank=True)
-    lng = models.CharField(max_length=255, blank=True)
-
-    class Meta:
-        db_table = 'merchants'
-        verbose_name_plural = 'Merchants'
-
-    def __unicode__(self):
-        return self.name
 
 
 class PaymentTransaction(models.Model):

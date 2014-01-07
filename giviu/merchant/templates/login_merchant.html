@@ -1,37 +1,38 @@
 {% extends "base_login.html" %}
 {% block content %}
 <div id="login-container">
-				<div class="alert alert-danger">
-					<a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
-					contraseña incorrecta
-				</div>
+  <div class="alert alert-danger">
+    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
+    contraseña incorrecta
+  </div>
 
-	<div id="login">
+  <div id="login">
 
-		<h3><img src="/static/img/img/logo.png"></h3>
+    <h3><img src="/static/img/img/logo.png"></h3>
 
-		<h5>Ingresa con usuario y contraseña.</h5>
+    <h5>Ingresa con usuario y contraseña.</h5>
 
-		<form id="login-form" action="/merchant/login/" class="form" method="post">
+    <form id="login-form" action="/merchant/login/" class="form" method="post">
+    {% csrf_token %}
 
-			<div class="form-group">
-				<label for="login-username">Usuario</label>
-				<input type="text" class="form-control" id="login-username" name="username" placeholder="Username">
-			</div>
+      <div class="form-group">
+        <label for="login-username">Usuario</label>
+        <input type="text" class="form-control" id="login-username" name="email" placeholder="Username">
+      </div>
 
-			<div class="form-group">
-				<label for="login-password">Contraseña</label>
-				<input type="password" class="form-control" id="login-password" name="pass" placeholder="Password">
-			</div>
+      <div class="form-group">
+        <label for="login-password">Contraseña</label>
+        <input type="password" class="form-control" id="login-password" name="password" placeholder="Password">
+      </div>
 
-			<div class="form-group">
+      <div class="form-group">
 
-				<button type="submit" id="login-btn" class="btn btn-primary btn-block">Ingresar &nbsp; <i class="fa fa-play-circle"></i></button>
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block">Ingresar &nbsp; <i class="fa fa-play-circle"></i></button>
 
-			</div>
-		</form>
+      </div>
+    </form>
 
-	</div> <!-- /#login -->
+  </div> <!-- /#login -->
 
 
 </div>

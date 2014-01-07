@@ -1,122 +1,122 @@
 {% extends "base_merchant.html" %}
 {% block content %}
-	<div id="content">		
-		
-		<div id="content-header">
-			<h1><i class="fa fa-check"></i> Validar giftcard</h1>
-		</div> <!-- #content-header -->	
-		<div id="content-container">
-			<!-- validar giftcard multi 	
-			<form id="support-search" class="form">
+<div id="content">
 
-							<div class="input-group">
-					            <input class="form-control input-lg" type="text">
-					            <div class="input-group-btn">
-					              <button type="button" class="btn btn-primary btn-lg" tabindex="-1">Validar por</button>
-					              <button type="button" class="btn btn-primary dropdown-toggle btn-lg" data-toggle="dropdown" tabindex="-1">
-					                <span class="caret"></span>
-					              </button>
-					              <ul class="dropdown-menu pull-right" role="menu">
-					                <li><a data-toggle="modal" href="#basicModal">Código Giftcard</a></li>
-					                <li><a href="javascript:;">Correo electronico</a></li>
-					              </ul>
-					            </div>
-					        </div>
-			</form>
-		 	Fin validar giftcard -->
+  <div id="content-header">
+    <h1><i class="fa fa-check"></i> Validar giftcard</h1>
+  </div> <!-- #content-header -->
+  <div id="content-container">
+    <!-- validar giftcard multi
+         <form id="support-search" class="form">
 
-			<form id="support-search" class="form">
-				<div class="form-group">
-					<div class="input-group">
-						<input id="giftcard-code" type="text" class="form-control input-lg" name="search" placeholder="Ingresa aquí el código de la giftcard">
-						<span class="input-group-btn">
-							<input type="submit" value="Buscar" href="#" class="btn btn-primary btn-lg validate" type="button"/>
-						</span>
-					</div>
-				</div>
-			</form>
-			<!--validation form-->
-			<table class="table table-striped" id="validation-table" style="display:none;">					
-				<tbody>
-					<tr>
-						<td>
-							<p>Giftcard regalada a: <strong id="giftcardto"></strong></p>
-							<p>Servicio: <strong id="giftcardtitle"></strong></p>
-							<p>Valor giftcard: <strong id="giftcardprice"></strong></p>
-						</td>
-						<td>
-							<form id="validateFormComplete" method="post" action="/merchant/newCustomer">
-								<div class="fieldset">
-								</div>
-								<input type="submit" value="Validar" class="btn btn-primary btn-lg pull-right"/>
-							</form>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<!-- end validation form -->
+           <div class="input-group">
+             <input class="form-control input-lg" type="text">
+             <div class="input-group-btn">
+               <button type="button" class="btn btn-primary btn-lg" tabindex="-1">Validar por</button>
+               <button type="button" class="btn btn-primary dropdown-toggle btn-lg" data-toggle="dropdown" tabindex="-1">
+                 <span class="caret"></span>
+               </button>
+               <ul class="dropdown-menu pull-right" role="menu">
+                 <li><a data-toggle="modal" href="#basicModal">Código Giftcard</a></li>
+                 <li><a href="javascript:;">Correo electronico</a></li>
+               </ul>
+             </div>
+           </div>
+         </form>
+         Fin validar giftcard -->
 
-		</div>	
-	</div> <!-- #content -->	
+    <form id="support-search" class="form", >
+      <div class="form-group">
+        <div class="input-group">
+          <input id="giftcard-code" type="text" class="form-control input-lg" name="search" placeholder="Ingresa aquí el código de la giftcard">
+          <span class="input-group-btn">
+            <input type="submit" value="Buscar" href="#" class="btn btn-primary btn-lg validate" type="button"/>
+          </span>
+        </div>
+      </div>
+    </form>
+    <!--validation form-->
+    <table class="table table-striped" id="validation-table" style="display:none;">
+      <tbody>
+        <tr>
+          <td>
+            <p>Giftcard regalada a: <strong id="giftcardto"></strong></p>
+            <p>Servicio: <strong id="giftcardtitle"></strong></p>
+            <p>Valor giftcard: <strong id="giftcardprice"></strong></p>
+          </td>
+          <td>
+            <form id="validateFormComplete" method="post" action="/merchant/newCustomer">
+              <div class="fieldset">
+              </div>
+              <input type="submit" value="Validar" class="btn btn-primary btn-lg pull-right"/>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- end validation form -->
+
+  </div>
+</div> <!-- #content -->
 </div> <!-- #wrapper -->
 
 
 
 <script>
-$(document).ready(function(){
-	$('.validate').click(function(e){
-		e.preventDefault();
-		$('#validation-table').hide();
-		$('.fieldset').html('');
-		$.get( "/merchant/validategiftcard", { u: $('#giftcard-code').val() } )
-		  .done(function(data) {
-		  	var obj = jQuery.parseJSON(data);
-			switch (obj.status) { 
-			   	case "error": 
-			      	alert(obj.msg);
-			      	break 
-			   	case "success": 
+  $(document).ready(function(){
+  $('.validate').click(function(e){
+  e.preventDefault();
+  $('#validation-table').hide();
+  $('.fieldset').html('');
+  $.get( "/api/validate/giftcard/" + $('#giftcard-code').val())
+  .done(function(data) {
+  var obj = jQuery.parseJSON(data);
+  switch (obj.status) {
+  case "error":
+  alert(obj.msg);
+  break
+  case "success":
 
-			      	$.each( obj, function( key, val ) {
-			      		if(key=='giftcard-price'){
-			      			val = '$'+separador(val);
-			      		}
-    					$('#'+key).html(val);
-    					$('.fieldset').append('<input type="hidden" name="'+key+'" value="'+val+'">');
-  					});
-  					$('#validation-table').show();
-			      	break 
+  $.each( obj, function( key, val ) {
+  if(key=='giftcard-price'){
+  val = '$'+separador(val);
+  }
+  $('#'+key).html(val);
+  $('.fieldset').append('<input type="hidden" name="'+key+'" value="'+val+'">');
+  });
+  $('#validation-table').show();
+  break
 
-			}
-			
-		 });
-	});
+  }
 
-function separador(valor) {
-    var nums = new Array();
-    var simb = "."; //Éste es el separador
-    valor = valor.toString();
-    valor = valor.replace(/\D/g, "");   //Ésta expresión regular solo permitira ingresar números
-    nums = valor.split(""); //Se vacia el valor en un arreglo
-    var long = nums.length - 1; // Se saca la longitud del arreglo
-    var patron = 3; //Indica cada cuanto se ponen las comas
-    var prox = 2; // Indica en que lugar se debe insertar la siguiente coma
-    var res = "";
- 
-    while (long > prox) {
-        nums.splice((long - prox),0,simb); //Se agrega la coma
-        prox += patron; //Se incrementa la posición próxima para colocar la coma
-    }
- 
-    for (var i = 0; i <= nums.length-1; i++) {
-        res += nums[i]; //Se crea la nueva cadena para devolver el valor formateado
-    }
- 
-    return res;
-}
+  });
+  });
+
+  function separador(valor) {
+  var nums = new Array();
+  var simb = "."; //Éste es el separador
+  valor = valor.toString();
+  valor = valor.replace(/\D/g, "");   //Ésta expresión regular solo permitira ingresar números
+  nums = valor.split(""); //Se vacia el valor en un arreglo
+  var long = nums.length - 1; // Se saca la longitud del arreglo
+  var patron = 3; //Indica cada cuanto se ponen las comas
+  var prox = 2; // Indica en que lugar se debe insertar la siguiente coma
+  var res = "";
+
+  while (long > prox) {
+  nums.splice((long - prox),0,simb); //Se agrega la coma
+  prox += patron; //Se incrementa la posición próxima para colocar la coma
+  }
+
+  for (var i = 0; i <= nums.length-1; i++) {
+                       res += nums[i]; //Se crea la nueva cadena para devolver el valor formateado
+                       }
+
+                       return res;
+                       }
 
 
-});
-</script>
+                       });
+                       </script>
 
 {% endblock %}
