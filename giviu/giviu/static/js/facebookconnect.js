@@ -37,6 +37,7 @@
             $('#register').append('<input type="hidden" name="facebookId" value="'+response.id+'">');
             $('#facebook-name').html('<strong>Bienvenido nuevamente</strong> <br/>'+response.first_name);
             showInfo();
+            alertMessage('Invita a tus amigos','inviteFriends');
           },
           404:function(){
             if(response.first_name==undefined){
@@ -80,6 +81,7 @@
             $('#facebook-name').html(first_name);
             $('#facebook-birth').html(birthday);
             $('#facebook-email').html(email);
+            alertMessage('Invita a tus amigos','inviteFriends');
             showInfo();
           }
         }

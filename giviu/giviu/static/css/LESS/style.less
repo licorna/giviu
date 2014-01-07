@@ -379,6 +379,17 @@ aside{
       border-bottom:1px dotted @greyBorder;
     }
   }
+  &.promo{
+    height:120px;
+    figure{
+      overflow:hidden;
+      border-radius:5px;
+      img{
+        width:100%;
+        height:auto;
+      }
+    }
+  }
 }
 
 .profile{
@@ -720,6 +731,7 @@ nav{
     font-weight:lighter;
     font-size:0.9em;
     margin:0px 10px 0px;
+    color:@grayText;
   }  
   h4{
     font-weight:lighter;
@@ -1427,15 +1439,19 @@ nav{
     }
   }
 }
+
 #alertMessage{
   max-width:250px;
   margin-left:39%;
   #likeLogin{
-    padding:20px 0px;
+    padding:20px 0px 5px;
     text-align:center;
     .ico{
       color:#c0392b;
       font-size:5em;
+      &.blue{
+        color:#3b5998;
+      }
     }
     #likeLoginAction{
       margin-top:20px;
@@ -1536,12 +1552,23 @@ nav{
 }
 
 .special{
-    background-color:red;
-    argin:10px;
+    margin-left:10px;
     height:80px;
     color:#fff;
+    width:calc(77.44444444444446% - 1px);
     text-align:center;
     margin-bottom:10px;
+    position:relative;
+    background-color:#e74c3c;
+    .close{
+      position:absolute;
+      top:10px;
+      right:10px;
+      cursor:pointer;
+    }
+    &.out{
+      display:none;
+    }
 }
 
 .show{

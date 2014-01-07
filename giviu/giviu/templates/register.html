@@ -43,5 +43,21 @@
   </section>
 
 </section>
+    <span id="inviteFriends" style="display:none;">
+      <div class="span9" id="likeLogin">
+        <div class="span4">
+          <strong>
+            <span class="icon-facebook ico blue"></span>
+          </strong>
+        </div>
+        <div class="span5">
+          Invita a tus amigos de Facebook a disfrutar de <strong>Giviu</strong>
+        </div>
+        <div class="span9" id="likeLoginAction">
+          <a onClick="FB.ui({method: 'apprequests',message: 'Invita a tus amigos a Giviu.com'}, sendInviteFriends);" href="javascript:;" class="login">Invitar</a>
+
+        </div>
+      </div>
+    </span>
 <script src="{% static "js/facebookconnect.js" %}"></script>
 {% endblock %}

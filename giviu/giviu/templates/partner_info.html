@@ -42,9 +42,11 @@
 					    <article class="giftCardModule" data-source-id="{{ product.id }}">
 					      <figure>
 					        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
-					        <img src="{{ product.image }}">
+					       	<a href="/giftcard/detail/{{ product.id }}">
+						        <img src="{{ product.image }}">
+					        </figure>
 					      </figure>
-					      <h2>{{ product.title }}</h2>
+					      <a href="/giftcard/detail/{{ product.id }}"><h2>{{ product.title }}</h2></a>
 					      {% if product.kind == '1' %}
 					      <center>
 					        <select class="" name="webmenu"  onchange="showValue(this.value)">
@@ -82,8 +84,10 @@ $(document).ready(function(){
 	function defaultTab(){
 		var url = document.URL;
         var url = url.split('#');
-		$('.enterpriseTab').hide();
-		$('[data-tab="'+url[1]+'"]').show();	
+        if(url[1]){
+			$('.enterpriseTab').hide();
+			$('[data-tab="'+url[1]+'"]').show();	
+        }
 	}
 
 	function showTab(e){
