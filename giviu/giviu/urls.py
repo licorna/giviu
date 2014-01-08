@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     url(r'^user/sent$', 'giviu.views.sent', name='user_sent'),
     url(r'^user/calendar$', 'giviu.views.calendar', name='user_calendar'),
 
+    url(r'^search$', 'giviu.views.search', name='search'),
+
     url(r'^partner/(?P<merchant_slug>\S+)$', 'giviu.views.partner_info', name='partner_info'),
 
     url(r'^page/giviu$', 'giviu.views.page_who_we_are', name='page_who_we_are'),

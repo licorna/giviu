@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load locale_price %}
+{% block content %}
+<section class="container options">
+<h1>Busqueda por: "Estel bonito"</h1>
+	<small style="text-align:left; padding-left:15px;" class="span9">Hemos encontrado 1 resultado</small>
+</section>
+<section class="container">
+
+	<section class="span9" id="giftCardSearch" data-columns>
+	    {% for product in products %}
+	    <article class="giftCardModule" data-source-id="{{ product.id }}">
+	      <figure>
+	        <span class="like {% if not user.is_authenticated  %}disabled{% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+	        <a href="/giftcard/detail/{{ product.id }}">
+	          <img src="{{ product.image }}">
+	        </a>
+	      </figure>
+	      <a href="/giftcard/detail/{{ product.id }}"><h2>{{ product.title }}</h2></a>
+	      <h4><a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+	      {% if product.kind == '1' %}
+	      <center>
+	        <select class="" name="webmenu"  onchange="showValue(this.value)">
+	          {% for price in product.get_price %}
+	          <option value="{{ price }}">{{ price|clp }}</option>
+	          {% endfor %}
+	        </select>
+	      </center>
+	      {% endif %}
+	      {% if product.kind == '0' %}
+	      <strong class="span9">{{ product.get_price|clp }}</strong>
+	      {% endif %}
+	      <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
+
+	    </article>
+	    {% endfor %}
+	</section>
+
+</section> 
+{% endblock %}

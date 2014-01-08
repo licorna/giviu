@@ -229,6 +229,9 @@ def partner_info(request, merchant_slug):
                               context_instance=RequestContext(request))
 
 
+def search(request):
+    return render_to_response('search.html')
+
 def page_who_we_are(request):
     return render_to_response('page_who_we_are.html')
 
