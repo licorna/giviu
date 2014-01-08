@@ -21,7 +21,7 @@ $(document).ready(function(e){
 
     $('.close').on('click',closeModal);
 
-    $('#logout').on('click',logout);
+    $//('#logout').on('click',logout);
     $('.share').on('click',share);
 
     $('.mobileActions').on('click',menuDisplay);
@@ -90,10 +90,12 @@ function reviewModalCampaign(){
 }
 
 function sendInviteFriends(e){
-    FB.ui({method: 'apprequests',
+    console.log(e.to);
+    FB.ui({method: 'send',
         message: 'Busca, personaliza y envia regalos a quien quieras cuando quieras. www.giviu.com',
-        to: e.to,
-        title:'Ven a conocer giviu'        
+        to: 'cristina.aravena.sanchez,esteldesign',
+        title:'Ven a conocer giviu',
+        link:'https://www.giviu.com'        
     }, confirmSendInviteFriends);
 
 }

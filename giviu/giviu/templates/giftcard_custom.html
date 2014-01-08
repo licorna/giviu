@@ -33,6 +33,7 @@
         ¿En que fecha quieres enviarla?
       </label>
       <input type="text" class="span9 required" name="send-when" id="datepicker" value="" name="send-date">
+      <input type="hidden" name="send-when" id="hidden-date" value="" name="send-date">
       <label class="span9">
         ¿Quieres agregarle un mensaje?
       </label>
@@ -94,11 +95,39 @@
     monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
     dayNamesMin:["Lu","Ma","Mi","Ju","Vi","Sa","Do"],
     monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-    dateFormat: "yy-mm-d",
+    dateFormat: "yy-m-d",
     defaultDate: -1,
     autoSize: true,
     maxDate: "+1m",
-    minDate: "0"
+    minDate: "0",
+    onSelect: function(e) {
+
+        var terms = ['Hoy','Mañana','Pasado mañana']
+        var special_dates = ['2014-2-14','Mañana','Pasado mañana']
+        var special_msg = ['El día de los enamorados','Mañana','Pasado mañana']
+        var picker_date = e;
+        var new_format_date = e.split('-');
+        var new_format_date =new_format_date[2]+'-'+new_format_date[1]+'-'+new_format_date[0];
+        var d = new Date(); 
+        var fechaInicio= new Date(picker_date);
+        var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());            
+        var fechaResta= fechaInicio-hoy;
+        fechaResta=(((fechaResta/1000)/60)/60)/24;   
+        fechaResta = parseInt(fechaResta);        
+
+        if(fechaResta<=2) {
+          $('#datepicker').val(terms[fechaResta]);
+        }else if(fechaResta<=5){
+          $('#datepicker').val('En '+fechaResta+' días');
+        }else{
+           $('#datepicker').val(new_format_date);
+        }
+        var special_date_review = $.inArray(e,special_dates)
+        if(special_date_review!=-1){
+          $('#datepicker').val(special_msg[special_date_review]);
+        }
+        $('#hidden-date').val(e);
+    }
   });
 
   });
