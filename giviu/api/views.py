@@ -1,5 +1,9 @@
-from django.http import HttpResponse
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseNotFound)
+from django.views.decorators.csrf import csrf_exempt
 from giviu.models import Users, Product
+from api.models import ApiClientId
+from datetime import datetime
 import json
 
 
@@ -28,7 +32,16 @@ def user_exists_by_fbid(request, fbid):
     )
 
 
+@csrf_exempt
 def validate_giftcard(request, giftcard):
+    if 'client_id' not in request.GET:
+        return HttpResponseBadRequest()
+    client_id = request.GET['client_id']
+    try:
+        client = ApiClientId.objects.get(client_id=client_id)
+    except ApiClientId.DoesNotExist:
+        return HttpResponseBadRequest()
+
     try:
         product = Product.objects.get(validation_code__exact=giftcard)
     except Product.DoesNotExist:
@@ -37,26 +50,36 @@ def validate_giftcard(request, giftcard):
             content_type='application/json',
             status=404
         )
-    if request.method == 'POST':
+
+    if product.giftcard.merchant != client.merchant:
+        return HttpResponseNotFound()
+
+    if request.method == 'PUT':
         if product.validated == 0:
             product.validated = 1
+            product.validation_date = datetime.now()
             product.save()
-            response = {'status': 'validated'}
+            response = {'status': 'The giftcard has been validated'}
             status = 200
         else:
-            response = {'status': 'already validated'}
+            response = {
+                'status': 'The giftcard has already been validated',
+                'validation_date': product.validation_date.isoformat()
+            }
             status = 400
         return HttpResponse(json.dumps(response),
                             content_type='application/json',
                             status=status)
 
     data = {
-        'uuid': giftcard,
+        'id': giftcard,
         'from': product.giftcard_from.email,
         'to': product.giftcard_to.email,
         'already_validated': product.validated == 1,
-        'giftcard-price': int(product.price),
+        'giftcard_price': int(product.price),
     }
+    if product.validated == 1:
+        data['validation_date'] = product.validation_date.isoformat()
 
     return HttpResponse(
         json.dumps({'giftcard': data}),
