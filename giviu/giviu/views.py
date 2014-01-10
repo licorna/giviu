@@ -194,7 +194,8 @@ def giftcard_confirmation(request):
         'giftcard': giftcard,
         'product_id': product_id,
         'token': response['token'],
-        'trx_id': trx_id
+        'trx_id': trx_id,
+        'design': product.design
     }
     data.update(csrf(request))
 

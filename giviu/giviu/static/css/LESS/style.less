@@ -77,7 +77,7 @@
 
 body{ 
 	font-size: 16px;
-  font-family: 'Open Sans', sans-serif;  
+  font-family: 'Open Sans','helvetica',sans-serif;  
   color: @grayText;  
   line-height: @line-height;
   font-weight:lighter ;
@@ -744,6 +744,16 @@ nav{
       }
     }
   }
+  .quantity{
+    font-size:0.8em;
+    background-color: #f39c12;
+    margin-bottom:-10px;
+    color:#fff;
+    strong{
+      color:#fff;
+      font-size:1em;
+    }
+  }
   figure{
     width:100%;
     height:160px;
@@ -826,6 +836,40 @@ nav{
       }
     }
   }
+  .friends{
+    font-size:0.8em;
+    border-top:1px dotted @greyBorder;
+    background-color: #fefefe;
+    text-align:left;
+    margin-bottom:-10px;
+    figure{
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      display:inline-block;
+      margin:5px 3px 0px 0px;
+      img{
+        width:100%!important;
+        margin:0px;
+      }
+    }
+    .ico{
+      display:inline-block;
+      float:left;
+      background-color:#efefef;
+      margin-right:5px;
+      width:30px;
+      height:43px;
+      margin-bottom:-10px;
+      span{
+        margin-left:8px;
+        margin-top:15px;
+        float:left;
+        color:#999;
+      }
+    }
+  }
+
 }
 
 .steps{
@@ -1904,7 +1948,9 @@ span.tooltip {
       }
     }
   }
-
+  #giftCardList{ 
+    .span9;
+  }
   .detail{
     .giftcardImage{
       .span9;

@@ -26,14 +26,14 @@
       </label>
       <input type="text" class="span9 nameTo required" name="name-to">
       <label class="span9">
-        ¿Cual es el correo electronico de <strong class="name_to"></strong>?
+        ¿Cual es el correo electrónico  <span class="name_to"></span>?
       </label>
       <input type="text" class="span9 required email" name="email-to">
       <label class="span9">
         ¿En que fecha quieres enviarla?
       </label>
-      <input type="text" class="span9 required" name="send-when" id="datepicker" value="" name="send-date">
-      <input type="hidden" name="send-when" id="hidden-date" value="" name="send-date">
+      <input type="text" class="span9 required" id="datepicker" value="">
+      <input type="hidden" name="send-when" id="hidden-date" value="" >
       <label class="span9">
         ¿Quieres agregarle un mensaje?
       </label>
@@ -81,7 +81,7 @@
   $('[name="giftcard-price"]').val(giftcard_price)
 
   $('.nameTo').keyup(function(){
-    $('.name_to').html($(this).val());
+    $('.name_to').html('de <strong class="name_to">'+$(this).val()+'</strong>');
   });
 
   $('#custom').click(function(e){
@@ -102,12 +102,13 @@
     minDate: "0",
     onSelect: function(e) {
 
+        var month = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
         var terms = ['Hoy','Mañana','Pasado mañana']
-        var special_dates = ['2014-2-14','Mañana','Pasado mañana']
+        var special_dates = ['2014-1-14','Mañana','Pasado mañana']
         var special_msg = ['El día de los enamorados','Mañana','Pasado mañana']
         var picker_date = e;
         var new_format_date = e.split('-');
-        var new_format_date =new_format_date[2]+'-'+new_format_date[1]+'-'+new_format_date[0];
+        var new_format_date =new_format_date[2]+' de '+month[new_format_date[1]-1]
         var d = new Date(); 
         var fechaInicio= new Date(picker_date);
         var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());            

@@ -5,6 +5,8 @@ from django.conf import settings
 from giviu.models import PaymentTransaction, Product, CustomerInfo
 from django.core.exceptions import MultipleObjectsReturned
 from puntopagos import transaction_check
+from django.template import RequestContext
+
 
 if settings.DEVELOPMENT:
     from giviu.settings_development import *
@@ -98,13 +100,26 @@ def pp_response(request, token, **kwargs):
 
         transaction.operation_number = response['numero_operacion']
         transaction.authorization_code = response['codigo_autorizacion']
+
+        transaction.raw_response = response
+        transaction.save()
+        data = {
+            'transaction' : response,
+            'product' : product
+        }
+        return render_to_response('success.html', data,
+                                context_instance=RequestContext(request))
     else:
         product.set_state('RESPONSE_FROM_PP_ERROR')
         transaction.set_state('RESPONSE_FROM_PP_ERROR')
+        data = {}
+        return render_to_response('error.html',data,
+                              context_instance=RequestContext(request))
 
-    transaction.raw_response = response
-    transaction.save()
+
+
+def prueba(request):
     data = {
-        'transaction' : response
+
     }
-    return render_to_response('success.html', data)
+    return render_to_response('prueba.html')

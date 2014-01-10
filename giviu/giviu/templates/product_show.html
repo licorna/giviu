@@ -10,7 +10,7 @@
 		<span class="span9 title"><strong>¡{{ product.giftcard_to_name }}, haz recibido una giftcard.</strong></span>
 		<span class="span9 from">de parte de: {{ product.giftcard_from.first_name }} {{ product.giftcard_from.last_name }}</small></span>
 		<figure class="span9 giftCardStyle" >
-			<img class="span9" src="/static/img/giftcards/{{ product.design }}"/>
+			<img class="span9" src="{{ product.design }}"/>
 			<figcaption class="span9">
 				<span>Código de giftcard: <strong>{{ hash }}</strong>
 			</figcaption>

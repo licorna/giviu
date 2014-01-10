@@ -13,8 +13,6 @@ urlpatterns = patterns('',
     url(r'^giftcard/checkout$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),
     url(r'^product/show/(?P<uuid>\S+)$', 'giviu.views.product_show', name='product_show'),
 
-    # url(r'^giftcard/success$', 'giviu.views.giftcard_success', name='giftcard_success'),
-
     url(r'^user$', 'giviu.views.user', name='user'),
     url(r'^user/sent$', 'giviu.views.sent', name='user_sent'),
     url(r'^user/calendar$', 'giviu.views.calendar', name='user_calendar'),

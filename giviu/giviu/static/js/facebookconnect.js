@@ -28,6 +28,7 @@
   function newuser() {
     showPreload();
     FB.api('/me/', function(response) {
+      console.log(response)
       $.ajax({
         type: "GET",
         url: "/api/users/exists-by-fb/"+response.id,
@@ -88,8 +89,27 @@
       })
       $('#fb-show-sheet').remove();
       $('#facebook-avatar').attr('src','https://graph.facebook.com/'+response.id+'/picture?width=200&amp;height=200');
+      friends(response.id);
     }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
   }
+
+
+  function friends(idloginUser) {
+    FB.api('/'+idloginUser+'/friends', function(response) {
+
+      $.each(response.data, function( key, value ) {
+        $.each(value, function( k, v ) {
+          if(k=='id'){
+          FB.api('/'+v+'?fields=birthday,id,first_name,gender', function(response) {
+            console.log(response)
+
+          }, {scope: 'email,user_birthday'});
+          }
+        });
+      });
+
+    }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
+  } 
 
   $('.confirmBtn').click(function(e){
      e.preventDefault();

@@ -8,6 +8,8 @@ register = template.Library()
 @stringfilter
 def clp(price):
     price = price.strip()
+    price = price.split('.')
+    price = price[0]
 
     def insert_thousand_separator(s, separator='.'):
         i = len(s)

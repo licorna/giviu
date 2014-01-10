@@ -58,7 +58,24 @@
       <strong class="span9">{{ product.get_price|clp }}</strong>
       {% endif %}
       <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
-
+      <!--       
+      {% if product.sold_quantity < 5 %}
+      <div class="quantity">
+        Quedan <strong>{{ product.sold_quantity }}</strong> productos ¡Apresurate!
+      </div>
+      {% endif %}  
+      -->     
+      <div class="friends">
+        <div class="ico">
+          <span class="icon-smiley"></span> 
+        </div>
+          <figure>
+            <img src="https://graph.facebook.com/729998412/picture?width=40&height=40">
+          </figure>
+          <figure>
+            <img src="https://graph.facebook.com/729998412/picture?width=40&height=40">
+          </figure>
+      </div>
     </article>
     {% endfor %}
   </section>
