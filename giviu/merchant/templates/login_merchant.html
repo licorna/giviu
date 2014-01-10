@@ -1,9 +1,8 @@
 {% extends "base_login.html" %}
 {% block content %}
 <div id="login-container">
-  <div class="alert alert-danger">
-    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
-    contraseña incorrecta
+  <div class="alert alert-danger" style="{% if not error %}display:none;{% endif %}">
+    Usuario o contraseña incorrecta
   </div>
 
   <div id="login">
