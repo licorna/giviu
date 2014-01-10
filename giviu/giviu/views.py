@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
     GiftcardCategory, Giftcard, Likes, GiftcardDesign,
     Users, Product
@@ -13,6 +13,10 @@ from merchant.models import MerchantTabs, Merchants
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
+
+
+def user_is_normal_user(user):
+    return isinstance(user, Users) and user.is_normal_user()
 
 
 def do_logout(request):
@@ -51,6 +55,7 @@ def do_register(request):
     return render_to_response('register.html', c, context_instance=RequestContext(request))
 
 
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def home(request, slug=None):
     categories = GiftcardCategory.objects.all()
     data = {}
@@ -72,6 +77,7 @@ def home(request, slug=None):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_detail(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
     try:
@@ -84,9 +90,11 @@ def giftcard_detail(request, gift_id):
         'likes': likes,
         'friends': friends
     }
-    return render_to_response('giftcard_details.html', data, context_instance=RequestContext(request))
+    return render_to_response('giftcard_details.html', data,
+                              context_instance=RequestContext(request))
 
 
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_custom(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
     style = GiftcardDesign.objects.filter(status='publish')
@@ -103,10 +111,12 @@ def giftcard_custom(request, gift_id):
         'styles': style,
     }
 
-    return render_to_response('giftcard_custom.html', data, context_instance=RequestContext(request))
+    return render_to_response('giftcard_custom.html', data,
+                              context_instance=RequestContext(request))
 
 
 @login_required
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def user(request):
     data = {}
     return render_to_response('user.html',
@@ -115,6 +125,7 @@ def user(request):
 
 
 @login_required
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def sent(request):
     products = Product.objects.filter(giftcard_from=request.user, state='RESPONSE_FROM_PP_SUCCESS')
     data = {
@@ -126,6 +137,7 @@ def sent(request):
 
 
 @login_required
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def calendar(request):
     data = {}
     return render_to_response('user_calendar.html',
@@ -135,6 +147,7 @@ def calendar(request):
 
 @require_POST
 @login_required
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_confirmation(request):
     from puntopagos import transaction_create
 
@@ -204,6 +217,7 @@ def giftcard_confirmation(request):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def product_show(request, uuid):
     product = Product.objects.get(uuid__exact=uuid)
     data = {
@@ -216,6 +230,7 @@ def product_show(request, uuid):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(user_is_normal_user, login_url='/logout')
 def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
