@@ -1,4 +1,5 @@
 from django.db import models
+from api.models import ApiClientId
 
 
 class MerchantTabs(models.Model):
@@ -31,6 +32,14 @@ class Merchants(models.Model):
     logo = models.CharField(max_length=255, blank=True)
     lat = models.CharField(max_length=255, blank=True)
     lng = models.CharField(max_length=255, blank=True)
+
+    def get_api_client_id(self):
+        try:
+            # TODO: multiple objects returned
+            client_id = ApiClientId.objects.get(merchant=self)
+        except ApiClientId.DoesNotExist:
+            return None
+        return client_id
 
     def get_customers(self):
         from giviu.models import Product, Users

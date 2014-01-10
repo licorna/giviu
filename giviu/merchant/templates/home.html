@@ -105,6 +105,7 @@
             </h3>
           </div> <!-- /.portlet-header -->
           <div class="portlet-content">
+            {% if products %}
             <table class="table table-striped">
               <tbody>
                 {% for product in products %}
@@ -112,11 +113,15 @@
                   <td style="width: 125px;">{{ product.created }}</td>
                   <td>
                     <p><strong>{{ product.giftcard.title }}</strong></p>
-                    <p>Regalado a: {{ product.giftcard_to_name }}</p>
+                    <p>Regalado a: {{ product.giftcard.to.get_full_name }}</p>
                   </td>
                   <td>
                     <div class="thumbnail pull-right" style="width: 60px;">
-                      <img src="https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-ash3/9107_10151731050713413_903996314_n.jpg" alt="Avatar">
+                      {% if product.giftcard.to.fbid %}
+                      <img src="https://graph.facebook.com/{{ product.giftcard.to.fbid }}/picture?width=40&amp;height=40" alt="Avatar">
+                      {% else %}
+                      <img src="https://graph.facebook.com/200293938/picture?width=40&amp;height=40" alt="Avatar">
+                      {% endif %}
                     </div>
                   </td>
                 </tr>
@@ -125,7 +130,9 @@
               </tbody>
             </table>
             <a href="javascript:;" class="btn btn-secondary btn-xs pull-right"><i class="fa fa-expand-o"></i> &nbsp; Ver todas las ventas</a>
-
+            {% else %}
+            <h4>Todavia no hay ventas :(</h4>
+            {% endif %}
           </div> <!-- /.portlet-content -->
         </div> <!-- /.portlet -->
       </div><!-- /.col -->

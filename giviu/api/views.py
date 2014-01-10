@@ -1,7 +1,7 @@
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotFound)
 from django.views.decorators.csrf import csrf_exempt
-from giviu.models import Users, Product
+from giviu.models import Users, Product, Giftcard
 from api.models import ApiClientId
 from datetime import datetime
 import json
@@ -27,6 +27,26 @@ def user_exists_by_fbid(request, fbid):
         )
     return HttpResponse(
         json.dumps({'user_id': user.id}),
+        content_type='application/json',
+        status=200
+    )
+
+
+@csrf_exempt
+def get_sales_by_service(request, merchant_id):
+    if 'client_id' not in request.GET:
+        return HttpResponseBadRequest()
+
+    giftcards = Giftcard.objects.filter(merchant=merchant_id)
+    data = {}
+    for giftcard in giftcards:
+        data[giftcard.id] = {
+            'title': giftcard.title,
+            'sold_qty': giftcard.sold_quantity
+        }
+
+    return HttpResponse(
+        json.dumps(data),
         content_type='application/json',
         status=200
     )

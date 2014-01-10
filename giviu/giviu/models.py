@@ -308,7 +308,11 @@ class Users(AbstractBaseUser):
     REQUIRED_FIELDS = ['birthday']
 
     def get_full_name(self):
-        return self.first_name + ' ' + self.last_name
+        if self.first_name != '' and self.last_name != '':
+            return self.first_name + ' ' + self.last_name
+        if self.first_name != '' and self.last_name == '':
+            return self.first_name
+        return self.email
 
     def get_short_name(self):
         return self.first_name
@@ -325,6 +329,14 @@ class Users(AbstractBaseUser):
     def get_related_merchant(self):
         if self.is_merchant:
             return self.admin_of
+
+    def get_fb_image_url(self):
+        try:
+            fbid = int(self.fbid)
+        except ValueError:
+            fbid = 1232131
+
+        return 'https://graph.facebook.com/%d/picture' % (fbid, )
 
     @property
     def is_staff(self):

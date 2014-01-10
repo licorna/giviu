@@ -23,6 +23,8 @@ def do_login(request):
             data = {
                 'message': 'Usuario o contrase&ntilde;a incorrectos'
             }
+            return render_to_response('login_merchant.html', data,
+                                      context_instance=RequestContext(request))
         if user:
             print 'a punto de autenticar el usuario'
             user = authenticate(username=email, password=password)
@@ -46,12 +48,14 @@ def home(request):
     products = Product.objects.filter(giftcard__merchant=merchant,
                                       state='RESPONSE_FROM_PP_SUCCESS')
     products_validated_qty = len(filter(lambda x: x.validated, products))
-    products_total_sold = reduce(lambda x, y: x+y, [int(p.price) for p in products])
+    products_total_sold = reduce(lambda x, y: x+y, [int(p.price) for p in products], 0)
+    client_id = merchant.get_api_client_id()
     data = {
         'products': products,
         'products_validated_qty': products_validated_qty,
         'products_to_validate_qty': len(products) - products_validated_qty,
-        'total_sold': products_total_sold
+        'total_sold': products_total_sold,
+        'client_id': client_id
     }
     return render_to_response('home.html', data,
                               context_instance=RequestContext(request))
@@ -77,7 +81,7 @@ def customer_profile(request, customer_id):
     except CustomerInfo.DoesNotExist:
         return HttpResponseNotFound()
 
-    products = Product.objects.filter(giftcard_from=customer.user,
+    products = Product.objects.filter(giftcard_to=customer.user,
                                       state='RESPONSE_FROM_PP_SUCCESS')
 
     data = {
