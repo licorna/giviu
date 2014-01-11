@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic.base import RedirectView
 
 urlpatterns = patterns('',
     url(r'^login/$', 'merchant.views.do_login', name='login_merchant'),
@@ -7,8 +8,5 @@ urlpatterns = patterns('',
     url(r'^customers/$', 'merchant.views.customers', name='customers'),
     url(r'^customer/profile/(?P<customer_id>\d+)$', 'merchant.views.customer_profile', name='customer_profile'),
     url(r'^customer/edit/(?P<customer_id>\d+)$', 'merchant.views.customer_edit', name='customer_edit'),
-    url(r'^users/$', 'merchant.views.users', name='users'),
-    url(r'^user/new/$', 'merchant.views.user_new', name='user_new'),
-    url(r'^user/profile/$', 'merchant.views.user_profile', name='user_profile'),
-
+    url(r'^$', RedirectView.as_view(pattern_name='home', permanent=True)),
 )

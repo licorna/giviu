@@ -1,49 +1,46 @@
 from django.shortcuts import render_to_response, redirect, get_object_or_404
-from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
-from giviu.models import Users, Giftcard, Product, CustomerInfo
+from django.contrib.auth.decorators import user_passes_test
+from giviu.models import Users, Product, CustomerInfo
 import json
 
 
 def do_login(request):
-    data = {}
+    def error():
+        data = {
+            'error': True,
+            'message': 'Usuario o contrase&ntilde;a incorrectos'
+        }
+        return render_to_response('login_merchant.html', data,
+                                  context_instance=RequestContext(request))
+
     if request.method == 'POST':
         if 'email' not in request.POST or 'password' not in request.POST:
-            return HttpResponseBadRequest()
+            return error()
         email = request.POST['email']
         password = request.POST['password']
 
         try:
-            user = Users.objects.get(email__exact=email)
-            print 'he encotrado el usuario'
+            user = Users.objects.get(email=email)
         except Users.DoesNotExist:
-            print 'el usuario no existe!!!'
-            data = {
-                'message': 'Usuario o contrase&ntilde;a incorrectos'
-            }
-            return render_to_response('login_merchant.html', data,
-                                      context_instance=RequestContext(request))
+            return error()
+
         if user:
-            print 'a punto de autenticar el usuario'
             user = authenticate(username=email, password=password)
             if not user:
-                print 'usuario no se pudo autenticar'
-                return HttpResponseBadRequest()
+                return error()
             login(request, user)
-            print 'usuario logueado'
             return redirect('/merchant/home')
 
-    return render_to_response('login_merchant.html',
-                              data, context_instance=RequestContext(request))
+    return render_to_response('login_merchant.html', {},
+                              context_instance=RequestContext(request))
 
 
-@login_required
+@user_passes_test(lambda u: isinstance(u, Users) and u.is_merchant,
+                  login_url='/merchant/login')
 def home(request):
-    if not request.user.is_merchant:
-        return HttpResponse('Restringido a merchants')
-
     merchant = request.user.merchant
     products = Product.objects.filter(giftcard__merchant=merchant,
                                       state='RESPONSE_FROM_PP_SUCCESS')
@@ -61,6 +58,8 @@ def home(request):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: isinstance(u, Users) and u.is_merchant,
+                  login_url='/merchant/login')
 def validate(request):
     merchant = request.user.merchant
     client_id = merchant.get_api_client_id()
@@ -71,6 +70,8 @@ def validate(request):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: isinstance(u, Users) and u.is_merchant,
+                  login_url='/merchant/login')
 def customers(request):
     customers = CustomerInfo.objects.filter(merchant=request.user.merchant)
     data = {
@@ -80,6 +81,8 @@ def customers(request):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: isinstance(u, Users) and u.is_merchant,
+                  login_url='/merchant/login')
 def customer_profile(request, customer_id):
     try:
         customer = CustomerInfo.objects.get(pk=customer_id)
@@ -98,6 +101,8 @@ def customer_profile(request, customer_id):
                               context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: isinstance(u, Users) and u.is_merchant,
+                  login_url='/merchant/login')
 def customer_edit(request, customer_id):
     customer = get_object_or_404(CustomerInfo, pk=customer_id)
     if request.method == 'POST':
@@ -118,19 +123,3 @@ def customer_edit(request, customer_id):
 
     return render_to_response('customer_edit.html', data,
                               context_instance=RequestContext(request))
-
-
-def users(request):
-    data = {}
-
-    return render_to_response('users.html')
-
-def user_profile(request):
-    data = {}
-
-    return render_to_response('user_profile.html')
-
-def user_new(request):
-    data = {}
-
-    return render_to_response('user_new.html')

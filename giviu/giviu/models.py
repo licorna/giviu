@@ -314,6 +314,14 @@ class Users(AbstractBaseUser):
             return self.first_name
         return self.email
 
+    def get_birthday(self):
+        if self.birthday is None:
+            return ''
+        return self.birthday
+
+    def is_normal_user(self):
+        return (len(self.fbid) < 56 and not self.is_merchant)
+
     def get_short_name(self):
         return self.first_name
 
