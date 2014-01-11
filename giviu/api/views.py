@@ -94,9 +94,10 @@ def validate_giftcard(request, giftcard):
     data = {
         'id': giftcard,
         'from': product.giftcard_from.email,
-        'to': product.giftcard_to.email,
+        'to': product.giftcard_to.get_full_name(),
         'already_validated': product.validated == 1,
         'giftcard_price': int(product.price),
+        'product': product.giftcard.title,
     }
     if product.validated == 1:
         data['validation_date'] = product.validation_date.isoformat()

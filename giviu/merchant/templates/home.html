@@ -113,7 +113,7 @@
                   <td style="width: 125px;">{{ product.created }}</td>
                   <td>
                     <p><strong>{{ product.giftcard.title }}</strong></p>
-                    <p>Regalado a: {{ product.giftcard.to.get_full_name }}</p>
+                    <p>Regalado a: {{ product.giftcard_to.get_full_name }}</p>
                   </td>
                   <td>
                     <div class="thumbnail pull-right" style="width: 60px;">
@@ -145,35 +145,41 @@
   </div>
 </div> <!-- #content -->
 </div> <!-- #wrapper -->
-
+<input type="hidden" name="client_id" value="{{ client_id.client_id }}">
+<input type="hidden" name="merchant_id" value="{{ client_id.merchant_id }}">
 <script>
   $(document).ready(function(){
-  $(function () {
+    $(function () {
+      if (!$('#solds').length) { return false; }
+      donut ();
+      $(window).resize (App.debounce (donut, 500));
+    });
 
-  if (!$('#solds').length) { return false; }
+    function donut () {
+      $('#solds').empty ();
+      $.get( "/api/merchant/get-sales-by-giftcard/"+$('[name="merchant_id"]').val(),{client_id:$('[name="client_id"]').val()})
+          .done(function(data) { 
+              jsonObj = [];
+              $.each(data, function (i, content) {
+                var label = content.title;
+                var value = content.sold_qty;
+                item = {}
+                item ["label"] = label;
+                item ["value"] = value;
+                jsonObj.push(item);
+              })     
+              Morris.Donut({
+              element: 'solds',
+              data: jsonObj,
+              colors: App.chartColors,
+              hideHover: true,
+                formatter: function (y, data) { return data.value  +' vendidos'}
+              });
+        });
+    }
 
-  donut ();
 
-  $(window).resize (App.debounce (donut, 500));
 
-  });
-
-  function donut () {
-  $('#solds').empty ();
-
-  Morris.Donut({
-  element: 'solds',
-  data: [
-  {label: 'masajes', value: 5 },
-  {label: 'masajes 2', value: 10 },
-  ],
-  colors: App.chartColors,
-  hideHover: true,
-
-  formatter: function (y, data) { return data.value  +' vendidos'}
-  });
-  }
   });
 </script>
-
 {% endblock %}

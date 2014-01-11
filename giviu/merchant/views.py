@@ -62,7 +62,12 @@ def home(request):
 
 
 def validate(request):
-    return render_to_response('validate.html', {},
+    merchant = request.user.merchant
+    client_id = merchant.get_api_client_id()
+    data = {
+        'client_id': client_id,
+    }
+    return render_to_response('validate.html', data,
                               context_instance=RequestContext(request))
 
 
