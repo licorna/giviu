@@ -28,6 +28,8 @@ urlpatterns = patterns('',
     url(r'^page/contacto$', 'giviu.views.page_contact', name='page_contact'),
     url(r'^page/terminos-y-condiciones$', 'giviu.views.page_terms', name='page_terms'),
 
+    url(r'^404$', 'giviu.views.response_not_found', name='response_not_found'),
+
     url(r'^api/', include('api.urls')),
     url(r'^status/', include('status.urls')),
 

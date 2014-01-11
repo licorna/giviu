@@ -244,6 +244,8 @@ def partner_info(request, merchant_slug):
     return render_to_response('partner_info.html', data,
                               context_instance=RequestContext(request))
 
+def response_not_found(request):
+    return render_to_response('404.html')
 
 def search(request):
     return render_to_response('search.html')
