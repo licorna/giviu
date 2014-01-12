@@ -61,7 +61,12 @@ def home(request):
 @user_passes_test(lambda u: isinstance(u, Users) and u.is_merchant,
                   login_url='/merchant/login')
 def validate(request):
-    return render_to_response('validate.html', {},
+    merchant = request.user.merchant
+    client_id = merchant.get_api_client_id()
+    data = {
+        'client_id': client_id,
+    }
+    return render_to_response('validate.html', data,
                               context_instance=RequestContext(request))
 
 

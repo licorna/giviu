@@ -45,11 +45,9 @@
             <p>Valor giftcard: <strong id="giftcardprice"></strong></p>
           </td>
           <td>
-            <form id="validateFormComplete" method="post" action="/merchant/newCustomer">
               <div class="fieldset">
               </div>
-              <input type="submit" value="Validar" class="btn btn-primary btn-lg pull-right"/>
-            </form>
+              <input type="submit" value="Validar" data-id=""  id="validate" class="btn btn-primary btn-lg pull-right"/>
           </td>
         </tr>
       </tbody>
@@ -60,63 +58,103 @@
 </div> <!-- #content -->
 </div> <!-- #wrapper -->
 
+<input type="hidden" name="client_id" value="{{ client_id.client_id }}">
 
 
 <script>
-  $(document).ready(function(){
+$(document).ready(function(){
+
+  $('#validate').on('click',validateGiftcard);
+
+
   $('.validate').click(function(e){
-  e.preventDefault();
-  $('#validation-table').hide();
-  $('.fieldset').html('');
-  $.get( "/api/validate/giftcard/" + $('#giftcard-code').val())
-  .done(function(data) {
-  var obj = jQuery.parseJSON(data);
-  switch (obj.status) {
-  case "error":
-  alert(obj.msg);
-  break
-  case "success":
+    e.preventDefault();
+    $('#validation-table').hide();
+    $('.fieldset').html('');
 
-  $.each( obj, function( key, val ) {
-  if(key=='giftcard-price'){
-  val = '$'+separador(val);
+      $.ajax({
+        type: "GET",
+        url: "/api/validate/giftcard/"+$('#giftcard-code').val()+'?client_id='+$('[name="client_id"]').val(),
+        cache: false,
+        statusCode: {
+          200: function(data) {
+            if(data.giftcard.already_validated==false){
+              console.log(data)
+              $(this).attr('disabled','')
+              $('#validation-table').show();
+              $('#giftcardto').html(data.giftcard.from);
+              $('#giftcardtitle').html(data.giftcard.product);
+              $('#giftcardprice').html('$'+separador(data.giftcard.giftcard_price));
+              $('#validate').attr('data-id',data.giftcard.id)
+            }else{
+              alert('Ya fue validada')
+            }
+          },
+          404:function(data){
+            var error = jQuery.parseJSON(data.responseText);
+            alert(error.message)
+            $('#validation-table').hide();
+          }
+        }
+      })
+
+    });
+
+  function validateGiftcard(e){
+    $(this).attr('disabled','disabled')
+    if($(this).attr('data-id')){
+      $.ajax({
+        type: "PUT",
+        url: "/api/validate/giftcard/"+$(this).attr('data-id')+'?client_id='+$('[name="client_id"]').val(),
+        cache: false,
+        statusCode: {
+          200: function(data) {
+            alert(data.status);
+            $('#validation-table').hide();
+            $('#giftcardto').html('');
+            $('#giftcardtitle').html('');
+            $('#giftcardprice').html('');
+            $('#validate').attr('data-id','')   
+            $(this).attr('disabled','')
+            $('#giftcard-code').val('').focus()
+          },
+          404:function(data){
+            var error = jQuery.parseJSON(data.responseText);
+            alert(error.message)
+            $('#validation-table').show();
+          }
+        }
+      })
+    }else{
+        alert('nope');
+    }
   }
-  $('#'+key).html(val);
-  $('.fieldset').append('<input type="hidden" name="'+key+'" value="'+val+'">');
-  });
-  $('#validation-table').show();
-  break
 
-  }
 
-  });
-  });
 
   function separador(valor) {
-  var nums = new Array();
-  var simb = "."; //Éste es el separador
-  valor = valor.toString();
-  valor = valor.replace(/\D/g, "");   //Ésta expresión regular solo permitira ingresar números
-  nums = valor.split(""); //Se vacia el valor en un arreglo
-  var long = nums.length - 1; // Se saca la longitud del arreglo
-  var patron = 3; //Indica cada cuanto se ponen las comas
-  var prox = 2; // Indica en que lugar se debe insertar la siguiente coma
-  var res = "";
+    var nums = new Array();
+    var simb = "."; //Éste es el separador
+    valor = valor.toString();
+    valor = valor.replace(/\D/g, "");   //Ésta expresión regular solo permitira ingresar números
+    nums = valor.split(""); //Se vacia el valor en un arreglo
+    var long = nums.length - 1; // Se saca la longitud del arreglo
+    var patron = 3; //Indica cada cuanto se ponen las comas
+    var prox = 2; // Indica en que lugar se debe insertar la siguiente coma
+    var res = "";
 
-  while (long > prox) {
-  nums.splice((long - prox),0,simb); //Se agrega la coma
-  prox += patron; //Se incrementa la posición próxima para colocar la coma
-  }
+    while (long > prox) {
+      nums.splice((long - prox),0,simb); //Se agrega la coma
+      prox += patron; //Se incrementa la posición próxima para colocar la coma
+    }
 
-  for (var i = 0; i <= nums.length-1; i++) {
-                       res += nums[i]; //Se crea la nueva cadena para devolver el valor formateado
-                       }
+    for (var i = 0; i <= nums.length-1; i++) {
+      res += nums[i]; //Se crea la nueva cadena para devolver el valor formateado
+    }
+      return res;
+    }
 
-                       return res;
-                       }
-
-
-                       });
-                       </script>
+});
+</script>
 
 {% endblock %}
