@@ -20,7 +20,7 @@
         <tr>
           <td>
             <a href="/merchant/customer/profile/{{ customer.id }}" title="">{{ customer.user.get_full_name }}</a>
-            <p>{{ customer.user.birthday }}</p>
+            <p>{{ customer.user.get_birthday }}</p>
           </td>
           <td>{{ customer.user.email }}</td>
 

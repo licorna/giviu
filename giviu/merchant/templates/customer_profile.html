@@ -23,7 +23,7 @@
         <hr>
         <ul class="" style="list-style:none;">
           <li><span class="icon-li fa fa-envelope"></span> <strong>Email:</strong> {{ customer.user.email }}</li>
-          <li><span class="icon-li fa fa-calendar"></span> <strong>Cumpleaños:</strong>  {{ customer.user.birthday }}</li>
+          <li><span class="icon-li fa fa-calendar"></span> <strong>Cumpleaños:</strong>  {{ customer.user.get_birthday }}</li>
           <li><span class="icon-li fa fa-phone"></span> <strong>Télefono:</strong> {{ customer.user.phone }}</li>
         </ul>
         <hr>

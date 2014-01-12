@@ -19,7 +19,7 @@
         <li class="span9 category {% if this_category.name == category.name %}selected{% endif %}"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}">{{ category.count }}</span></a></li>
         {% endfor %}
       </ul>
-    </aside>    
+    </aside>
 
     <aside class="span9 promo">
       <figure>
@@ -27,7 +27,7 @@
         <img src="/static/img/campaigns/small_banner_3_lucas.png"/>
         </a>
       </figure>
-    </aside>  
+    </aside>
   </div>
 
   <section class="special span7" id="lucas">
@@ -58,25 +58,22 @@
       <strong class="span9">{{ product.get_price|clp }}</strong>
       {% endif %}
       <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
-      <!--       
+      <!--
       {% if product.sold_quantity < 5 %}
       <div class="quantity">
         Quedan <strong>{{ product.sold_quantity }}</strong> productos ¡Apresurate!
       </div>
-      {% endif %}  
-     
+      {% endif %}
       <div class="friends">
         <div class="ico">
-          <span class="icon-smiley"></span> 
+          <span class="icon-smiley"></span>
         </div>
-          <figure>
-            <img src="https://graph.facebook.com/729998412/picture?width=40&height=40">
-          </figure>
-          <figure>
-            <img src="https://graph.facebook.com/729998412/picture?width=40&height=40">
-          </figure>
-      </div> 
-      -->
+        {% for likes in product.get_likes %}
+        <figure>
+          <img src="https://graph.facebook.com/{{ likes.fbid }}/picture?width=40&height=40">
+        </figure>
+        {% endfor %}
+      </div>
     </article>
     {% endfor %}
   </section>
