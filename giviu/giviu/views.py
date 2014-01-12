@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
-    GiftcardCategory, Giftcard, Likes, GiftcardDesign,
+    GiftcardCategory, Giftcard, GiftcardDesign,
     Users, Product
 )
 from merchant.models import MerchantTabs, Merchants
@@ -80,11 +80,8 @@ def home(request, slug=None):
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_detail(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
-    try:
-        likes = Likes.objects.get(pk=gift_id)
-    except Likes.DoesNotExist:
-        likes = 0
-        friends = 0
+    likes = 0
+    friends = 0
     data = {
         'giftcard': giftcard,
         'likes': likes,
@@ -98,12 +95,8 @@ def giftcard_detail(request, gift_id):
 def giftcard_custom(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
     style = GiftcardDesign.objects.filter(status='publish')
-    try:
-        likes = Likes.objects.get(pk=gift_id)
-        friends = UserFriends.objects.filter(user_friend_fb_id__exact=likes.like_user_fb_id)
-    except Likes.DoesNotExist:
-        likes = 0
-        friends = 0
+    likes = 0
+    friends = 0
     data = {
         'giftcard': giftcard,
         'likes': likes,

@@ -17,6 +17,7 @@ from uuid import uuid4
 from utils import get_one_month, get_now
 from merchant.models import Merchants
 from hashlib import sha224
+from social.models import Likes
 
 
 class Calendar(models.Model):
@@ -144,6 +145,13 @@ class Giftcard(models.Model):
         if ',' in self.price:
             return self.price.split(',')
         return self.price
+
+    def get_likes_qty(self):
+        response = Likes.get_giftcard_likes(self.id, just_count=True)
+        return response
+
+    def get_likes(self):
+        return Likes.get_giftcard_likes(self.id, just_count=False)
 
     class Meta:
         db_table = 'giftcard'
@@ -372,19 +380,6 @@ class GiviuAuthenticationBackend(object):
             return Users.objects.get(pk=user_id)
         except Users.DoesNotExist:
             return None
-
-
-class Likes(models.Model):
-    id = models.IntegerField(primary_key=True)
-    source_id = models.IntegerField()
-    user = models.ForeignKey('Users')
-    user_fbid = models.CharField(max_length=255)
-    source_type = models.IntegerField()
-    created = models.DateTimeField()
-
-    class Meta:
-        db_table = 'likes'
-        verbose_name_plural = 'Likes'
 
 
 class PaymentTransaction(models.Model):
