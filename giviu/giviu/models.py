@@ -354,6 +354,10 @@ class Users(AbstractBaseUser):
 
         return 'https://graph.facebook.com/%d/picture' % (fbid, )
 
+    def get_friend_likes_for_giftcard(self, giftcard_id):
+        likes = Likes.get_likes_from_friends(self.fbid, giftcard_id)
+        return likes
+
     @property
     def is_staff(self):
         return self.is_admin

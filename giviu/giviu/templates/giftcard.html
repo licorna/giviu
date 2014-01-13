@@ -16,7 +16,9 @@
       <ul class="span9">
         <li class="span9 {% if not this_category %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
         {% for category in categories %}
+        {% if category.count > 0 %}
         <li class="span9 category {% if this_category.name == category.name %}selected{% endif %}"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}">{{ category.count }}</span></a></li>
+        {% endif %}
         {% endfor %}
       </ul>
     </aside>
