@@ -38,6 +38,29 @@ class Likes():
             return 0
         return None
 
+
+    @staticmethod
+    def does_user_likes(user, giftcard):
+        condition = {
+            "giftcard_likes": giftcard,
+            "fbid": user,
+        }
+        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
+        url += '?where=' + json.dumps(condition)
+        headers = {'Accept':'application/json'}
+        try:
+            response = requests.get(url, headers=headers)
+        except requests.exceptions.RequestException:
+            return False
+
+        if response.status_code == 200:
+            jres = response.json()
+            if '_items' in jres:
+                return True
+
+        return False
+
+
     @staticmethod
     def add_giftcard_like(user, giftcard):
         condition = '?where={"fbid":"%s"}' % (user,)
@@ -59,7 +82,8 @@ class Likes():
             if 'giftcard_likes' in jres['_items'][0]:
                 user_likes = jres['_items'][0]['giftcard_likes']
             user_id = jres['_items'][0]['_id']
-            user_likes.append(int(giftcard))
+            if int(giftcard) not in user_likes:
+                user_likes.append(int(giftcard))
 
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         headers = {
