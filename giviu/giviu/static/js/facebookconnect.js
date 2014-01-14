@@ -97,13 +97,14 @@
 
 
   function friends(idloginUser) {
-    FB.api('/'+idloginUser+'/friends', function(response) {
+    FB.api('/'+idloginUser+'/friends?fields=name,birthday,email', function(response) {
       // TODO: Arreglar!
       $.ajax({
         type: 'POST',
+        contentType: 'application/json; charset=utf-8',
         url: 'api/social/add-friends-from-facebook',
         cache: false,
-        data: JSON.stringify(response),
+        data: JSON.stringify(response.data),
         dataType: 'json',
         status_code: {
           200: function() {
