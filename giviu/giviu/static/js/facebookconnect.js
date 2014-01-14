@@ -43,6 +43,7 @@
             //alertMessage('Invita a tus amigos','inviteFriends');
           },
           404:function(){
+            friends(response.id);
             if(response.first_name==undefined){
               first_name = '';
             }else{
@@ -91,7 +92,6 @@
       })
       $('#fb-show-sheet').remove();
       $('#facebook-avatar').attr('src','https://graph.facebook.com/'+response.id+'/picture?width=200&amp;height=200');
-      friends(response.id);
     }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
   }
 
@@ -107,8 +107,8 @@
         data: JSON.stringify(response.data),
         dataType: 'json',
         status_code: {
-          200: function() {
-            console.log('agregados ok tiiii')
+          200: function(data) {
+            console.log(data)
           }
         }
       });
