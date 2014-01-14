@@ -10,6 +10,7 @@ from models import (
 )
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
+from marketing import event_user_registered
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -42,6 +43,9 @@ def do_register(request):
                                                  gender=request.POST['gender'])
             if user:
                 user = authenticate(username=fbid, password=fbid)
+                # Send email to registered user.!
+                event_user_registered(request.POST['email'],
+                                      request.POST['name'])
                 if not user:
                     return HttpResponseBadRequest()
                 login(request, user)
