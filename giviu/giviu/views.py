@@ -9,6 +9,7 @@ from models import (
     Users, Product
 )
 from merchant.models import MerchantTabs, Merchants
+from social.models import Likes
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -68,6 +69,11 @@ def home(request, slug=None):
     else:
         products = Giftcard.objects.all()
     all_product_len = Giftcard.objects.count()
+
+    if request.user.is_authenticated:
+        for product in products:
+            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+                                                                    product.id)
     data.update({
         'categories': categories,
         'products': products,

@@ -71,7 +71,7 @@
         <div class="ico">
           <span class="icon-smiley"></span>
         </div>
-        {% for likes in product.get_likes %}
+        {% for likes in product.get_friend_likes %}
         <figure>
           <img src="https://graph.facebook.com/{{ likes.fbid }}/picture?width=40&height=40">
         </figure>
