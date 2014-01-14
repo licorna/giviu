@@ -1,3 +1,5 @@
+// -*- mode: javascript;  js-indent-level: 2; -*-
+
   window.fbAsyncInit = function() {
   FB.init({
     appId      : '259478790867380',
@@ -96,24 +98,26 @@
 
   function friends(idloginUser) {
     FB.api('/'+idloginUser+'/friends', function(response) {
-
-      $.each(response.data, function( key, value ) {
-        $.each(value, function( k, v ) {
-          if(k=='id'){
-          FB.api('/'+v+'?fields=birthday,id,first_name,gender', function(response) {
-            console.log(response)
-
-          }, {scope: 'email,user_birthday'});
+      // TODO: Arreglar!
+      $.ajax({
+        type: 'POST',
+        url: 'api/social/add-friends-from-facebook',
+        cache: false,
+        data: JSON.stringify(response),
+        dataType: 'json',
+        status_code: {
+          200: function() {
+            console.log('agregados ok tiiii')
           }
-        });
+        }
       });
 
     }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
-  } 
+  }
 
   $('.confirmBtn').click(function(e){
      e.preventDefault();
-     $('#register').submit(); 
+     $('#register').submit();
   })
   function showPreload(){
     $('#btn-login').hide('fast');

@@ -8,6 +8,44 @@ class Likes():
     TIMEOUT = settings.SOCIAL['TIMEOUT']
 
     @staticmethod
+    def add_user_to_social(fbid, name, birthdate):
+        '''Will add the new registered user to Social database'''
+        print 'a punto de enviar solicitud tiiiii'
+        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
+        data = {
+            'fbid': fbid,
+            'first_name': name,
+            'birthdate': birthdate,
+            'giftcard_likes': [],
+            'friend_of': []
+        }
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        try:
+            response = requests.post(url, data=data, headers=headers)
+        except requests.exceptions.RequestException, e:
+            print e
+            # TODO: IMPORTANTE:
+            # ESTO SE DEBE LOGUEAR Y ALERTAR!!
+            return False
+
+        return response.status_code < 300
+
+    @staticmethod
+    def add_users_to_social(users):
+        '''Add users from facebook response to Social'''
+        print 'add_users_to_social'
+        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
+        headers = {'Content-Type': 'application/json'}
+        try:
+            response = requests.post(url, data=users, headers=headers)
+        except requests.exceptions.RequestException:
+            print 'error agregando usuarios'
+
+        return response.text < 300
+
+    @staticmethod
     def get_giftcard_likes(giftcard_id, just_count=True):
         '''Will fetch all the likes a giftcard has'''
         condition = {
@@ -105,7 +143,7 @@ class Likes():
 
     @staticmethod
     def get_social_user(fbid):
-        '''Returns the full user Mongo object.'''
+        '''Returns the full user Social object.'''
         condition = {
             "fbid": fbid,
         }

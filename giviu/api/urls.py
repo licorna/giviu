@@ -22,5 +22,9 @@ urlpatterns = patterns('',
 
                        url(r'^likes/get-from-friends/(?P<user>\d+)/(?P<giftcard>\d+)$',
                            'api.views.get_gf_like',
-                           name='api_social_like_get')
+                           name='api_social_like_get'),
+
+                       url(r'^social/add-friends-from-facebook$',
+                           'api.views.add_friends_from_facebook',
+                           name='api_social_add_friends_from_facebook'),
 )
