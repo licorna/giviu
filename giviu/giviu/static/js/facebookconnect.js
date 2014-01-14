@@ -102,7 +102,7 @@
       $.ajax({
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
-        url: 'api/social/add-friends-from-facebook',
+        url: 'api/social/add-friends-from-facebook/'+idloginUser,
         cache: false,
         data: JSON.stringify(response.data),
         dataType: 'json',
