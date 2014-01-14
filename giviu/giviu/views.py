@@ -236,10 +236,17 @@ def product_show(request, uuid):
 def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
-    product = Giftcard.objects.filter(merchant=merchant.id)
+    products = Giftcard.objects.filter(merchant=merchant.id)
+    if request.user.is_authenticated:
+        for product in products:
+            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+                                                                    product.id)
+            product.get_own_like = Likes.does_user_likes(request.user.fbid,
+                                                         product.id)
+
     data = {
         'merchant': merchant,
-        'products': product,
+        'products': products,
         'tabs': tabs,
     }
 
