@@ -80,10 +80,10 @@ function reviewModalCampaign(){
         fechaResta=(((fechaResta/1000)/60)/60)/24;   
         fechaResta = parseInt(fechaResta);         
         if(fechaResta>=2) {
-            $('[data-lightbox="campaign"]').trigger('click');
+            //$('[data-lightbox="campaign"]').trigger('click');
         }
     }else{
-        $('[data-lightbox="campaign"]').trigger('click');
+        //$('[data-lightbox="campaign"]').trigger('click');
     }
 
 }
@@ -105,7 +105,7 @@ function confirmSendInviteFriends(e){
 
 function share(e){
     e.preventDefault();
-    var url =   $(this).attr('href');
+    var url = $(this).attr('href')+encodeURIComponent(document.URL);
     window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=650');
 }
 
