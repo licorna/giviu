@@ -16,13 +16,13 @@ class Likes():
         return mongo.eve
 
     @staticmethod
-    def add_user_to_social(fbid, name, birthdate):
+    def add_user_to_social(fbid, name, birthday):
         '''Will add the new registered user to Social database'''
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         data = {
             'fbid': fbid,
             'first_name': name,
-            'birthdate': birthdate,
+            'birthday': birthday,
             'giftcard_likes': [],
             'friend_of': []
         }
@@ -45,12 +45,18 @@ class Likes():
         str_user = '{"fbid":"%(id)s","birthday":"%(birthday)s","first_name":"%(name)s","friend_of":["' + fbid +'"]}'
 
         data = []
+        friend_ids = []
         for user in users:
             if 'name' in user and len(user['name']) > 80:
                 user['name'] = user['name'][:80]
+            friend_ids.append(user['id'])
             ddict = defaultdict(str)
             ddict.update(user)
             data.append(str_user % ddict)
+
+        client = Likes.get_social_client()
+        for friend in friend_ids:
+            Likes.add_facebook_friend(fbid, friend, client)
 
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         headers = {'Content-Type': 'application/json'}
