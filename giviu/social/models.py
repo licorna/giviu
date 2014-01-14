@@ -212,7 +212,11 @@ class Likes():
         except requests.exceptions.RequestException:
             return []
 
-        return response.json()
+        try:
+            result = response.json()
+        except:
+            return []
+        return result
 
     @staticmethod
     def get_likes_from_friends(fbid, giftcard):
