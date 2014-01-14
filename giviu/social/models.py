@@ -155,7 +155,7 @@ class Likes():
         try:
             response = requests.get(url, headers=headers)
         except requests.exceptions.RequestException:
-            return None
+            return []
 
         return response.json()
 
@@ -171,7 +171,14 @@ class Likes():
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         url += '?where=' + json.dumps(condition)
         headers = {'Accept': 'application/json'}
-        friends = Likes.get_social_user(fbid)['_items'][0]['friend_of']
+        social_user = Likes.get_social_user(fbid)
+        if not social_user:
+            return []
+        if len(social_user['_items']) == 0:
+            return []
+        if 'friend_of' not in social_user['_items'][0]:
+            return []
+        friends = social_user['_items'][0]['friend_of']
         for friend in friends:
             condition = {
                 "fbid": friend,
