@@ -104,7 +104,7 @@ class GiftcardCategory(models.Model):
 
 class GiftcardDesign(models.Model):
     id = models.AutoField(primary_key=True)
-    category = models.ForeignKey(GiftcardCategory)
+    #category = models.ForeignKey(GiftcardCategory)
     image = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
 
