@@ -3,11 +3,17 @@ from django.conf import settings
 import json
 from collections import defaultdict
 import re
+import pymongo
 
 
 class Likes():
     ENDPOINT = '/friend'
     TIMEOUT = settings.SOCIAL['TIMEOUT']
+
+    @staticmethod
+    def get_social_client():
+        mongo = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+        return mongo.eve
 
     @staticmethod
     def add_user_to_social(fbid, name, birthdate):
@@ -61,6 +67,7 @@ class Likes():
 
         if response.status_code == 200:
             jres = response.json()
+            client = Likes.get_social_client()
             for friend in jres:
                 if friend['status'] == 'ERR':
                     print friend
@@ -73,38 +80,19 @@ class Likes():
                             except KeyError:
                                 continue
                             print 'adding', friend_id, 'as friend of', fbid
-                            Likes.add_facebook_friend(fbid, friend_id)
+                            Likes.add_facebook_friend(fbid, friend_id, client)
 
         print response.status_code
         return response.status_code < 300
 
     @staticmethod
-    def add_facebook_friend(fbid, friend):
-        user = Likes.get_social_user(friend)
-        if not user:
-            return False
+    def add_facebook_friend(fbid, friend, client=None):
+        if not client:
+            client = Likes.get_social_client()
 
-        friend_of = user['_items'][0]['friend_of']
-        if fbid in friend_of:
-            return False
-        friend_of.append(fbid)
-
-        data = {
-            "friend_of": friend_of
-        }
-        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
-        headers = {
-            'Accept': 'application/json'
-        }
-        try:
-            requests.patch(url, data=data,
-                           headers=headers)
-        except requests.exceptions.RequestException:
-            # TODO: Loguear
-            print 'Exceptions!!!'
-            return False
-        return True
-
+        result = client.friend.update({"fbid": fbid},
+                                      {"$addToSet": {"friend_of": friend}})
+        return result['updatedExisting'] and not result['err']
 
     @staticmethod
     def get_giftcard_likes(giftcard_id, just_count=True):
