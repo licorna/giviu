@@ -124,14 +124,16 @@ def get_gf_like(request, user, giftcard):
             'friends_like': response
         }
     }
-    return HttpResponse(json.dumps(data), content_type='application/json', status_code=200)
+    return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
 
 
 @csrf_exempt
-def add_friends_from_facebook(request):
-    data = json.loads(request.POST)
-    response = Likes.add_users_to_social(data)
+def add_friends_from_facebook(request, fbid):
+    data = json.loads(request.body)
+    response = Likes.add_users_to_social(data, fbid)
+
     if response:
-        return HttpResponse('{"status":"success"}', status_code=200)
+        return HttpResponse('{"status":"success"}', status=200)
 
     return HttpResponseBadRequest()

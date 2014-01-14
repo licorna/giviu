@@ -1,6 +1,8 @@
 import requests
 from django.conf import settings
 import json
+from collections import defaultdict
+import re
 
 
 class Likes():
@@ -10,7 +12,6 @@ class Likes():
     @staticmethod
     def add_user_to_social(fbid, name, birthdate):
         '''Will add the new registered user to Social database'''
-        print 'a punto de enviar solicitud tiiiii'
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         data = {
             'fbid': fbid,
@@ -33,17 +34,75 @@ class Likes():
         return response.status_code < 300
 
     @staticmethod
-    def add_users_to_social(users):
+    def add_users_to_social(users, fbid):
         '''Add users from facebook response to Social'''
-        print 'add_users_to_social'
+        str_user = '{"fbid":"%(id)s","birthday":"%(birthday)s","first_name":"%(name)s","friend_of":["' + fbid +'"]}'
+
+        data = []
+        for user in users:
+            if 'name' in user and len(user['name']) > 80:
+                user['name'] = user['name'][:80]
+            ddict = defaultdict(str)
+            ddict.update(user)
+            data.append(str_user % ddict)
+
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         headers = {'Content-Type': 'application/json'}
-        try:
-            response = requests.post(url, data=users, headers=headers)
-        except requests.exceptions.RequestException:
-            print 'error agregando usuarios'
+        data = '[' + u','.join(data).encode('utf-8') + ']'
 
-        return response.text < 300
+        try:
+            response = requests.post(url, data=data, headers=headers,
+                                     timeout=Likes.TIMEOUT)
+        except requests.exceptions.RequestException:
+            print response.text
+            # TODO: Log!
+            pass
+
+        if response.status_code == 200:
+            jres = response.json()
+            for friend in jres:
+                if friend['status'] == 'ERR':
+                    issues = friend['issues']
+                    for issue in issues:
+                        if 'not unique' in issue:
+                            match = re.search("\'(\d+)\'", issue)
+                            try:
+                                friend_id = match.group(1)
+                            except KeyError:
+                                continue
+                            print 'adding', friend_id, 'as friend of', fbid
+                            Likes.add_facebook_friend(fbid, friend_id)
+
+        print response.status_code
+        return response.status_code < 300
+
+    @staticmethod
+    def add_facebook_friend(fbid, friend):
+        user = Likes.get_social_user(friend)
+        if not user:
+            return False
+
+        friend_of = user['_items'][0]['friend_of']
+        if fbid in friend_of:
+            return False
+        friend_of.append(fbid)
+
+        data = {
+            "friend_of": friend_of
+        }
+        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
+        headers = {
+            'Accept': 'application/json'
+        }
+        try:
+            requests.patch(url, data=data,
+                           headers=headers)
+        except requests.exceptions.RequestException:
+            # TODO: Loguear
+            print 'Exceptions!!!'
+            return False
+        return True
+
 
     @staticmethod
     def get_giftcard_likes(giftcard_id, just_count=True):
