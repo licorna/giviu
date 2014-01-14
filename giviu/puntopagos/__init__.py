@@ -3,7 +3,6 @@ import hmac
 from datetime import datetime
 from wsgiref.handlers import format_date_time
 from time import mktime
-from uuid import uuid4
 import base64
 import requests
 from string import Template

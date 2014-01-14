@@ -247,8 +247,8 @@ class GiviuUserManager(BaseUserManager):
             first_name=name,
         )
         #user.set_password()
-        user.is_active = False
-        user.is_receiving = True
+        user.is_active = 0
+        user.is_receiving = 1
         user.save()
         print 'user id', user.id
         return user
@@ -294,7 +294,7 @@ class Users(AbstractBaseUser):
     last_name = models.CharField(max_length=80, blank=True)
     email = models.CharField(unique=True, max_length=255, blank=True)
     phone = models.CharField(max_length=16, blank=True)
-    birthday = models.DateField()
+    birthday = models.CharField(max_length=12)
     gender = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=20, blank=True)
     region = models.CharField(max_length=255, blank=True)
@@ -306,10 +306,10 @@ class Users(AbstractBaseUser):
     last_purchase = models.DateField(blank=True, null=True)
     hash = models.CharField(max_length=255, blank=True)
     fbid = models.CharField(unique=True, max_length=56, blank=True)
-    is_active = models.IntegerField(blank=True, null=True)
-    is_admin = models.IntegerField(blank=True, null=True)
-    is_receiving = models.IntegerField(blank=True, null=True)
-    is_merchant = models.IntegerField(blank=True)
+    is_active = models.IntegerField(null=False, blank=False, default=1)
+    is_admin = models.IntegerField(null=False, blank=False, default=0)
+    is_receiving = models.IntegerField(null=False, blank=False, default=0)
+    is_merchant = models.IntegerField(null=False, blank=False, default=0)
     merchant = models.ForeignKey(Merchants, blank=True, db_column='merchant_id')
 
     objects = GiviuUserManager()

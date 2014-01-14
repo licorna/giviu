@@ -10,6 +10,7 @@ from models import (
 )
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
+from marketing import event_user_registered
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -27,33 +28,73 @@ def do_logout(request):
 
 def do_register(request):
     if request.method == 'POST':
-        if 'facebookId' in request.POST:
-            fbid = request.POST['facebookId']
-            try:
-                user = Users.objects.get(fbid__exact=fbid)
-            except Users.DoesNotExist:
-                bday = request.POST['birth']
-                bday = bday[6:] + '-' + bday[0:2] + '-' + bday[3:5]
-                user = Users.objects.create_user(fbid, fbid, bday,
-                                                 email=request.POST['email'],
-                                                 location=request.POST['location'],
-                                                 first_name=request.POST['name'],
-                                                 last_name=request.POST['lastName'],
-                                                 gender=request.POST['gender'])
-            if user:
-                user = authenticate(username=fbid, password=fbid)
-                if not user:
-                    return HttpResponseBadRequest()
-                login(request, user)
-                return redirect('/')
-            else:
-                print 'LOG: No se pudo crear el usuario'
-        else:
+        required_parameters = frozenset(('facebookId', 'email', 'location',
+                                         'name', 'lastName', 'gender',
+                                         'birth'))
+        if not required_parameters <= frozenset(request.POST):
             return HttpResponseBadRequest()
+
+        facebook_id = request.POST['facebookId']
+        email = request.POST['email']
+        location = request.POST['location']
+        first_name = request.POST['name']
+        last_name = request.POST['lastName']
+        gender = request.POST['gender']
+        birthday = request.POST['birth']
+        birthday = birthday[6:] + '-' + birthday[0:2] + '-' + birthday[3:5]
+        full_name = first_name + ' ' + last_name
+
+        try:
+            user = Users.objects.get(fbid=facebook_id)
+        except Users.DoesNotExist:
+            try:
+                # If user does not exists, check for a user with
+                # same email.
+                user = Users.objects.get(email=email)
+                user.fbid = facebook_id
+                user.birthday = birthday
+                user.first_name = first_name
+                user.last_name = last_name
+                user.gender = gender
+                user.location = location
+                user.is_receiving = 0
+                user.is_active = 1
+                user.is_receiving = 0
+                user.save()
+
+            except Users.DoesNotExist:
+                # If there is no user with this facebook_id and no
+                # user with this email, then it is a completely new user
+                user = Users.objects.create_user(facebook_id, facebook_id,
+                                                 birthday,
+                                                 email=email,
+                                                 location=location,
+                                                 first_name=first_name,
+                                                 last_name=last_name,
+                                                 gender=gender)
+            # Only user created who has facebook_id already has
+            # Social API corresponding entry, so any two prior user
+            # creation will add user to Social.
+            Likes.add_user_to_social(facebook_id,
+                                     full_name,
+                                     birthday)
+
+        if user and user.is_active == 1 and not user.is_merchant:
+            user = authenticate(username=facebook_id, password=facebook_id)
+            if not user:
+                return HttpResponseBadRequest()
+            # Send email to registered user.!
+            event_user_registered(email, full_name)
+
+            login(request, user)
+            return redirect('/')
+        else:
+            print 'LOG: No se pudo crear el usuario'
 
     c = {}
     c.update(csrf(request))
-    return render_to_response('register.html', c, context_instance=RequestContext(request))
+    return render_to_response('register.html', c,
+                              context_instance=RequestContext(request))
 
 
 @user_passes_test(user_is_normal_user, login_url='/logout')

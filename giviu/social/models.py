@@ -3,6 +3,7 @@ from django.conf import settings
 import json
 from collections import defaultdict
 import re
+import pymongo
 
 
 class Likes():
@@ -10,13 +11,18 @@ class Likes():
     TIMEOUT = settings.SOCIAL['TIMEOUT']
 
     @staticmethod
-    def add_user_to_social(fbid, name, birthdate):
+    def get_social_client():
+        mongo = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+        return mongo.eve
+
+    @staticmethod
+    def add_user_to_social(fbid, name, birthday):
         '''Will add the new registered user to Social database'''
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         data = {
             'fbid': fbid,
             'first_name': name,
-            'birthdate': birthdate,
+            'birthday': birthday,
             'giftcard_likes': [],
             'friend_of': []
         }
@@ -39,29 +45,38 @@ class Likes():
         str_user = '{"fbid":"%(id)s","birthday":"%(birthday)s","first_name":"%(name)s","friend_of":["' + fbid +'"]}'
 
         data = []
+        friend_ids = []
         for user in users:
             if 'name' in user and len(user['name']) > 80:
                 user['name'] = user['name'][:80]
+            friend_ids.append(user['id'])
             ddict = defaultdict(str)
             ddict.update(user)
             data.append(str_user % ddict)
+
+        client = Likes.get_social_client()
+        for friend in friend_ids:
+            Likes.add_facebook_friend(fbid, friend, client)
 
         url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
         headers = {'Content-Type': 'application/json'}
         data = '[' + u','.join(data).encode('utf-8') + ']'
 
         try:
+            print 'enviando solicitud'
             response = requests.post(url, data=data, headers=headers,
                                      timeout=Likes.TIMEOUT)
         except requests.exceptions.RequestException:
-            print response.text
+            print 'error al enviar usuarios.'
             # TODO: Log!
             pass
 
         if response.status_code == 200:
             jres = response.json()
+            client = Likes.get_social_client()
             for friend in jres:
                 if friend['status'] == 'ERR':
+                    print friend
                     issues = friend['issues']
                     for issue in issues:
                         if 'not unique' in issue:
@@ -71,38 +86,19 @@ class Likes():
                             except KeyError:
                                 continue
                             print 'adding', friend_id, 'as friend of', fbid
-                            Likes.add_facebook_friend(fbid, friend_id)
+                            Likes.add_facebook_friend(fbid, friend_id, client)
 
         print response.status_code
         return response.status_code < 300
 
     @staticmethod
-    def add_facebook_friend(fbid, friend):
-        user = Likes.get_social_user(friend)
-        if not user:
-            return False
+    def add_facebook_friend(fbid, friend, client=None):
+        if not client:
+            client = Likes.get_social_client()
 
-        friend_of = user['_items'][0]['friend_of']
-        if fbid in friend_of:
-            return False
-        friend_of.append(fbid)
-
-        data = {
-            "friend_of": friend_of
-        }
-        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
-        headers = {
-            'Accept': 'application/json'
-        }
-        try:
-            requests.patch(url, data=data,
-                           headers=headers)
-        except requests.exceptions.RequestException:
-            # TODO: Loguear
-            print 'Exceptions!!!'
-            return False
-        return True
-
+        result = client.friend.update({"fbid": fbid},
+                                      {"$addToSet": {"friend_of": friend}})
+        return result['updatedExisting'] and not result['err']
 
     @staticmethod
     def get_giftcard_likes(giftcard_id, just_count=True):
@@ -216,7 +212,11 @@ class Likes():
         except requests.exceptions.RequestException:
             return []
 
-        return response.json()
+        try:
+            result = response.json()
+        except:
+            return []
+        return result
 
     @staticmethod
     def get_likes_from_friends(fbid, giftcard):

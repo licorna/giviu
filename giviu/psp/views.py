@@ -6,6 +6,7 @@ from giviu.models import PaymentTransaction, Product, CustomerInfo
 from django.core.exceptions import MultipleObjectsReturned
 from puntopagos import transaction_check
 from django.template import RequestContext
+from marketing import event_merchant_notification_giftcard_was_bought
 
 
 if settings.DEVELOPMENT:
@@ -90,6 +91,11 @@ def pp_response(request, token, **kwargs):
         product.set_state('RESPONSE_FROM_PP_SUCCESS')
         transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
 
+        # Send merchant notification
+        # INPUT: merchant_email
+        #        giftcard details
+        # event_merchant_notification_giftcard_was_bought(merchant_email, data)
+
         try:
             customer = CustomerInfo.objects.get(user=product.giftcard_to,
                                                 merchant=product.giftcard.merchant)
@@ -108,13 +114,13 @@ def pp_response(request, token, **kwargs):
             'product' : product
         }
         return render_to_response('success.html', data,
-                                context_instance=RequestContext(request))
+                                  context_instance=RequestContext(request))
     else:
         product.set_state('RESPONSE_FROM_PP_ERROR')
         transaction.set_state('RESPONSE_FROM_PP_ERROR')
         data = {}
         return render_to_response('error.html',data,
-                              context_instance=RequestContext(request))
+                                  context_instance=RequestContext(request))
 
 
 
