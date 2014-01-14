@@ -173,7 +173,6 @@ class Likes():
         headers = {'Accept': 'application/json'}
         friends = Likes.get_social_user(fbid)['_items'][0]['friend_of']
         for friend in friends:
-            print 'requesting friend:', friend
             condition = {
                 "fbid": friend,
                 "giftcard_likes": int(giftcard)
@@ -186,7 +185,6 @@ class Likes():
                 response = response.json()
                 if len(response['_items']) > 0:
                     if giftcard in response['_items'][0]['giftcard_likes']:
-                        print 'user', friend, 'likes gfs:', response['_items'][0]['giftcard_likes']
                         likes.append(friend)
 
         return likes
