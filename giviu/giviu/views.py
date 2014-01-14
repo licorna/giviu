@@ -89,7 +89,7 @@ def home(request, slug=None):
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_detail(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
-    likes = 0
+    likes = Likes.get_giftcard_likes(gift_id)
     friends = 0
     data = {
         'giftcard': giftcard,
