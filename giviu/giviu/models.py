@@ -240,10 +240,11 @@ class Friend(models.Model):
 
 
 class GiviuUserManager(BaseUserManager):
-    def create_inactive_user(self, email):
+    def create_inactive_user(self, email, name):
         user = self.model(
             email=email,
             fbid=sha224(email).hexdigest(),
+            first_name=name,
         )
         #user.set_password()
         user.is_active = False
