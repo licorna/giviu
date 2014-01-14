@@ -51,10 +51,11 @@ class Likes():
         data = '[' + u','.join(data).encode('utf-8') + ']'
 
         try:
+            print 'enviando solicitud'
             response = requests.post(url, data=data, headers=headers,
                                      timeout=Likes.TIMEOUT)
         except requests.exceptions.RequestException:
-            print response.text
+            print 'error al enviar usuarios.'
             # TODO: Log!
             pass
 
@@ -62,6 +63,7 @@ class Likes():
             jres = response.json()
             for friend in jres:
                 if friend['status'] == 'ERR':
+                    print friend
                     issues = friend['issues']
                     for issue in issues:
                         if 'not unique' in issue:
