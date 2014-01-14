@@ -180,7 +180,11 @@ class Likes():
             url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
             url += '?where=' + json.dumps(condition)
             headers = {'Accept': 'application/json'}
-            response = requests.get(url, headers=headers)
+            try:
+                response = requests.get(url, headers=headers)
+            except requests.exceptions.RequestException:
+                # TODO: Loguear y reportar
+                print 'error en Social'
             if response.status_code == 200:
                 response = response.json()
                 if len(response['_items']) > 0:
