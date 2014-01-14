@@ -185,7 +185,7 @@ def giftcard_confirmation(request):
     try:
         customer = Users.objects.get(email=email_to)
     except Users.DoesNotExist:
-        customer = Users.objects.create_inactive_user(email_to)
+        customer = Users.objects.create_inactive_user(email_to, name_to)
         customer = Users.objects.get(email=email_to)
 
     product = Product(giftcard_from=request.user,
