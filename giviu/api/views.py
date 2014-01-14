@@ -3,6 +3,7 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.views.decorators.csrf import csrf_exempt
 from giviu.models import Users, Product, Giftcard
 from api.models import ApiClientId
+from social.models import Likes
 from datetime import datetime
 import json
 
@@ -107,3 +108,20 @@ def validate_giftcard(request, giftcard):
         content_type='application/json',
         status=200
     )
+
+
+@csrf_exempt
+def add_gf_like(request, user, giftcard):
+    Likes.add_giftcard_like(user, giftcard)
+    return HttpResponse()
+
+
+def get_gf_like(request, user, giftcard):
+    response = Likes.get_likes_from_friends(user, giftcard)
+    data = {
+        'user': {
+            'fbid': user,
+            'friends_like': response
+        }
+    }
+    return HttpResponse(json.dumps(data), content_type='application/json', status_code=200)
