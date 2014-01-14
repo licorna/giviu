@@ -74,6 +74,9 @@ def home(request, slug=None):
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
+            product.get_own_like = Likes.does_user_likes(request.user.fbid,
+                                                         product.id)
+
     data.update({
         'categories': categories,
         'products': products,

@@ -12,7 +12,7 @@
 
   <div class="span5 giftcardImage">
     <figure class="span9">
-      <span class="like big tooltipInfo {% if not is_logged_in %}disabled{% endif %}"  data-source-id="{{ giftcard.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+      <span class="like big tooltipInfo {% if not user.is_authenticated %}disabled{% endif %}"  data-source-id="{{ giftcard.id }}" data-source-type="1"><span class="icon-heart"></span></span>
       <img class="span9" src="{{ giftcard.image }}">
     </figure>
   </div>

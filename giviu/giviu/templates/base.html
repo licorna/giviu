@@ -89,6 +89,7 @@
       </div>
     </header>
         <nav class="mobile" style="display:none;">
+          <input type="hidden" id="fb-id" value="{{ user.fbid }}"/>
           <ul>
             {% if user.is_authenticated %}
             <li><a href="?session=off" >Cerrar sesion</a></li>

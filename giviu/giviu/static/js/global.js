@@ -10,9 +10,8 @@ $(document).ready(function(e){
         if($(this).hasClass('disabled')){
             alertMessage('Debes hacer login','likeLoginMessage');
         }else{
-            var sourceId = $(this).attr('data-source-id');
-            var sourceType = $(this).attr('data-source-type');
-            newLike(sourceId,sourceType);
+            var giftcard_id = $(this).attr('data-source-id');
+            newLike(giftcard_id);
             $(this).addClass('active');    
         }
     });
@@ -211,20 +210,9 @@ function moneyFormat(nStr)
 }
 
 
-function newLike(sourceId, sourceType,success,error){
-    $.post( "/likes/newLike", { sourceId: sourceId, sourceType:sourceType })
+function newLike(giftcard_id){
+    $.post( "/api/likes/add/"+$('#fb-id').val()+'/'+giftcard_id)
       .done(function(data) {
-        var obj = jQuery.parseJSON(data);
-        if(obj.status=="sucess"){
-            if(success!=""){
-                success();
-            }
-        }else{
-            if(error!=""){
-                error();
-            }
-
-        }
-
+        console.log(data)
       });
 }

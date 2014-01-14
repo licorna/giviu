@@ -94,7 +94,7 @@ class Likes():
 
         if response.status_code == 200:
             jres = response.json()
-            return '_items' in jres
+            return len(jres['_items']) > 0
 
         return False
 
