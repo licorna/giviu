@@ -24,7 +24,7 @@ def event_user_buy_product_confirmation(email, **kwargs):
     At the same time he sees the Purchase Confirmation page.'''
     c = Context(kwargs)
     html_content = get_template('marketing_buy_confirmation.html').render(c)
-    text_content = get_template('marketing_buy_confirmation.text').render(c)
+    text_content = get_template('marketing_buy_confirmation.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
     msg = EmailMultiAlternatives('Confirmacion de compra en Giviu',
@@ -40,7 +40,7 @@ def event_user_receives_product(email, **kwargs):
     a giftcard indicating on how to proceed.'''
     c = Context(kwargs)
     html_content = get_template('marketing_giftcard.html').render(c)
-    text_content = get_template('marketing_giftcard.text').render(c)
+    text_content = get_template('marketing_giftcard.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
     msg = EmailMultiAlternatives('Has recibido una giftcard!',
@@ -56,7 +56,7 @@ def event_user_confirmation_sends_giftcard(email, **kwargs):
     the destination party.'''
     c = Context(kwargs)
     html_content = get_template('marketing_sender_notification.html').render(c)
-    text_content = get_template('marketing_sender_notification.text').render(c)
+    text_content = get_template('marketing_sender_notification.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
     msg = EmailMultiAlternatives('Has enviado una giftcard!',
@@ -73,7 +73,7 @@ def event_merchant_notification_giftcard_was_bought(email, **kwargs):
     this email confirming a new Giftard was bought.'''
     c = Context(kwargs)
     html_content = get_template('marketing_merchant_notification.html').render(c)
-    text_content = get_template('marketing_merchant_notification.text').render(c)
+    text_content = get_template('marketing_merchant_notification.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
     msg = EmailMultiAlternatives('Has recibido una giftcard!',

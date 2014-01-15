@@ -94,7 +94,12 @@ def pp_response(request, token, **kwargs):
         # Send merchant notification
         # INPUT: merchant_email
         #        giftcard details
-        # event_merchant_notification_giftcard_was_bought(merchant_email, data)
+        args0 = {
+            'merchant_name': product.giftcard.merchant.name,
+            'product_name': product.giftcard.title,
+            'product_date': product.created.isoformat(),
+        }
+        event_merchant_notification_giftcard_was_bought(merchant_email, args0)
 
         try:
             customer = CustomerInfo.objects.get(user=product.giftcard_to,
@@ -104,8 +109,36 @@ def pp_response(request, token, **kwargs):
                                     merchant=product.giftcard.merchant)
             customer.save()
 
+        args = {
+            'payment_method': response['medio_pago_descripcion'],
+            'payment_total': response['monto'],
+            'payment_date': response['fecha_aprobacion'],
+            'payment_operation_number': response['numero_operacion']
+        }
+        event_user_buy_product_confirmation(product.giftcard_from.email, args)
         transaction.operation_number = response['numero_operacion']
         transaction.authorization_code = response['codigo_autorizacion']
+
+        now = datetime.now()
+        if (product.send_date.year == now.year and
+            product.send_date.month == now.month and
+            product.send_date.day == now.day):
+
+            args1 = {
+                'name_from': product.giftcard_from.name,
+                'name_to': product.giftcard_to.name,
+            }
+            event_user_confirmation_sends_giftcard(product.giftcard_from.email,
+                                                   args1)
+            args2 = {
+                'product_code': product.uuid,
+                'name_to': product.giftcard_to.name,
+                'name_from': product.giftcard_from.name,
+                'description': product.comment,
+                'giftcard_design': product.design.image,
+            }
+            event_user_receives_product(product.giftcard_to, args2)
+
 
         transaction.raw_response = response
         transaction.save()
