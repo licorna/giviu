@@ -86,7 +86,7 @@ class Likes():
                             except KeyError:
                                 continue
                             print 'adding', friend_id, 'as friend of', fbid
-                            Likes.add_facebook_friend(fbid, friend_id, client)
+                            Likes.add_facebook_friend(friend_id, fbid, client)
 
         print response.status_code
         return response.status_code < 300
