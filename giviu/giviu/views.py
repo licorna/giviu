@@ -96,7 +96,6 @@ def do_register(request):
                               context_instance=RequestContext(request))
 
 
-@user_passes_test(user_is_normal_user, login_url='/logout')
 def home(request, slug=None):
     categories = GiftcardCategory.objects.all()
     data = {}
@@ -111,12 +110,14 @@ def home(request, slug=None):
         products = Giftcard.objects.filter(status=1)
     all_product_len = Giftcard.objects.filter(status=1).count()
 
+
     if request.user.is_authenticated:
-        for product in products:
-            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+        if isinstance(user, Users):
+            for product in products:
+                product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
-            product.get_own_like = Likes.does_user_likes(request.user.fbid,
-                                                         product.id)
+                product.get_own_like = Likes.does_user_likes(request.user.fbid,
+                                                             product.id)
 
     data.update({
         'categories': categories,

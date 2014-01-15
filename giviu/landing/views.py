@@ -10,10 +10,6 @@ from giviu.views import home as main_home
 
 def home(request):
 
-    now = datetime.now()
-    if now > settings.LAUNCH_DAY or not isinstance(request.user, AnonymousUser):
-        return main_home(request)
-
     data = {}
     if request.method == 'POST':
         if 'name' not in request.POST or 'email' not in request.POST:
