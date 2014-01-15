@@ -63,11 +63,11 @@
 								<h3>{{ product.giftcard }}</h3>
 								<strong class="price">{{ product.price|clp }}</strong>
 								<ul>
-									<li><strong>Enviado por: </strong> <strong>sebastian</strong> ({{ product.giftcard_from.get_full_name }})</li>
-									<li><strong>Recibida el: </strong> ({{ product.send_date }})</li>
+									<li><strong>Enviado por: </strong> {{ product.giftcard_from.get_full_name }})</li>
+									<li><strong>Recibida el: </strong> {{ product.send_date }}</li>
 								</ul>
 							</div>
-							<a href="/giftcard/show/" target="_blank" class="btn primary verGift">Ver giftcard</a>
+							<a href="/product/show/{{ product.uuid }}" target="_blank" class="btn primary verGift">Ver giftcard</a>
 						</div>
 						{% endfor %}
 
