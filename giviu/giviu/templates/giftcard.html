@@ -23,21 +23,21 @@
       </ul>
     </aside>
 
-  <!--     
+  <!--
     <aside class="span9 promo">
       <figure>
         <a href="#">
         <img src="/static/img/campaigns/small_banner_3_lucas.png"/>
         </a>
       </figure>
-    </aside> 
+    </aside>
     -->
   </div>
 
-  <!--   
+  <!--
   <section class="special span7" id="lucas">
     <span class="icon-close close"></span>
-  </section> 
+  </section>
   -->
 
   <section class="span7" id="giftCardList" data-columns>
@@ -45,11 +45,11 @@
     <article class="giftCardModule" data-source-id="{{ product.id }}">
       <figure>
         <span class="like {% if not user.is_authenticated %}disabled{% endif %} {% if product.get_own_like %} active {% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
-        <a href="/giftcard/detail/{{ product.id }}">
+        <a href="/giftcard/detail/{{ product.slug }}">
           <img src="{{ product.image }}">
         </a>
       </figure>
-      <a href="/giftcard/detail/{{ product.id }}"><h2>{{ product.title }}</h2></a>
+      <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title }}</h2></a>
       <h4><a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
       {% if product.kind == '1' %}
       <center>
@@ -63,7 +63,7 @@
       {% if product.kind == '0' %}
       <strong class="span9">{{ product.get_price|clp }}</strong>
       {% endif %}
-      <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
+      <a href="/giftcard/detail/{{ product.slug }}" class="btn primary">Regalar</a>
       <!--
       {% if product.sold_quantity < 5 %}
       <div class="quantity">

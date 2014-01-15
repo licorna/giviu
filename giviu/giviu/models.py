@@ -123,6 +123,7 @@ class Giftcard(models.Model):
     publication_date = models.DateField()
     unpublish_date = models.DateField()
     title = models.CharField(max_length=255)
+    slug = models.CharField(max_length=511, blank=False, null=False)
     kind = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey('GiftcardCategory', db_column='category_id')

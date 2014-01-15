@@ -129,14 +129,14 @@ def home(request, slug=None):
 
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
-def giftcard_detail(request, gift_id):
-    giftcard = Giftcard.objects.get(pk=gift_id)
-    likes = Likes.get_giftcard_likes(gift_id)
+def giftcard_detail(request, slug):
+    giftcard = Giftcard.objects.get(slug=slug)
+    likes = Likes.get_giftcard_likes(giftcard.id)
     if request.user.is_authenticated():
         user_like = Likes.does_user_likes(request.user.fbid, giftcard.id)
     else:
         user_like = 0
-    friends = 0
+    friends = []
     data = {
         'giftcard': giftcard,
         'likes': likes,
@@ -148,15 +148,11 @@ def giftcard_detail(request, gift_id):
 
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
-def giftcard_custom(request, gift_id):
-    giftcard = Giftcard.objects.get(pk=gift_id)
+def giftcard_custom(request, slug):
+    giftcard = Giftcard.objects.get(slug=slug)
     style = GiftcardDesign.objects.filter(status='publish')
-    likes = 0
-    friends = 0
     data = {
         'giftcard': giftcard,
-        'likes': likes,
-        'friends': friends,
         'styles': style,
     }
 
