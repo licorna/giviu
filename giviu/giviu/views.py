@@ -294,27 +294,51 @@ def partner_info(request, merchant_slug):
 
     return render_to_response('partner_info.html', data,
                               context_instance=RequestContext(request))
+    
 
 def response_not_found(request):
-    return render_to_response('404.html')
+    data = ""
+    return render_to_response('404.html',data,
+                              context_instance=RequestContext(request))
+
 
 def search(request):
-    return render_to_response('search.html')
+    data = ""
+    return render_to_response('search.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_who_we_are(request):
-    return render_to_response('page_who_we_are.html')
+    data = ""
+    return render_to_response('page_who_we_are.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_who_its_work(request):
-    return render_to_response('page_who_its_work.html')
+    data = ""
+    return render_to_response('page_who_its_work.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_faq(request):
-    return render_to_response('page_faq.html')
+    data = ""
+    return render_to_response('page_faq.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_enterprise(request):
-    return render_to_response('page_enterprise.html')
+    data = ""
+    return render_to_response('page_enterprise.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_contact(request):
-    return render_to_response('page_contact.html')
+    data = ""
+    return render_to_response('page_contact.html',data,
+                              context_instance=RequestContext(request))
+
 
 def page_terms(request):
-    return render_to_response('page_terms.html')
+    data = ""    
+    return render_to_response('page_terms.html',data,
+                              context_instance=RequestContext(request))
