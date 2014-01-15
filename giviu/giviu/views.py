@@ -114,8 +114,8 @@ def home(request, slug=None):
     if request.user.is_authenticated:
         if isinstance(user, Users):
             for product in products:
-                product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
-                                                                    product.id)
+                #product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+                #                                                    product.id)
                 product.get_own_like = Likes.does_user_likes(request.user.fbid,
                                                              product.id)
 
@@ -281,8 +281,8 @@ def partner_info(request, merchant_slug):
     products = Giftcard.objects.filter(merchant=merchant.id, status=1)
     if request.user.is_authenticated:
         for product in products:
-            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
-                                                                    product.id)
+            # product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+            #                                                         product.id)
             product.get_own_like = Likes.does_user_likes(request.user.fbid,
                                                          product.id)
 
@@ -294,7 +294,7 @@ def partner_info(request, merchant_slug):
 
     return render_to_response('partner_info.html', data,
                               context_instance=RequestContext(request))
-    
+
 
 def response_not_found(request):
     data = ""
