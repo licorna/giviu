@@ -130,8 +130,8 @@ def pp_response(request, token, **kwargs):
             product.send_date.day == now.day):
 
             args1 = {
-                'name_from': product.giftcard_from.name,
-                'name_to': product.giftcard_to.name,
+                'name_from': product.giftcard_from.get_full_name(),
+                'name_to': product.giftcard_to.get_full_name(),
             }
             event_user_confirmation_sends_giftcard(product.giftcard_from.email,
                                                    args1)
