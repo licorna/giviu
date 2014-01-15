@@ -266,7 +266,7 @@ def product_show(request, uuid):
     product = Product.objects.get(uuid__exact=uuid)
     data = {
         'product': product,
-        'hash': uuid.split('-')[0]
+        'hash': product.validation_code
 
     }
 
