@@ -132,7 +132,10 @@ def home(request, slug=None):
 def giftcard_detail(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
     likes = Likes.get_giftcard_likes(gift_id)
-    user_like = Likes.does_user_likes(request.user.fbid,giftcard.id)
+    if request.user.is_authenticated():
+        user_like = Likes.does_user_likes(request.user.fbid, giftcard.id)
+    else:
+        user_like = 0
     friends = 0
     data = {
         'giftcard': giftcard,
