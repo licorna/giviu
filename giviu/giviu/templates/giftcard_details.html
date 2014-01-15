@@ -37,7 +37,7 @@
           <span class="icon-google-plus"></span>
         </a>
     </div>
-    <p class="span9">{{ giftcard.description }}</p>
+    <p class="span9">{{ giftcard.description|safe }}</p>
     <div class="span9 value">
       <div class="span6">
         {% if giftcard.kind == '1' %}
