@@ -5,7 +5,7 @@
   <span class="stepIndicator">
     2
   </span>
-  <span class="actualStep">Seleccionar giftcard / presonalizar gitcard</span> / pagar
+  <span class="actualStep">Seleccionar giftcard / personalizar giftcard</span> / pagar
 </section>
 
 <section class="container custom">
@@ -51,7 +51,7 @@
         {% for style in styles %}
         <li id="{{ style.id }}">
           <figure>
-            <img src="/static/img/giftcards/{{ style.image }}">
+            <img src="{{ style.image }}">
           </figure>
         </li>
         {% endfor %}
