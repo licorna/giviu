@@ -102,13 +102,14 @@ def home(request, slug=None):
     data = {}
     if slug:
         category = GiftcardCategory.objects.get(slug__exact=slug)
-        products = Giftcard.objects.filter(category__exact=category.id)
+        products = Giftcard.objects.filter(category__exact=category.id,
+                                           status=1)
         data = {
             'this_category': category,
         }
     else:
-        products = Giftcard.objects.all()
-    all_product_len = Giftcard.objects.count()
+        products = Giftcard.objects.filter(status=1)
+    all_product_len = Giftcard.objects.filter(status=1).count()
 
     if request.user.is_authenticated:
         for product in products:
@@ -276,7 +277,7 @@ def product_show(request, uuid):
 def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
-    products = Giftcard.objects.filter(merchant=merchant.id)
+    products = Giftcard.objects.filter(merchant=merchant.id, status=1)
     if request.user.is_authenticated:
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,

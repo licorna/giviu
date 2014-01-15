@@ -92,7 +92,7 @@ class GiftcardCategory(models.Model):
     description = models.TextField(null=True, blank=True)
 
     def count(self):
-        return Giftcard.objects.filter(category__exact=self).count()
+        return Giftcard.objects.filter(category__exact=self, status=1).count()
 
     class Meta:
         db_table = 'giftcard_category'
@@ -130,7 +130,7 @@ class Giftcard(models.Model):
     quantity = models.IntegerField()
     image = models.CharField(max_length=255)
     stores = models.TextField(blank=True)
-    status = models.IntegerField()
+    status = models.IntegerField(blank=False, default=1)
     sold_quantity = models.IntegerField()
     gender = models.CharField(max_length=20, blank=True)
     comuna = models.CharField(max_length=5, blank=True)
