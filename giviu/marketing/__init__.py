@@ -41,9 +41,10 @@ def event_user_receives_product(email, args):
     c = Context(args)
     html_content = get_template('marketing_giftcard.html').render(c)
     text_content = get_template('marketing_giftcard.html').render(c)
+    subject = 'Has recibido una giftcard de ' + args['name_from']
     if settings.DEBUG:
         email = 'licorna@gmail.com'
-    msg = EmailMultiAlternatives('Has recibido una giftcard!',
+    msg = EmailMultiAlternatives(subject,
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])
@@ -57,9 +58,10 @@ def event_user_confirmation_sends_giftcard(email, args):
     c = Context(args)
     html_content = get_template('marketing_sender_notification.html').render(c)
     text_content = get_template('marketing_sender_notification.html').render(c)
+    subject = 'La giftcard regalada a ' + args['name_to'] + ' ha sido enviada'
     if settings.DEBUG:
         email = 'licorna@gmail.com'
-    msg = EmailMultiAlternatives('Has enviado una giftcard!',
+    msg = EmailMultiAlternatives(subject,
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])
@@ -76,7 +78,7 @@ def event_merchant_notification_giftcard_was_bought(email, args):
     text_content = get_template('marketing_merchant_notification.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
-    msg = EmailMultiAlternatives('Has recibido una giftcard!',
+    msg = EmailMultiAlternatives('Has vendido una giftcard',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])
