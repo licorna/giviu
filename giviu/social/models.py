@@ -30,7 +30,7 @@ class Likes():
             'Content-Type': 'application/json'
         }
         try:
-            response = requests.post(url, data=data, headers=headers)
+            response = requests.post(url, data=json.dumps(data), headers=headers)
         except requests.exceptions.RequestException, e:
             print e
             # TODO: IMPORTANTE:
