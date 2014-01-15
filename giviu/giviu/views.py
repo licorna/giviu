@@ -110,14 +110,12 @@ def home(request, slug=None):
         products = Giftcard.objects.filter(status=1)
     all_product_len = Giftcard.objects.filter(status=1).count()
 
-
-    if request.user.is_authenticated:
-        if isinstance(user, Users):
-            for product in products:
-                product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+    if request.user.is_authenticated():
+        for product in products:
+            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
-                product.get_own_like = Likes.does_user_likes(request.user.fbid,
-                                                             product.id)
+            product.get_own_like = Likes.does_user_likes(request.user.fbid,
+                                                         product.id)
 
     data.update({
         'categories': categories,
@@ -279,7 +277,7 @@ def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
     products = Giftcard.objects.filter(merchant=merchant.id, status=1)
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
