@@ -2,6 +2,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
@@ -21,7 +22,8 @@ logger = logging.getLogger(__name__)
 
 
 def user_is_normal_user(user):
-    return isinstance(user, Users) and user.is_normal_user()
+    return isinstance(user, AnonymousUser) or (
+        isinstance(user, Users) and user.is_normal_user())
 
 
 def do_logout(request):
@@ -110,14 +112,12 @@ def home(request, slug=None):
         products = Giftcard.objects.filter(status=1)
     all_product_len = Giftcard.objects.filter(status=1).count()
 
-
-    if request.user.is_authenticated:
-        if isinstance(user, Users):
-            for product in products:
-                #product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
-                #                                                    product.id)
-                product.get_own_like = Likes.does_user_likes(request.user.fbid,
-                                                             product.id)
+    if request.user.is_authenticated():
+        for product in products:
+            # product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+            #                                                         product.id)
+            product.get_own_like = Likes.does_user_likes(request.user.fbid,
+                                                         product.id)
 
     data.update({
         'categories': categories,
@@ -279,7 +279,7 @@ def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
     products = Giftcard.objects.filter(merchant=merchant.id, status=1)
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         for product in products:
             # product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
             #                                                         product.id)
@@ -339,6 +339,6 @@ def page_contact(request):
 
 
 def page_terms(request):
-    data = ""    
+    data = ""
     return render_to_response('page_terms.html',data,
                               context_instance=RequestContext(request))
