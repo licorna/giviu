@@ -52,6 +52,32 @@ def event_user_receives_product(email, args):
     msg.send()
 
 
+def simple_giftcard_send_notification(product):
+    '''This wrapper function will send both buyer and
+    receiving parties the corresponding mailing when
+    requested, and the given product will be marked
+    as already_sent'''
+    args1 = {
+        'name_from': product.giftcard_from.get_full_name(),
+        'name_to': product.giftcard_to.get_full_name(),
+    }
+    event_user_confirmation_sends_giftcard(product.giftcard_from.email,
+                                           args1)
+
+    args2 = {
+        'product_code': product.uuid,
+        'name_to': product.giftcard_to.get_full_name(),
+        'name_from': product.giftcard_from.get_full_name(),
+        'description': product.comment,
+        'giftcard_design': product.design.image,
+    }
+    event_user_receives_product(product.giftcard_to.email, args2)
+    product.already_sent = 1
+    product.save()
+
+    return True
+
+
 def event_user_confirmation_sends_giftcard(email, args):
     '''This event triggers when a giftcard a users bought is send to
     the destination party.'''
