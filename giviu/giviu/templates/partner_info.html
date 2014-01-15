@@ -18,8 +18,8 @@
 				{% for tab in tabs %}
 				<li><a class="tabLink" href="tab{{ tab.id }}">{{ tab.title}}</a></li>
 				{% endfor %}
-			</ul>		
-		</div>		
+			</ul>
+		</div>
 		<div class="userSide span9">
 			<center>
 				<strong>Dirección</strong>
@@ -29,7 +29,7 @@
 					<a href="https://www.google.com/maps?q={{ merchant.address }}&hl=es&ie=UTF8&t=m&z=16" target="_blank"><img class="span9" src="http://maps.googleapis.com/maps/api/staticmap?center={{ merchant.address }}&zoom=18&size=400x400&maptype=roadmap&markers=color:blue%7Clabel:S%7C{{ merchant.address }}&sensor=false&scale=2"></a>
 					<small class="address span9"><span class="icon-location"></span> {{ merchant.address }}</small>
 				</li>
-			</ul>		
+			</ul>
 		</div>
 	</div>
 	<div class="span7 col userContent">
@@ -42,11 +42,11 @@
 					    <article class="giftCardModule" data-source-id="{{ product.id }}">
 					      <figure>
 					        <span class="like {% if not user.is_authenticated %}disabled{% endif %} {% if product.get_own_like %} active {% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
-					        <a href="/giftcard/detail/{{ product.id }}">
+					        <a href="/giftcard/detail/{{ product.slug }}">
 					          <img src="{{ product.image }}">
 					        </a>
 					      </figure>
-					      <a href="/giftcard/detail/{{ product.id }}"><h2>{{ product.title }}</h2></a>
+					      <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title }}</h2></a>
 					      <h4><a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
 					      {% if product.kind == '1' %}
 					      <center>
@@ -60,7 +60,7 @@
 					      {% if product.kind == '0' %}
 					      <strong class="span9">{{ product.get_price|clp }}</strong>
 					      {% endif %}
-					      <a href="/giftcard/detail/{{ product.id }}" class="btn primary">Regalar</a>
+					      <a href="/giftcard/detail/{{ product.slug }}" class="btn primary">Regalar</a>
 					      <!--
 					      {% if product.sold_quantity < 5 %}
 					      <div class="quantity">
@@ -90,7 +90,7 @@
 						{{ tab.content|safe }}
 					</section>
 				{% endfor %}
-			</section> 
+			</section>
 
 		</div>
 	</div>
@@ -105,16 +105,16 @@ $(document).ready(function(){
         var url = url.split('#');
         if(url[1]){
 			$('.enterpriseTab').hide();
-			$('[data-tab="'+url[1]+'"]').show();	
+			$('[data-tab="'+url[1]+'"]').show();
         }
 	}
 
 	function showTab(e){
 		e.preventDefault();
 		$('.enterpriseTab').hide();
-		$('[data-tab="'+$(this).attr('href')+'"]').show();	
+		$('[data-tab="'+$(this).attr('href')+'"]').show();
 		var stateObj = { foo: "a" };
-		history.pushState(stateObj, "page 2", "/partner/{{ merchant.slug }}#"+$(this).attr('href'));	
+		history.pushState(stateObj, "page 2", "/partner/{{ merchant.slug }}#"+$(this).attr('href'));
 	}
 
 });
