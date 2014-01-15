@@ -99,7 +99,8 @@ def pp_response(request, token, **kwargs):
             'product_name': product.giftcard.title,
             'product_date': product.created.isoformat(),
         }
-        event_merchant_notification_giftcard_was_bought(merchant_email, args0)
+
+        event_merchant_notification_giftcard_was_bought(product.giftcard.merchant.contact_email, args0)
 
         try:
             customer = CustomerInfo.objects.get(user=product.giftcard_to,
