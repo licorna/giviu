@@ -132,11 +132,13 @@ def home(request, slug=None):
 def giftcard_detail(request, gift_id):
     giftcard = Giftcard.objects.get(pk=gift_id)
     likes = Likes.get_giftcard_likes(gift_id)
+    user_like = Likes.does_user_likes(request.user.fbid,giftcard.id)
     friends = 0
     data = {
         'giftcard': giftcard,
         'likes': likes,
-        'friends': friends
+        'friends': friends,
+        'user_like': user_like
     }
     return render_to_response('giftcard_details.html', data,
                               context_instance=RequestContext(request))
