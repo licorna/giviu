@@ -24,6 +24,10 @@ urlpatterns = patterns('',
                            'api.views.get_gf_like',
                            name='api_social_like_get'),
 
+                       url(r'^social/add-user-from-facebook/(?P<fbid>\d+)$',
+                           'api.views.add_user_from_facebook',
+                           name='api_social_add_user_from_facebook'),
+
                        url(r'^social/add-friends-from-facebook/(?P<fbid>\d+)$',
                            'api.views.add_friends_from_facebook',
                            name='api_social_add_friends_from_facebook'),

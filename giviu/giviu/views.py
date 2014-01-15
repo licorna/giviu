@@ -75,12 +75,6 @@ def do_register(request):
                                                  first_name=first_name,
                                                  last_name=last_name,
                                                  gender=gender)
-            # Only user created who has facebook_id already has
-            # Social API corresponding entry, so any two prior user
-            # creation will add user to Social.
-            Likes.add_user_to_social(facebook_id,
-                                     full_name,
-                                     birthday)
 
         logger.info('Se ha registrado un usuario:' + email)
 

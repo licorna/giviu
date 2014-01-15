@@ -137,3 +137,20 @@ def add_friends_from_facebook(request, fbid):
         return HttpResponse('{"status":"success"}', status=200)
 
     return HttpResponseBadRequest()
+
+
+@csrf_exempt
+def add_user_from_facebook(request, fbid):
+    data = json.loads(request.body)
+    if request.method == 'POST':
+
+        print 'REQUEST:'
+        print data
+        birthday = data['birthday']
+        name = data['name']
+
+        response = Likes.add_user_to_social(fbid, name, birthday)
+        if response:
+            return HttpResponse('{"status":"success"}', status=201)
+
+    return HttpResponseBadRequest()

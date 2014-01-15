@@ -75,6 +75,29 @@
             }else{
               email = response.email;
             }
+
+            var data = {
+              name: first_name + ' ' + last_name,
+              birthday: birthday,
+              email: email
+            };
+            console.log(JSON.stringify(data));
+            $.ajax({
+              type: 'POST',
+              contentType: 'application/json; charset=utf-8',
+              url: 'api/social/add-user-from-facebook/'+response.id,
+              data: JSON.stringify(data),
+              cache: false,
+              dataType: 'json',
+              status_code: {
+                200: function(data) {
+                  console.log('agregado!');
+                  console.log(data);
+                }
+              }
+            });
+
+
             $('#register').append('<input type="hidden" name="name" value="'+first_name+'">');
             $('#register').append('<input type="hidden" name="location" value="'+location_name+'">');
             $('#register').append('<input type="hidden" name="lastName" value="'+last_name+'">');
