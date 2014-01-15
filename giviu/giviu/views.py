@@ -110,7 +110,7 @@ def home(request, slug=None):
     categories = GiftcardCategory.objects.all()
     data = {}
     if slug:
-        category = GiftcardCategory.objects.get(slug__exact=slug)
+        category = get_object_or_404(GiftcardCategory, slug=slug)
         products = Giftcard.objects.filter(category__exact=category.id,
                                            status=1)
         data = {
@@ -274,7 +274,7 @@ def giftcard_confirmation(request):
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def product_show(request, uuid):
-    product = Product.objects.get(uuid__exact=uuid)
+    product = get_object_or_404(Product, uuid=uuid)
     data = {
         'product': product,
         'hash': product.validation_code
