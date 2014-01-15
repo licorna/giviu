@@ -1,5 +1,6 @@
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import (render_to_response, redirect,
+                              get_object_or_404)
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import AnonymousUser
@@ -130,7 +131,7 @@ def home(request, slug=None):
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_detail(request, slug):
-    giftcard = Giftcard.objects.get(slug=slug)
+    giftcard = get_object_or_404(Giftcard, slug=slug)
     likes = Likes.get_giftcard_likes(giftcard.id)
     if request.user.is_authenticated():
         user_like = Likes.does_user_likes(request.user.fbid, giftcard.id)
@@ -149,7 +150,7 @@ def giftcard_detail(request, slug):
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_custom(request, slug):
-    giftcard = Giftcard.objects.get(slug=slug)
+    giftcard = get_object_or_404(Giftcard, slug=slug)
     style = GiftcardDesign.objects.filter(status='publish')
     data = {
         'giftcard': giftcard,
