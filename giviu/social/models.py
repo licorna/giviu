@@ -30,7 +30,7 @@ class Likes():
             'Content-Type': 'application/json'
         }
         try:
-            response = requests.post(url, data=data, headers=headers)
+            response = requests.post(url, data=json.dumps(data), headers=headers)
         except requests.exceptions.RequestException, e:
             print e
             # TODO: IMPORTANTE:
@@ -86,7 +86,7 @@ class Likes():
                             except KeyError:
                                 continue
                             print 'adding', friend_id, 'as friend of', fbid
-                            Likes.add_facebook_friend(fbid, friend_id, client)
+                            Likes.add_facebook_friend(friend_id, fbid, client)
 
         print response.status_code
         return response.status_code < 300

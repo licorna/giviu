@@ -16,6 +16,9 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def user_is_normal_user(user):
     return isinstance(user, Users) and user.is_normal_user()
@@ -72,12 +75,8 @@ def do_register(request):
                                                  first_name=first_name,
                                                  last_name=last_name,
                                                  gender=gender)
-            # Only user created who has facebook_id already has
-            # Social API corresponding entry, so any two prior user
-            # creation will add user to Social.
-            Likes.add_user_to_social(facebook_id,
-                                     full_name,
-                                     birthday)
+
+        logger.info('Se ha registrado un usuario:' + email)
 
         if user and user.is_active == 1 and not user.is_merchant:
             user = authenticate(username=facebook_id, password=facebook_id)
@@ -103,13 +102,14 @@ def home(request, slug=None):
     data = {}
     if slug:
         category = GiftcardCategory.objects.get(slug__exact=slug)
-        products = Giftcard.objects.filter(category__exact=category.id)
+        products = Giftcard.objects.filter(category__exact=category.id,
+                                           status=1)
         data = {
             'this_category': category,
         }
     else:
-        products = Giftcard.objects.all()
-    all_product_len = Giftcard.objects.count()
+        products = Giftcard.objects.filter(status=1)
+    all_product_len = Giftcard.objects.filter(status=1).count()
 
     if request.user.is_authenticated:
         for product in products:
@@ -277,7 +277,7 @@ def product_show(request, uuid):
 def partner_info(request, merchant_slug):
     merchant = Merchants.objects.get(slug__exact=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
-    products = Giftcard.objects.filter(merchant=merchant.id)
+    products = Giftcard.objects.filter(merchant=merchant.id, status=1)
     if request.user.is_authenticated:
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
