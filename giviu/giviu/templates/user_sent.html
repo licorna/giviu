@@ -65,7 +65,7 @@
 								<h3>{{ product.giftcard }}</h3>
 								<strong class="price">{{ product.price|clp }}</strong>
 								<ul>
-									<li><strong>Enviado a: </strong> <strong>{{ product.giftcard_to_name }}</strong> ({{ product.giftcard_to_email }})</li>
+									<li><strong>Enviado a: </strong> <strong>{{ product.giftcard_to.get_full_name }}</strong> ({{ product.giftcard_to.email }})</li>
 									<li><strong>Enviada el: </strong> {{ product.send_date|date:"d /m/ Y" }}</li>
 								</ul>
 							</div>

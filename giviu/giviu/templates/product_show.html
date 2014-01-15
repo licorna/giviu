@@ -7,8 +7,8 @@
 </center> -->
 <section class="show">
 	<div class="giftcardcontainer span9">
-		<span class="span9 title"><strong>¡{{ product.giftcard_to_name }}, haz recibido una giftcard.</strong></span>
-		<span class="span9 from">de parte de: {{ product.giftcard_from.first_name }} {{ product.giftcard_from.last_name }}</small></span>
+		<span class="span9 title"><strong>¡{{ product.giftcard_to.get_full_name }}, has recibido una giftcard.</strong></span>
+		<span class="span9 from">de parte de: {{ product.giftcard_from.get_full_name }} </small></span>
 		<figure class="span9 giftCardStyle" >
 			<img class="span9" src="{{ product.design }}"/>
 			<figcaption class="span9">

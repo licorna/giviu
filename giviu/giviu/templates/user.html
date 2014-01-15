@@ -57,13 +57,13 @@
 						{% for product in products %}
 						<div class="span9 giftcardList">
 							<figure class="span2">
-								<img class="span9" src="/static/img/giftcards/{{ product.design }}">
+								<img class="span9" src="{{ product.design }}">
 							</figure>
 							<div class="span6 col">
 								<h3>{{ product.giftcard }}</h3>
-								<strong class="price">$2.000</strong>
+								<strong class="price">{{ product.price|clp }}</strong>
 								<ul>
-									<li><strong>Enviado por: </strong> <strong>sebastian</strong> ({{ product.giftcard_from }})</li>
+									<li><strong>Enviado por: </strong> <strong>sebastian</strong> ({{ product.giftcard_from.get_full_name }})</li>
 									<li><strong>Recibida el: </strong> ({{ product.send_date }})</li>
 								</ul>
 							</div>
