@@ -281,7 +281,7 @@ def product_show(request, uuid):
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def partner_info(request, merchant_slug):
-    merchant = Merchants.objects.get(slug__exact=merchant_slug)
+    merchant = get_object_or_404(Merchants, slug=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
     products = Giftcard.objects.filter(merchant=merchant.id, status=1)
     if request.user.is_authenticated():
