@@ -26,7 +26,7 @@
 	  		<ul class="span4">
 	  			<li>Metodo de pago: <strong>{{ transaction.medio_pago_descripcion }}</strong></li>
 	  			<li>Monto: <strong>{{ transaction.monto|clp }}</strong></li>
-	  			<li>Fecha: <strong>30/12/2013</strong></li>
+	  			<li>Fecha: <strong>{{ transaction.fecha_aprobacion }}</strong></li>
 	  		</ul>	  		
 	  		<ul class="span5 col">
 	  			<li>Numero de cuotas: <strong>{{ transaction.num_cuotas }}</strong></li>
