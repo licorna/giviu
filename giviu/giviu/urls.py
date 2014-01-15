@@ -8,11 +8,11 @@ urlpatterns = patterns('',
                            'giviu.views.home',
                            name='landing_home'),
 
-                       url(r'^giftcard/detail/(?P<slug>[a-z-]+)$',
+                       url(r'^giftcard/detail/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.giftcard_detail',
                            name='giftcard_detail'),
 
-                       url(r'^giftcard/custom/(?P<slug>[a-z-]+)$',
+                       url(r'^giftcard/custom/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.giftcard_custom',
                            name='giftcard_custom'),
 
