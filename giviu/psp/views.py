@@ -10,6 +10,7 @@ from marketing import (event_merchant_notification_giftcard_was_bought,
                        event_user_buy_product_confirmation,
                        event_user_confirmation_sends_giftcard,
                        event_user_receives_product)
+from datetime import datetime
 
 
 if settings.DEVELOPMENT:
