@@ -16,6 +16,9 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def user_is_normal_user(user):
     return isinstance(user, Users) and user.is_normal_user()
@@ -78,6 +81,8 @@ def do_register(request):
             Likes.add_user_to_social(facebook_id,
                                      full_name,
                                      birthday)
+
+        logger.info('Se ha registrado un usuario:' + email)
 
         if user and user.is_active == 1 and not user.is_merchant:
             user = authenticate(username=facebook_id, password=facebook_id)
