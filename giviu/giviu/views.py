@@ -78,6 +78,8 @@ def do_register(request):
                                                  first_name=first_name,
                                                  last_name=last_name,
                                                  gender=gender)
+            # Send email to registered user.!
+            event_user_registered(user.email, user.get_full_name())
         else:
             if 'facebookId' in request.POST:
                 facebook_id = request.POST['facebookId']
@@ -92,8 +94,6 @@ def do_register(request):
             user = authenticate(username=facebook_id, password=facebook_id)
             if not user:
                 return HttpResponseBadRequest()
-            # Send email to registered user.!
-            event_user_registered(user.email, user.get_full_name())
 
             login(request, user)
             return redirect('/')
