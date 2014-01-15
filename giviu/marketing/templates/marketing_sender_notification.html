@@ -1,10 +1,3 @@
-
-<!doctype html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>correo template</title>
-<body>
 <div style="background-color:#f8f8f8; padding:10px 0px; margin:0px; width:100%; display:block; text-align:center; font-family: Helvetica, arial, sans-saerif;">
 	<center>
 		<table border="0" width="750"  cellspacing="0" cellpadding="0"  style="background-color:#fff; border:1px solid #e1e1e1;border-bottom:none;">
@@ -33,9 +26,9 @@
 			<tr style="text-align:center; color:#807f7f;">
 				<td>
 					<br>
-					<strong style="color:#23a057; font-size:22px">{nameSender}</strong>
+					<strong style="color:#23a057; font-size:22px">{{ name_from }}</strong>
 					<p style="font-size:16px; margin:10px 20px">
-						La giftcard regalada a {nameTo} ha sido enviada con exito, gracias por preferir nuestros servicios y te invitamos a continuar disfrutando de <a style="color:#23a057; text-decoration-none;" href="http://www.giviu.com">Giviu</a>
+						La giftcard regalada a {{ name_to }} ha sido enviada con exito, gracias por preferir nuestros servicios y te invitamos a continuar disfrutando de <a style="color:#23a057; text-decoration-none;" href="http://www.giviu.com">Giviu</a>
 					</p>
 				
 				</td>
@@ -58,5 +51,3 @@
 		<small style="color:#a1a1a1; font-size:10px;">Si no quieres recibir mas este correo, haz <a href="http://www.giviu.com" style="color:#23a057;">click aquí</a></small>
 	</center>
 </div>
-</body>
-</html>

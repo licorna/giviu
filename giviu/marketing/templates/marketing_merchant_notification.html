@@ -1,10 +1,3 @@
-
-<!doctype html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>correo template</title>
-<body>
 <div style="background-color:#f8f8f8; padding:10px 0px; margin:0px; width:100%; display:block; text-align:center; font-family: Helvetica, arial, sans-saerif;">
 	<center>
 		<table border="0" width="750"  cellspacing="0" cellpadding="0"  style="background-color:#fff; border:1px solid #e1e1e1;border-bottom:none;">
@@ -22,16 +15,16 @@
 		</table>
 		<table border="0" width="750"  cellspacing="0" cellpadding="0"  style="background-color:#fff; border:1px solid #e1e1e1; border-bottom:none;">
 			<tr>
-				<td style="background-color:#23a057; height:108px; text-align:center; color:#fff; background-image:url('{imagePath}background-title.png'); font-size:30px; font-weight:lighter;">
+				<td style="background-color:#23a057; height:108px; text-align:center; color:#fff; background-image:url('http://commondatastorage.googleapis.com/site-images/mailing/background-title.png'); font-size:30px; font-weight:lighter;">
 					¡Felicitaciones! has vendido una giftcard
 				</td>
 			</tr>
 			<tr style="text-align:center; color:#807f7f;">
 				<td>
 					<br>
-					<strong style="color:#23a057; font-size:22px">Nombre empresa</strong>
+					<strong style="color:#23a057; font-size:22px">{{ merchant_name }}</strong>
 					<p style="font-size:16px; margin:10px 20px">
-						Se ha vendido una giftcard del producto <strong>Pulento</strong> con fecha de envio <strong>21/06/2013</strong>
+						Se ha vendido una giftcard del producto <strong>{{ product_name }}</strong> con fecha de envio <strong>{{ product_date }}</strong>
 					</p>
 					<p style="font-size:16px; margin:10px 20px">
 						Para mas información puedes entrar directamente <a href="http://www.giviu.com/merchant" style="color:#23a057;">aquí</a>
@@ -54,5 +47,3 @@
 		<small style="color:#a1a1a1; font-size:10px;">Si no quieres recibir mas este correo, haz <a href="http://www.giviu.com" style="color:#23a057;">click aquí</a></small>
 	</center>
 </div>
-</body>
-</html>
