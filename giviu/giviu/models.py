@@ -289,7 +289,7 @@ class GiviuUserManager(BaseUserManager):
 
 
 class Users(AbstractBaseUser):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=80, blank=True)
     last_name = models.CharField(max_length=80, blank=True)
     email = models.CharField(unique=True, max_length=255, blank=True)
