@@ -138,7 +138,8 @@ def pp_response(request, token, **kwargs):
                 'giftcard_design': product.design.image,
             }
             event_user_receives_product(product.giftcard_to, args2)
-
+            product.already_sent = 1
+            product.save()
 
         transaction.raw_response = response
         transaction.save()

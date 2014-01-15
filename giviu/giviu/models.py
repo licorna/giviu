@@ -171,6 +171,7 @@ class Product(models.Model):
     uuid = models.CharField(max_length=40, default=lambda: str(uuid4()))
     validation_code = models.CharField(max_length=8)
     send_date = models.DateField(blank=True)
+    already_sent = models.IntegerField()
     created = models.DateTimeField(default=lambda: get_now())
     giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
