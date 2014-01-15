@@ -6,7 +6,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^$',
                            'giviu.views.home',
-                           name='landing_home'),
+                           name='home'),
 
                        url(r'^giftcard/detail/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.giftcard_detail',

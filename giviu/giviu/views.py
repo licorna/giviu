@@ -33,6 +33,9 @@ def do_logout(request):
 
 
 def do_register(request):
+    if request.user.is_authenticated():
+        return redirect('home')
+
     if request.method == 'POST':
         required_parameters = frozenset(('facebookId', 'email', 'location',
                                          'name', 'lastName', 'gender',
