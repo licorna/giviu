@@ -222,39 +222,13 @@ class Likes():
     def get_likes_from_friends(fbid, giftcard):
         '''Returns a list of facebook ids of friends that liked
         the given giftcard.'''
-        likes = []
-        condition = {
-            "fbid": fbid,
-            "giftcard_likes": int(giftcard)
-        }
-        url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
-        url += '?where=' + json.dumps(condition)
-        headers = {'Accept': 'application/json'}
-        social_user = Likes.get_social_user(fbid)
-        if not social_user:
-            return []
-        if len(social_user['_items']) == 0:
-            return []
-        if 'friend_of' not in social_user['_items'][0]:
-            return []
-        friends = social_user['_items'][0]['friend_of']
-        for friend in friends:
-            condition = {
-                "fbid": friend,
-                "giftcard_likes": int(giftcard)
-            }
-            url = settings.SOCIAL['ENDPOINT'] + Likes.ENDPOINT
-            url += '?where=' + json.dumps(condition)
-            headers = {'Accept': 'application/json'}
-            try:
-                response = requests.get(url, headers=headers)
-            except requests.exceptions.RequestException:
-                # TODO: Loguear y reportar
-                print 'error en Social'
-            if response.status_code == 200:
-                response = response.json()
-                if len(response['_items']) > 0:
-                    if giftcard in response['_items'][0]['giftcard_likes']:
-                        likes.append(friend)
+        client = Likes.get_social_client()
+        result = client.friend.aggregate([
+            {"$match": {"friend_of": fbid, "giftcard_likes": giftcard}},
+            {"$group": {"_id": "$fbid"}}
+        ])
 
-        return likes
+        if len(result['result']) > 0:
+            return [res.values()[0] for res in result['result']]
+
+        return []

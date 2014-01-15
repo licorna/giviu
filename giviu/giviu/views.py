@@ -37,22 +37,19 @@ def do_register(request):
         required_parameters = frozenset(('facebookId', 'email', 'location',
                                          'name', 'lastName', 'gender',
                                          'birth'))
-        if not required_parameters <= frozenset(request.POST):
-            return HttpResponseBadRequest()
 
-        facebook_id = request.POST['facebookId']
-        email = request.POST['email']
-        location = request.POST['location']
-        first_name = request.POST['name']
-        last_name = request.POST['lastName']
-        gender = request.POST['gender']
-        birthday = request.POST['birth']
-        birthday = birthday[6:] + '-' + birthday[0:2] + '-' + birthday[3:5]
-        full_name = first_name + ' ' + last_name
+        if required_parameters <= frozenset(request.POST):
 
-        try:
-            user = Users.objects.get(fbid=facebook_id)
-        except Users.DoesNotExist:
+            facebook_id = request.POST['facebookId']
+            email = request.POST['email']
+            location = request.POST['location']
+            first_name = request.POST['name']
+            last_name = request.POST['lastName']
+            gender = request.POST['gender']
+            birthday = request.POST['birth']
+            #birthday = birthday[6:] + '-' + birthday[0:2] + '-' + birthday[3:5]
+            full_name = first_name + ' ' + last_name
+
             try:
                 # If user does not exists, check for a user with
                 # same email.
@@ -78,15 +75,22 @@ def do_register(request):
                                                  first_name=first_name,
                                                  last_name=last_name,
                                                  gender=gender)
-
-        logger.info('Se ha registrado un usuario:' + email)
+        else:
+            if 'facebookId' in request.POST:
+                facebook_id = request.POST['facebookId']
+                try:
+                    user = Users.objects.get(fbid=facebook_id)
+                except Users.DoesNotExist:
+                    return HttpResponseBadRequest()
+            else:
+                return HttpResponseBadRequest()
 
         if user and user.is_active == 1 and not user.is_merchant:
             user = authenticate(username=facebook_id, password=facebook_id)
             if not user:
                 return HttpResponseBadRequest()
             # Send email to registered user.!
-            event_user_registered(email, full_name)
+            event_user_registered(user.email, user.get_full_name())
 
             login(request, user)
             return redirect('/')
@@ -115,8 +119,7 @@ def home(request, slug=None):
 
     if request.user.is_authenticated():
         for product in products:
-            # product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
-            #                                                         product.id)
+            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid, product.id)
             product.get_own_like = Likes.does_user_likes(request.user.fbid,
                                                          product.id)
 
@@ -286,8 +289,8 @@ def partner_info(request, merchant_slug):
     products = Giftcard.objects.filter(merchant=merchant.id, status=1)
     if request.user.is_authenticated():
         for product in products:
-            # product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
-            #                                                         product.id)
+            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+                                                                    product.id)
             product.get_own_like = Likes.does_user_likes(request.user.fbid,
                                                          product.id)
 
