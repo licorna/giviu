@@ -6,7 +6,10 @@ from giviu.models import PaymentTransaction, Product, CustomerInfo
 from django.core.exceptions import MultipleObjectsReturned
 from puntopagos import transaction_check
 from django.template import RequestContext
-from marketing import event_merchant_notification_giftcard_was_bought
+from marketing import (event_merchant_notification_giftcard_was_bought,
+                       event_user_buy_product_confirmation,
+                       event_user_confirmation_sends_giftcard,
+                       event_user_receives_product)
 
 
 if settings.DEVELOPMENT:
