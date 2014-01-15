@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def user_is_normal_user(user):
-    return isinstance(user, Users) and user.is_normal_user()
+    return user.is_normal_user()
 
 
 def do_logout(request):
@@ -292,7 +292,7 @@ def partner_info(request, merchant_slug):
 
     return render_to_response('partner_info.html', data,
                               context_instance=RequestContext(request))
-    
+
 
 def response_not_found(request):
     data = ""
@@ -337,6 +337,6 @@ def page_contact(request):
 
 
 def page_terms(request):
-    data = ""    
+    data = ""
     return render_to_response('page_terms.html',data,
                               context_instance=RequestContext(request))
