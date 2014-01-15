@@ -137,12 +137,12 @@ def pp_response(request, token, **kwargs):
                                                    args1)
             args2 = {
                 'product_code': product.uuid,
-                'name_to': product.giftcard_to.name,
-                'name_from': product.giftcard_from.name,
+                'name_to': product.giftcard_to.get_full_name(),
+                'name_from': product.giftcard_from.get_full_name(),
                 'description': product.comment,
                 'giftcard_design': product.design.image,
             }
-            event_user_receives_product(product.giftcard_to, args2)
+            event_user_receives_product(product.giftcard_to.email, args2)
             product.already_sent = 1
             product.save()
 
