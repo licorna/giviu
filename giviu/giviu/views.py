@@ -96,7 +96,6 @@ def do_register(request):
                               context_instance=RequestContext(request))
 
 
-@user_passes_test(user_is_normal_user, login_url='/logout')
 def home(request, slug=None):
     categories = GiftcardCategory.objects.all()
     data = {}
