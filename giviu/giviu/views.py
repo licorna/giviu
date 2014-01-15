@@ -2,6 +2,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
@@ -21,7 +22,8 @@ logger = logging.getLogger(__name__)
 
 
 def user_is_normal_user(user):
-    return user.is_normal_user()
+    return isinstance(user, AnonymousUser) or (
+        isinstance(user, Users) and user.is_normal_user())
 
 
 def do_logout(request):
