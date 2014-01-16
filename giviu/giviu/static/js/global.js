@@ -34,7 +34,7 @@ $(document).ready(function(e){
 			onAfter : function( data ) { 
 				var actualPosition = parseInt($('.selected').html());
 				var actualPosition = actualPosition+1;
-				$('[name="giftcard-design"').val($('.giftcardsDesign li').attr('id'));
+				$('[name="giftcard-design"]').val($('.giftcardsDesign li').attr('id'));
 			}
 		},
 	    pagination  : "#pag",
