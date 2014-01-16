@@ -4,6 +4,8 @@ import json
 from collections import defaultdict
 import re
 import pymongo
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Likes():
@@ -63,13 +65,14 @@ class Likes():
         data = '[' + u','.join(data).encode('utf-8') + ']'
 
         try:
-            print 'enviando solicitud'
             response = requests.post(url, data=data, headers=headers,
-                                     timeout=Likes.TIMEOUT)
+                                     timeout=10)
+        except requests.exceptions.Timeout:
+            logger.error('Timeout exception while connecting to social backend. (fbid: %s)' % (fbid,))
+            return False
         except requests.exceptions.RequestException:
-            print 'error al enviar usuarios.'
-            # TODO: Log!
-            pass
+            logger.error('Exception while connecting to social backend. (fbid: %s)' % (fbid,))
+            return False
 
         if response.status_code == 200:
             jres = response.json()
@@ -88,7 +91,6 @@ class Likes():
                             print 'adding', friend_id, 'as friend of', fbid
                             Likes.add_facebook_friend(friend_id, fbid, client)
 
-        print response.status_code
         return response.status_code < 300
 
     @staticmethod
