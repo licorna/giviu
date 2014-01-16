@@ -97,7 +97,6 @@
               }
             });
 
-
             $('#register').append('<input type="hidden" name="name" value="'+first_name+'">');
             $('#register').append('<input type="hidden" name="location" value="'+location_name+'">');
             $('#register').append('<input type="hidden" name="lastName" value="'+last_name+'">');

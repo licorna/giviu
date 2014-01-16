@@ -173,7 +173,7 @@ def giftcard_custom(request, slug):
 @login_required
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def user(request):
-    products = Product.objects.filter(giftcard_to=request.user, state='RESPONSE_FROM_PP_SUCCESS')
+    products = Product.objects.filter(giftcard_to=request.user, state='RESPONSE_FROM_PP_SUCCESS',  already_sent=1)
     data = {
         'products': products,
     }

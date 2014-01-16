@@ -51,7 +51,7 @@
         </a>
       </figure>
       <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title }}</h2></a>
-      <h4><a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+      <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
       {% if product.kind == '1' %}
       <center>
         <select class="" name="webmenu"  onchange="showValue(this.value)">
