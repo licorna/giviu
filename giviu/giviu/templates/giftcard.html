@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load locale_price %}
+{% if show_title %}{% block title %}{{ this_category }} | {% endblock %}{% endif %}
 {% block content %}
 <!-- <section class="container options">
   ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>

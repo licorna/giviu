@@ -113,10 +113,12 @@ def home(request, slug=None):
         category = GiftcardCategory.objects.get(slug__exact=slug)
         products = Giftcard.objects.filter(category__exact=category.id,
                                            status=1)
+        show_title = True
         data = {
             'this_category': category,
         }
     else:
+        show_title = False
         products = Giftcard.objects.filter(status=1)
     all_product_len = Giftcard.objects.filter(status=1).count()
 
@@ -130,6 +132,7 @@ def home(request, slug=None):
         'categories': categories,
         'products': products,
         'all_products_len': all_product_len,
+        'show_title': show_title
     })
     return render_to_response('giftcard.html', data,
                               context_instance=RequestContext(request))
