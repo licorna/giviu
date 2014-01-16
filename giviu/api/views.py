@@ -1,6 +1,7 @@
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotFound)
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST, require_GET
 from giviu.models import Users, Product, Giftcard
 from api.models import ApiClientId
 from social.models import Likes
@@ -143,9 +144,6 @@ def add_friends_from_facebook(request, fbid):
 def add_user_from_facebook(request, fbid):
     data = json.loads(request.body)
     if request.method == 'POST':
-
-        print 'REQUEST:'
-        print data
         birthday = data['birthday']
         name = data['name']
 
@@ -154,3 +152,28 @@ def add_user_from_facebook(request, fbid):
             return HttpResponse('{"status":"success"}', status=201)
 
     return HttpResponseBadRequest()
+
+
+@require_GET
+def get_facebook_friends_birthdays(request, fbid):
+    birthdays = Likes.get_facebook_friends_birthdays(fbid)
+    return HttpResponse(json.dumps(birthdays),
+                        content_type='application/json')
+
+
+@csrf_exempt
+@require_POST
+def add_close_facebook_friend(request, fbid, friend):
+    result = Likes.add_close_facebook_friend(fbid, friend)
+    if result:
+        return HttpResponse(json.dumps({'status':'success'}),
+                            content_type='application/json',
+                            status=201)
+    return HttpResponseBadRequest()
+
+
+@require_GET
+def get_close_facebook_friends(request, fbid):
+    birthdays = Likes.get_close_facebook_friends(fbid)
+    return HttpResponse(json.dumps(birthdays),
+                        content_type='application/json')
