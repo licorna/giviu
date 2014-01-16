@@ -232,3 +232,44 @@ class Likes():
             return [res.values()[0] for res in result['result']]
 
         return []
+
+    @staticmethod
+    def delete_metadata(data):
+        del(data['_id'])
+        del(data['created'])
+        del(data['updated'])
+        del(data['friend_of'])
+        if 'giftcard_likes' in data:
+            del(data['giftcard_likes'])
+        return data
+
+    @staticmethod
+    def get_facebook_friends_birthdays(fbid):
+        client = Likes.get_social_client()
+        result = client.friend.find(
+            {"friend_of": fbid})
+        result = filter(lambda x: len(x['birthday']) > 0, result)
+        result = map(Likes.delete_metadata, result)
+
+        return result
+
+    @staticmethod
+    def add_close_facebook_friend(fbid, friend):
+        client = Likes.get_social_client()
+        result = client.friend.update({"fbid": fbid},
+                                      {"$addToSet": {"close_friend": friend}})
+        return result['updatedExisting'] and not result['err']
+
+    @staticmethod
+    def get_close_facebook_friends(fbid):
+        client = Likes.get_social_client()
+        result = client.friend.find({"fbid":fbid})
+        try:
+            close_friends = result[0]['close_friend']
+        except KeyError:
+            return []
+        result = client.friend.find(
+            {"fbid": {"$in": close_friends}}
+        )
+
+        return map(Likes.delete_metadata, result)
