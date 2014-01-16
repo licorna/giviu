@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load locale_price %}
 {% block title %} {{ merchant.name }} | {% endblock %}
+{% block meta %}
+    <meta property="og:image" content="{{ merchant.logo }}"/>
+    <meta property="og:title" content="{{ merchant.name }}" />
+    <meta property="og:description" content="{{ merchant.description }}" />
+    <meta property="og:url" content="https://www.giviu.com/partner/{{ merchant.slug }}" />
+{% endblock %}
+
 {% block content %}
 
 <section class="container profile">

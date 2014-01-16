@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load locale_price %}
 {% block title %}{{ giftcard.title }} | {% endblock %}
+{% block meta %}
+    <meta property="og:image" content="{{ giftcard.image }}"/>
+    <meta property="og:title" content="{{ giftcard.title }}" />
+    <meta property="og:description" content="{{ giftcard.description|safe }}" />
+    <meta property="og:url" content="https://www.giviu.com/giftcard/detail/{{ giftcard.slug }}" />
+{% endblock %}
 {% block content %}
 <section class="container steps">
   <span class="stepIndicator">

@@ -22,17 +22,19 @@
 
     <meta property="fb:admins" content="esteldesign"/>
     <meta property="fb:app_id" content="259478790867380"/>
-    <meta itemprop="name" content="Giviu - Busca, personaliza y envia giftcards a quien quieras {{ title }}">
-    <meta itemprop="description" content="Busca personaliza y envia giftcards a quien quieras">
+    <meta itemprop="name" content="Giviu.com">
+    <meta itemprop="description" content="Giviu - Buscar y Enviar Regalos Originales Personalizados">
     <meta name="description" content="Busca personaliza y envia giftcards a quien quieras" />
     <meta name="news_keywords" content="Giftcard, giftcards,regalo, regalos, regalos especiales, gift, card" />
-    <meta property="og:site_name" content="giviu.com" />
+    <meta property="og:site_name" content="Giviu - Buscar y Enviar Regalos Originales Personalizados" />
+    {% block meta %}
     <meta property="og:url" content="http://www.giviu.com/" />
-
     <meta property="og:image" content="{% static "img/155x100.png" %}"/>
-    <meta property="og:title" content="Giviu.vom" />
-    <meta property="og:description" content="Busca personaliza y envia giftcards a quien quieras" />
-    <meta property="og:url" content="<? echo full_url(); ?>" />
+    <meta property="og:title" content="Giviu.com" />
+    <meta property="og:description" content="Buscar y Enviar Regalos Originales Personalizados" />
+    <meta property="og:url" content="http://www.giviu.com" />
+    {%endblock%}
+
     <style>
 
       #giftCardList[data-columns]::before {
@@ -61,8 +63,8 @@
     {{ additional_head|safe }}
 
   </head>
-  <body class="cf <? echo $home;?>">
-    <header class="span9 <? echo $header;?>">
+  <body class="cf">
+    <header class="span9">
       <div class="container">
         <div class="span2">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
