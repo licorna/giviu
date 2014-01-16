@@ -31,4 +31,7 @@ urlpatterns = patterns('',
                        url(r'^social/add-friends-from-facebook/(?P<fbid>\d+)$',
                            'api.views.add_friends_from_facebook',
                            name='api_social_add_friends_from_facebook'),
+
+                       url(r'^internal/send-giftcards-for-today/$',
+                           'api.internal.send_giftcards_for_today')
 )

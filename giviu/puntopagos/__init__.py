@@ -10,6 +10,8 @@ from giviu.models import PaymentTransaction
 import json
 from string import digits
 import random
+import logging
+logger = logging.getLogger(__name__)
 
 from django.conf import settings
 if settings.DEVELOPMENT:
@@ -157,7 +159,7 @@ def transaction_check(token, trx_id, amount, date):
     try:
         response = json.loads(r.text)
     except ValueError:
-        print 'Error decodificando JSON'
-        return False
+        logger.critical('Unable to decode JSON data received from PP. Token:' + token)
+        return False, {}
 
     return response['respuesta'] == '00', response

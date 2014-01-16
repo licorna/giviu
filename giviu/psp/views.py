@@ -9,7 +9,8 @@ from django.template import RequestContext
 from marketing import (event_merchant_notification_giftcard_was_bought,
                        event_user_buy_product_confirmation,
                        event_user_confirmation_sends_giftcard,
-                       event_user_receives_product)
+                       event_user_receives_product,
+                       simple_giftcard_send_notification)
 from datetime import datetime
 
 
@@ -46,7 +47,7 @@ def first_stage(request):
     redirect_head = '<meta http-equiv="refresh" content="4; %s" />'
 
     try:
-        #TODO: Log
+        # TODO: Log
         payment = PaymentTransaction.objects.get(transaction_uuid=trx_id)
         last_state = payment.set_state('CLIENT_BEING_SENT_TO_PP')
 
@@ -129,22 +130,7 @@ def pp_response(request, token, **kwargs):
             product.send_date.month == now.month and
             product.send_date.day == now.day):
 
-            args1 = {
-                'name_from': product.giftcard_from.get_full_name(),
-                'name_to': product.giftcard_to.get_full_name(),
-            }
-            event_user_confirmation_sends_giftcard(product.giftcard_from.email,
-                                                   args1)
-            args2 = {
-                'product_code': product.uuid,
-                'name_to': product.giftcard_to.get_full_name(),
-                'name_from': product.giftcard_from.get_full_name(),
-                'description': product.comment,
-                'giftcard_design': product.design.image,
-            }
-            event_user_receives_product(product.giftcard_to.email, args2)
-            product.already_sent = 1
-            product.save()
+            simple_giftcard_send_notification(product)
 
         transaction.raw_response = response
         transaction.save()

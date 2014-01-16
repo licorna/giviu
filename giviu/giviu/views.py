@@ -78,6 +78,8 @@ def do_register(request):
                                                  first_name=first_name,
                                                  last_name=last_name,
                                                  gender=gender)
+            # Send email to registered user.!
+            event_user_registered(user.email, user.get_full_name())
         else:
             if 'facebookId' in request.POST:
                 facebook_id = request.POST['facebookId']
@@ -92,8 +94,6 @@ def do_register(request):
             user = authenticate(username=facebook_id, password=facebook_id)
             if not user:
                 return HttpResponseBadRequest()
-            # Send email to registered user.!
-            event_user_registered(user.email, user.get_full_name())
 
             login(request, user)
             return redirect('/')
@@ -110,7 +110,7 @@ def home(request, slug=None):
     categories = GiftcardCategory.objects.all()
     data = {}
     if slug:
-        category = GiftcardCategory.objects.get(slug__exact=slug)
+        category = get_object_or_404(GiftcardCategory, slug=slug)
         products = Giftcard.objects.filter(category__exact=category.id,
                                            status=1)
         show_title = True
@@ -277,7 +277,7 @@ def giftcard_confirmation(request):
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def product_show(request, uuid):
-    product = Product.objects.get(uuid__exact=uuid)
+    product = get_object_or_404(Product, uuid=uuid)
     data = {
         'product': product,
         'hash': product.validation_code
