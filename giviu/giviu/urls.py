@@ -1,7 +1,16 @@
 from django.conf.urls import patterns, include, url
+from utils import (GiftcardsSitemap,
+                   CategoriesSitemap,
+                   PartnersSitemap)
 
 from django.contrib import admin
 admin.autodiscover()
+
+sitemaps = {
+    'categories': CategoriesSitemap,
+    'giftcards': GiftcardsSitemap,
+    'partners': PartnersSitemap,
+}
 
 urlpatterns = patterns('',
                        url(r'^$',
@@ -15,6 +24,10 @@ urlpatterns = patterns('',
                        url(r'^giftcard/custom/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.giftcard_custom',
                            name='giftcard_custom'),
+
+                       url(r'^sitemap\.xml$',
+                           'django.contrib.sitemaps.views.sitemap',
+                           {'sitemaps': sitemaps}),
 
     url(r'^giftcard/category/(?P<slug>[a-z-]+)$', 'giviu.views.home', name='giftcard_category'),
     url(r'^logout$', 'giviu.views.do_logout', name='logout'),

@@ -47,6 +47,9 @@ class Merchants(models.Model):
         customers = Users.objects.filter(pk__in=[p.giftcard_from.id for p in products])
         return customers
 
+    def get_absolute_url(self):
+        return '/partner/' + self.slug
+
     class Meta:
         db_table = 'merchants'
         verbose_name_plural = 'Merchants'

@@ -94,6 +94,9 @@ class GiftcardCategory(models.Model):
     def count(self):
         return Giftcard.objects.filter(category__exact=self, status=1).count()
 
+    def get_absolute_url(self):
+        return '/giftcard/category/' + self.slug
+
     class Meta:
         db_table = 'giftcard_category'
         verbose_name_plural = 'Giftcard Categories'
@@ -153,6 +156,9 @@ class Giftcard(models.Model):
 
     def get_likes(self):
         return Likes.get_giftcard_likes(self.id, just_count=False)
+
+    def get_absolute_url(self):
+        return '/giftcard/detail/' + self.slug
 
     class Meta:
         db_table = 'giftcard'
