@@ -13,7 +13,7 @@
         <input type="text" class="span6" name="s" placeholder="¿Que estas buscando?"/>
         <input type="submit" class="span3 col btn inside" value="Buscar"/>
       </form> -->
-      <h3>Categorías {{show_title}}</h3>
+      <h3>Categorías</h3>
       <ul class="span9">
         <li class="span9 {% if not this_category %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
         {% for category in categories %}

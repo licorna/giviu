@@ -30,7 +30,7 @@
 		<div class="span6 col principalInfo">
 			<div class="span9">Tienda: <strong>{{ product.giftcard.merchant.name }}</strong></div>
 			<div class="span9">Producto: <strong>{{ product.giftcard }}</strong></div>
-			<div class="span9">Total: <strong>{{ product.price|clp }}</strong></div>
+
 		</div>
 	</div>
 
@@ -51,7 +51,7 @@
 		<div class="span5 col fine-print">
 			<h3><span class="icon-menu"></span> Detalles de tu giftcard</h3>
 			<ul>
-				<li>Esta giftcard es válida hasta el <strong>{{ product.send_date|date:"d /m/ Y" }}</strong></li>
+				<li>Esta giftcard es válida hasta el <strong>{{ product.expiration_date|date:"d/m/Y" }}</strong></li>
 			</ul>
 			{{ product.giftcard.fine_print|safe}}
 		</div>
