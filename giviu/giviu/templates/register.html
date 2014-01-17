@@ -11,15 +11,20 @@
       <center>
         <h1><span class="icon-key"></span> Ingresa a Giviu</h1>
         <p>Utilizando tu cuenta de facebook</p>
-        <a href="#" class="btn facebook fb-login-button" id="btn-login"><span class="msg">Ingresa haciendo click aquí <fb:login-button scope="email user_birthday user_location friends_birthday"></fb:login-button></span><img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif"></a>
-
+        <a href="#" class="facebook fb-login-button" id="btn-login">
+          <span class="msg">
+            <fb:login-button size="large" onlogin="require('./log').info('onlogin callback')" scope="email user_birthday user_location friends_birthday">
+              Click aquí para ingresar
+            </fb:login-button>
+          </span>
+          <img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif">
+        </a>
         <div class="loader">
           <center>
             <img src="/static/img/loaderBackGreen.gif"/>
           </center>
         </div>
-
-
+        
         <div class="confirm">
           <div class="span3">
             <figure class="span8">
@@ -38,6 +43,8 @@
             <a href="#" class="btn confirmBtn">ingresar</a>
           </div>
         </div>
+        <small class="tinytext span9">Te prometemos que no publicaremos nada en tu nombre</small>
+
       </center>
     </section>
   </section>
