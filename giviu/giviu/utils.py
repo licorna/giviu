@@ -11,7 +11,7 @@ class GiftcardsSitemap(sitemaps.Sitemap):
 
     def items(self):
         from models import Giftcard
-        return Giftcard.objects.all()
+        return Giftcard.objects.filter(status=1)
 
 
 class CategoriesSitemap(sitemaps.Sitemap):
