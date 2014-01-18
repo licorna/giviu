@@ -19,10 +19,15 @@ def send_giftcards_for_today(request):
                                    client_id=client_id,
                                    merchant__slug='giviu')
 
+    just_check = False
+    if 'just_check' in request.GET:
+        just_check = request.GET['just_check'] == 'true'
+
     today = date.today()
     products = Product.objects.filter(
         send_date=today,
         already_sent=0,
+        state='RESPONSE_FROM_PP_SUCCESS'
     )
 
     gf_sent = []
@@ -33,13 +38,15 @@ def send_giftcards_for_today(request):
             'giftcard_id': product.giftcard.id,
             'price': product.price,
         })
-        simple_giftcard_send_notification(product)
+        if not just_check:
+            simple_giftcard_send_notification(product)
 
     data = {
         'status': 'success' if len(products) > 0 else 'no giftcards sent',
         'count': len(products),
         'send_date': today.isoformat(),
         'giftcards_sent': gf_sent,
+        'actually_sent': not just_check,
     }
 
     return HttpResponse(json.dumps(data), content_type='application/json',
