@@ -263,15 +263,18 @@ class Likes():
         return result['updatedExisting'] and not result['err']
 
     @staticmethod
-    def get_close_facebook_friends(fbid):
+    def get_close_facebook_friends(fbid, month=None):
         client = Likes.get_social_client()
         result = client.friend.find({"fbid":fbid})
         try:
             close_friends = result[0]['close_friend']
         except KeyError:
             return []
-        result = client.friend.find(
-            {"fbid": {"$in": close_friends}}
-        )
+
+        find_dict = {"fbid": {"$in": close_friends}}
+        if month:
+            month = str(month).zfill(2)
+            find_dict['birthday'] = re.compile('^' + month)
+        result = client.friend.find(find_dict)
 
         return map(Likes.delete_metadata, result)
