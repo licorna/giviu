@@ -174,6 +174,17 @@ def add_close_facebook_friend(request, fbid, friend):
 
 @require_GET
 def get_close_facebook_friends(request, fbid):
-    birthdays = Likes.get_close_facebook_friends(fbid)
+    if 'month' in request.GET:
+        try:
+            date = datetime.strptime(request.GET['month']+', 01 2014', '%B, %d %Y')
+        except ValueError:
+            return HttpResponse(
+                '{"error":"%s is not a valid month name"}' % (request.GET['month']),
+                content_type='application/json',
+                status=400)
+        month = date.month
+        birthdays = Likes.get_close_facebook_friends(fbid, month)
+    else:
+        birthdays = Likes.get_close_facebook_friends(fbid)
     return HttpResponse(json.dumps(birthdays),
                         content_type='application/json')
