@@ -36,6 +36,7 @@ def send_giftcards_for_today(request):
             'from': product.giftcard_from.email,
             'to': product.giftcard_to.email,
             'giftcard_id': product.giftcard.id,
+            'giftcard': product.giftcard.title,
             'price': product.price,
         })
         if not just_check:
