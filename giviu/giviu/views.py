@@ -281,7 +281,6 @@ def product_show(request, uuid):
     data = {
         'product': product,
         'hash': product.validation_code
-
     }
 
     return render_to_response('product_show.html', data,

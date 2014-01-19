@@ -15,7 +15,7 @@
 				<li><a href="/user/calendar" class="btn primary">Mis fechas</a> </li>
 			</ul>		
 		</div>		
-		<div class="userSide span9">
+<!-- 		<div class="userSide span9">
 			<center>
 				<strong>Cumpleaños de este mes</strong>
 			</center>
@@ -29,7 +29,7 @@
 					</a>
 				</li>
 			</ul>		
-		</div>
+		</div> -->
 	</div>
 	<div class="span7 col userContent">
 		<!--<div class="span9 col">
@@ -51,69 +51,28 @@
 						<li clasS="tab"><a href="/user/sent">Giftcards regaladas</a></li>
 						<li clasS="tab selected"><a href="/user/calendar">Mis fechas</a></li>
 					</ul>
-					<div class="span9">
+					<div class="msg span9 success">
+						Agrega a tus amigos a tu calendario de fechas especiales <a class="btn" style="background-color:#fff;" id="popupFriend">comienza aquí</a>
+					</div>
+					<div class="span9" style="margin-top:10px;">
 						<div class="calendarAside span2">
 							<ul>
-								<li><a class="actual" href="#">Enero</a></li>
-								<li><a href="#">Febrero</a></li>
-								<li><a href="#">Marzo</a></li>
-								<li><a href="#">Abril</a></li>
-								<li><a href="#">Mayo</a></li>
-								<li><a href="#">Junio</a></li>
-								<li><a href="#">Julio</a></li>
-								<li><a href="#">Agosto</a></li>
-								<li><a href="#">Septiembre</a></li>
-								<li><a href="#">Octubre</a></li>
-								<li><a href="#">Noviembre</a></li>
-								<li><a href="#">Diciembre</a></li>
+								<li><a class="actual month" href="january">Enero</a></li>
+								<li><a href="february" class="month">Febrero</a></li>
+								<li><a href="march" class="month">Marzo</a></li>
+								<li><a href="april" class="month">Abril</a></li>
+								<li><a href="may" class="month">Mayo</a></li>
+								<li><a href="june" class="month">Junio</a></li>
+								<li><a href="july" class="month">Julio</a></li>
+								<li><a href="august" class="month">Agosto</a></li>
+								<li><a href="september" class="month">Septiembre</a></li>
+								<li><a href="october" class="month">Octubre</a></li>
+								<li><a href="november" class="month">Noviembre</a></li>
+								<li><a href="december" class="month">Diciembre</a></li>
 							</ul>
 						</div>
-						<section class="span7 col">
-							<article class="span9 friendBirth">
-								<a href="#">
-									<figure class="avatar span2">
-										<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-									</figure>
-									<span>Sebastian Duran</span>
-									<strong class="date">24</strong>
-								</a>
-							</article>								
-							<article class="span9 friendBirth">
-								<a href="#">
-									<figure class="avatar span2">
-										<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-									</figure>
-									<span>Sebastian Duran</span>
-									<strong class="date">24</strong>
-								</a>
-							</article>								
-							<article class="span9 friendBirth">
-								<a href="#">
-									<figure class="avatar span2">
-										<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-									</figure>
-									<span>Sebastian Duran</span>
-									<strong class="date">24</strong>
-								</a>
-							</article>								
-							<article class="span9 friendBirth">
-								<a href="#">
-									<figure class="avatar span2">
-										<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-									</figure>
-									<span>Sebastian Duran</span>
-									<strong class="date">24</strong>
-								</a>
-							</article>								
-							<article class="span9 friendBirth">
-								<a href="#">
-									<figure class="avatar span2">
-										<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-									</figure>
-									<span>Sebastian Duran</span>
-									<strong class="date">24</strong>
-								</a>
-							</article>	
+						<section class="span7 col" id="birthdays">
+
 						</section>
 					</div>
 
@@ -122,8 +81,86 @@
 		</div>
 	</div>
 </section>
+<div class="calendarFriends" id="friendFbList" style="display:none;">
+	<h2>Selecciona a tus amigos y ¡crea tu calendario!.</h2>
+	<small>Te recordamos que no publicaremos en facebook <strong>nada sin tu permiso</strong></small>
+	<div class="close" data-close="friendFbList">
+		<span class="icon-close"></span>
+	</div>
+	<br/>
+	<div class="friends">
 
-<style>
+	</div>
+</div>
 
-</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	f = new Date();
+	month = [ "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december" ];
+	getFriends(month[f.getMonth()]);
+
+
+	$('.month').on('click',function(e){
+		e.preventDefault();
+		getFriends($(this).attr('href'));
+	});
+
+	$(document).on('click', '.friend', function(event) {
+	    event.preventDefault();
+	    var friend_id = $(this).attr('data-id'); 
+	    var user_id = $("#fb-id").val(); 
+	    $(this).fadeOut();
+
+		 $.post( "/api/social/add-close-facebook-friend/"+user_id+"/"+friend_id, function( data ) {
+		  
+		});
+	});
+
+	$('#popupFriend').click(function(){
+		$('.friends').html(' ');
+		$('.calendarFriends').show()
+		$.get( "/api/social/get-facebook-friends-birthdays/"+$("#fb-id").val())
+		  .done(function( data ) {
+			$.each(data, function(key,value) {
+				var name = value.first_name.split(' ');
+				var friend = '<div class="span1 friend" data-id="'+value.fbid+'" onclick="javascript:alert("a");">';
+				var friend = friend+'<figure>';
+				var friend = friend+'<img src="https://graph.facebook.com/'+value.fbid+'/picture?width=100&height=100">';
+				var friend = friend+'</figure>';
+				var friend = friend+'<small>'+name[0] +' '+ name[1]+'</small>';
+				var friend = friend+'</div>';
+				$('.friends').append(friend);
+			})
+		});
+	});
+
+	function getFriends(month){
+		$('.month').removeClass('actual');
+		$('[href="'+month+'"]').addClass('actual');
+		$('#birthdays').html('');
+		$.get( "/api/social/get-close-facebook-friends/"+$("#fb-id").val()+"?month="+month)
+			.done(function(data){
+				$.each(data, function(key,value) {
+					var day = value.birthday.split('/');
+					var day = day[1];
+					birthday = 	'<article class="span9 friendBirth">';
+					birthday =	birthday+	'<a href="#">';
+					birthday =	birthday+			'<figure class="avatar span2">';
+					birthday =	birthday+				'<img class="span9" src="https://graph.facebook.com/'+value.fbid+'/picture?width=500&height=500"/>';
+					birthday =	birthday+			'</figure>';
+					birthday =	birthday+			'<span>'+value.first_name+'</span>';
+					birthday =	birthday+			'<strong class="date">'+day+'</strong>';
+					birthday =	birthday+		'</a>';
+					birthday =	birthday+	'</article>';
+					$('#birthdays').append(birthday);
+				})
+
+			})
+	}
+
+
+})
+</script>
+
+
 {% endblock %}
