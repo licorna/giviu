@@ -22,6 +22,13 @@
       <span class="like big tooltipInfo {% if not user.is_authenticated %}disabled{% endif %} {% if user_like %}active{% endif %}"  data-source-id="{{ giftcard.id }}" data-source-type="1"><span class="icon-heart"></span></span>
       <img class="span9" src="{{ giftcard.image }}">
     </figure>
+    <section class="span9 merchantInfo">
+      <figure>
+        <img class="span9" src="http://commondatastorage.googleapis.com/site-images%2Fmerchant%2Fgonzalo-rivera%2Flogo200x200.png">
+      </figure>
+      <strong>{{ giftcard.merchant }}</strong><br/>
+      <small><a  href="http://{{ giftcard.merchant.website }}" target="_blank">sitio web</a> | {% if giftcard.merchant.address != "" %}<a data-lightbox="address" href="https://maps.googleapis.com/maps/api/staticmap?center={{ giftcard.merchant.address }}&zoom=16&size=600x300&maptype=roadmap&markers=color:purple%7Clabel:!%7C{{ giftcard.merchant.address }}&sensor=false&scale=0">dirección</a> |{% endif %} <a href="">ver todos los productos</a></small>
+    </section>
   </div>
   <div class="span4 col actions">
     <h2>{{ giftcard.title }}</h2>
