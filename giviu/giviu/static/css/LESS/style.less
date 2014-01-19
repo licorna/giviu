@@ -199,6 +199,10 @@ input:-moz-placeholder {
     background-color:#27ae60;
     text-align:center;
   }
+  .btn{
+    padding:5px 10px;
+    color:#27ae60;
+  }
 }
 
 .options{
@@ -541,6 +545,10 @@ aside{
             border-left-color:@principalActions;
             border-width: 10px;
             margin-top: -10px;
+          }          
+          &.actual:hover {
+            background-color:@principalActions; 
+            color:#fff;
           }
         }
       }
@@ -1619,16 +1627,17 @@ nav{
 }
 
 .show{
-  width:40%;
-  max-width:500px;
+  width:80%;
+  max-width:800px;
   min-width: 290px;
   margin: 0 auto;
   .giftcardcontainer{
+    background-color:#fff;
     border-bottom:3px solid @principalActions;
     margin-bottom:10px;
     margin-top:20px;
+    border-radius:5px 5px 0px 0px;      
     .giftCardStyle{
-      width:100%;
       figcaption{
         margin-top: -38px;
         text-align: center;
@@ -1641,17 +1650,42 @@ nav{
       }
     }
     .title{
-      font-size:1.3em;
+      font-size:1.2em;
+      padding:5px 10px;
+      border-bottom:1px dotted #ccc;
       strong{
         color:@principalActions;
       }
     }
-    .from{
+    .from,.coment{
+      background-color:#fff;
       font-size:0.8em;
-      margin-bottom:10px;
+      padding:5px 0px;
+      border-bottom:1px dotted #ccc;
+      figure{
+        width:30px;
+        height:30px;
+        overflow:hidden;
+        border-radius:50%;
+        float:left;
+        margin-right:5px;
+        margin-left:10px;
+        img{
+          width:100%;
+        }
+      }
     }
-    p{
-      margin-top:20px;
+    .code{
+      border-bottom:1px dotted #ccc;
+      text-align:center;
+    }
+    .coment{
+      text-align:center;
+      font-size:1em;
+      padding:5px 10px;
+      p{
+        margin-bottom:0px;
+      }
     }
     figure{
       img{
@@ -1689,9 +1723,6 @@ nav{
     }
     .principalInfo{
       font-size:1.2em;
-      strong{
-        color: @insideAction;
-      }
       .price{
         font-size:1.2em;
       }

@@ -7,48 +7,53 @@
 </center> -->
 <section class="show">
 	<div class="giftcardcontainer span9">
-		<span class="span9 title"><strong>¡{{ product.giftcard_to.get_full_name }}, has recibido una giftcard!</strong></span>
-		<span class="span9 from">de parte de: {{ product.giftcard_from.get_full_name }} </small></span>
-		<figure class="span9 giftCardStyle" >
+		<span class="span9 title">
+			<strong>¡{{ product.giftcard_to.get_full_name }}, has recibido una giftcard!</strong>
+		</span>
+
+		<figure class="span5 giftCardStyle" >
 			<img class="span9" src="{{ product.design }}"/>
-			<figcaption class="span9">
-				<span>Código de giftcard: <strong>{{ hash }}</strong>
-			</figcaption>
 		</figure>
-		<div class="span9">
-			<p>{{ product.comment }}</p>
+		<span class="span4 from col">
+			<figure>
+				<img src="https://graph.facebook.com/{{ product.giftcard_from.fbid }}/picture?width=100&height=100"/> 
+			</figure>
+			<strong>{{ product.giftcard_from.get_full_name }}:</strong>
+		</span>
+		<div class="span4 coment col">
+			<p>"{{ product.comment }}"</p>
+		</div>
+		<div class="span4 code col">
+			Código: <strong>{{ hash }}</strong>
 		</div>
 	</div>
 </section>
 
+
 <section class="show finePrint ">
 	<div class="moreInfo span9">
-		<h2 class="span9">En que consiste tu giftcard</h2><br/><br/>
 		<figure class="span2">
 			<img class="span9" src="{{ product.giftcard.image }}">
 		</figure>
 		<div class="span6 col principalInfo">
 			<div class="span9">Tienda: <strong>{{ product.giftcard.merchant.name }}</strong></div>
 			<div class="span9">Producto: <strong>{{ product.giftcard }}</strong></div>
-
+			{% if product.giftcard.kind == '0' %}
+			<div class="span9">Valor giftcard: <strong>{{ product.giftcard.price|clp }}</strong></div>
+	      	{% endif %}
 		</div>
 	</div>
 
-	<div class="moreInfo span9">
+	<div class="moreInfo span5">
 		<div class="span9">
-			<h3><span class="icon-checkmark"></span> ¿Como validar esta giftcard?</h3>
-			<p>Solo debes acercarte a la tienda <strong>"{{ product.giftcard.merchant.name }}"</strong> ubicada en <strong>{{ product.giftcard.merchant.address }}</strong> mostrando esta giftcard impresa o digital.</p>
-			<p>Si tienes alguna duda, puedes escribir a <strong>{{ product.giftcard.merchant.contact_email }}</strong> o al teléfono <strong><a href="tel:{{ product.giftcard.merchant.contact_phone }}">{{ product.giftcard.merchant.contact_phone }}</a> </strong>, ademas puedes ver mas información de la empresa haciendo <a href="/partner/{{ product.giftcard.merchant.slug }}">click aquí</a></p>
+<!-- 			<h3><span class="icon-checkmark"></span> ¿Como validar esta giftcard?</h3>
+ -->			<p>Solo debes acercarte a la tienda <strong>"{{ product.giftcard.merchant.name }}"</strong> ubicada en <strong>{{ product.giftcard.merchant.address }}</strong> mostrando esta giftcard impresa o digital.</p>
+			<p>Si tienes alguna duda, puedes escribir a <strong>{{ product.giftcard.merchant.contact_email }} </strong>, ademas puedes ver mas información de la empresa haciendo <a href="/partner/{{ product.giftcard.merchant.slug }}">click aquí</a></p>
 		</div>
 	</div>
 
-	<div class="moreInfo span9">
-		<div class="span4">
-			<figure class="span9">
-				<img class="span9" src="http://maps.googleapis.com/maps/api/staticmap?center={{ product.giftcard.merchant.address }}&zoom=17&size=400x400&maptype=roadmap&markers=color:blue%7Clabel:S%7C{{ product.giftcard.merchant.address }}&sensor=false&scale=2">
-			</figure>
-		</div>
-		<div class="span5 col fine-print">
+	<div class="moreInfo span4 col">
+		<div class="span9 col fine-print">
 			<h3><span class="icon-menu"></span> Detalles de tu giftcard</h3>
 			<ul>
 				<li>Esta giftcard es válida hasta el <strong>{{ product.expiration_date|date:"d/m/Y" }}</strong></li>
@@ -57,4 +62,9 @@
 		</div>
 	</div>
 </section>
+<script>
+$(document).ready(function(){
+	$('header').hide();
+});
+</script>
 {% endblock %}
