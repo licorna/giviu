@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import get_template
@@ -118,7 +120,7 @@ def event_beta_registered_send_welcome(email):
     text_content = get_template('marketing_first.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
-    msg = EmailMultiAlternatives('Gracias por registrarte en Giviu',
+    msg = EmailMultiAlternatives('¡Ven a conocer Giviu!',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])

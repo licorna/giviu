@@ -73,12 +73,10 @@ def send_welcome_to_beta_users(request):
     if settings.DEBUG:
         registered = [registered[0]]
 
-    print registered
-
     email_list = []
     for user in registered:
-        print 'sending mail to:', user.email, '? ', 'no' if just_check else 'yes'
         if not just_check:
+            logger.debug('Sending welcome email to ' + user.email)
             event_beta_registered_send_welcome(user.email)
         email_list.append(user.email)
 
