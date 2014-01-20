@@ -42,5 +42,8 @@ urlpatterns = patterns('',
                            'api.views.get_close_facebook_friends'),
 
                        url(r'^internal/send-giftcards-for-today/$',
-                           'api.internal.send_giftcards_for_today')
+                           'api.internal.send_giftcards_for_today'),
+
+                       url(r'^internal/send-welcome-to-beta-users/$',
+                           'api.internal.send_welcome_to_beta_users'),
 )
