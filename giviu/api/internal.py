@@ -1,8 +1,13 @@
 from django.http import (HttpResponse, HttpResponseBadRequest)
 from django.shortcuts import get_object_or_404
-from giviu.models import Users, Product, Giftcard
+from django.views.decorators.http import require_GET
+from django.conf import settings
+from giviu.models import Product
 from api.models import ApiClientId
-from marketing import simple_giftcard_send_notification
+from landing.models import BetaRegisteredUser
+from marketing import (simple_giftcard_send_notification,
+                       event_beta_registered_send_welcome)
+
 from datetime import date
 import json
 import logging
@@ -19,9 +24,7 @@ def send_giftcards_for_today(request):
                                    client_id=client_id,
                                    merchant__slug='giviu')
 
-    just_check = False
-    if 'just_check' in request.GET:
-        just_check = request.GET['just_check'] == 'true'
+    just_check = request.GET.get('just_check', 'true') != 'false'
 
     today = date.today()
     products = Product.objects.filter(
@@ -47,6 +50,41 @@ def send_giftcards_for_today(request):
         'count': len(products),
         'send_date': today.isoformat(),
         'giftcards_sent': gf_sent,
+        'actually_sent': not just_check,
+    }
+
+    return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
+
+
+@require_GET
+def send_welcome_to_beta_users(request):
+    if 'client_id' not in request.GET:
+        return HttpResponseBadRequest()
+
+    just_check = request.GET.get('just_check', 'true') != 'false'
+
+    client_id = request.GET['client_id']
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
+
+    registered = BetaRegisteredUser.objects.all()
+    if settings.DEBUG:
+        registered = [registered[0]]
+
+    print registered
+
+    email_list = []
+    for user in registered:
+        print 'sending mail to:', user.email, '? ', 'no' if just_check else 'yes'
+        if not just_check:
+            event_beta_registered_send_welcome(user.email)
+        email_list.append(user.email)
+
+    data = {
+        'count': len(email_list),
+        'recipients': email_list,
         'actually_sent': not just_check,
     }
 

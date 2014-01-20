@@ -110,3 +110,17 @@ def event_merchant_notification_giftcard_was_bought(email, args):
                                  [email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+
+def event_beta_registered_send_welcome(email):
+    c = Context({})
+    html_content = get_template('marketing_first.html').render(c)
+    text_content = get_template('marketing_first.html').render(c)
+    if settings.DEBUG:
+        email = 'licorna@gmail.com'
+    msg = EmailMultiAlternatives('Gracias por registrarte en Giviu',
+                                 text_content,
+                                 settings.EMAIL_DEFAULT_FROM,
+                                 [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
