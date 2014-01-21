@@ -133,9 +133,11 @@ def pp_response(request, token, **kwargs):
         transaction.raw_response = response
         transaction.save()
 
+        _code = product.validation_code
+        _code = _code[:4] + '-' + _code[4:]
         merchant_notification.send(sender=request,
                                    merchant=product.giftcard.merchant.id,
-                                   code=product.validation_code,
+                                   code=_code,
                                    ammount=product.price)
 
         data = {
