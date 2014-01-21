@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from django.contrib import sitemaps
-from django.core.urlresolvers import reverse
 from django.conf import settings
 
 
@@ -44,6 +43,10 @@ def get_today():
 
 def get_one_month():
     return (datetime.now() + timedelta(days=31)).strftime(MYSQL_DATE_FORMAT)
+
+
+def get_three_month():
+    return (datetime.now() + timedelta(days=90)).strftime(MYSQL_DATE_FORMAT)
 
 
 def get_now():

@@ -14,7 +14,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from uuid import uuid4
-from utils import get_one_month, get_now
+from utils import get_now, get_three_month
 from merchant.models import Merchants
 from hashlib import sha224
 from social.models import Likes
@@ -184,7 +184,7 @@ class Product(models.Model):
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
     comment = models.TextField()
     status = models.CharField(max_length=255)
-    expiration_date = models.DateField(default=lambda: get_one_month())
+    expiration_date = models.DateField(default=lambda: get_three_month())
     validation_date = models.DateTimeField(blank=True, null=True)
     design = models.ForeignKey(GiftcardDesign, db_column='design')
     price = models.CharField(max_length=255)
@@ -337,7 +337,7 @@ class Users(AbstractBaseUser):
         return self.birthday
 
     def is_normal_user(self):
-        return (len(self.fbid) < 56 and not self.is_merchant)
+        return (len(self.fbid) < 56 and self.is_merchant == 0)
 
     def get_short_name(self):
         return self.first_name
