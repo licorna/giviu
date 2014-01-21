@@ -11,6 +11,7 @@ from marketing import (event_merchant_notification_giftcard_was_bought,
                        event_user_confirmation_sends_giftcard,
                        event_user_receives_product,
                        simple_giftcard_send_notification)
+from merchant_notifications.signals import merchant_notification
 from datetime import datetime
 
 
@@ -96,9 +97,6 @@ def pp_response(request, token, **kwargs):
         product.set_state('RESPONSE_FROM_PP_SUCCESS')
         transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
 
-        # Send merchant notification
-        # INPUT: merchant_email
-        #        giftcard details
         args0 = {
             'merchant_name': product.giftcard.merchant.name,
             'product_name': product.giftcard.title,
@@ -134,9 +132,15 @@ def pp_response(request, token, **kwargs):
 
         transaction.raw_response = response
         transaction.save()
+
+        merchant_notification.send(sender=request,
+                                   merchant=product.giftcard.merchant.id,
+                                   code=product.validation_code,
+                                   ammount=product.price)
+
         data = {
-            'transaction' : response,
-            'product' : product
+            'transaction': response,
+            'product': product
         }
         return render_to_response('success.html', data,
                                   context_instance=RequestContext(request))
@@ -144,7 +148,7 @@ def pp_response(request, token, **kwargs):
         product.set_state('RESPONSE_FROM_PP_ERROR')
         transaction.set_state('RESPONSE_FROM_PP_ERROR')
         data = {}
-        return render_to_response('error.html',data,
+        return render_to_response('error.html', data,
                                   context_instance=RequestContext(request))
 
 
