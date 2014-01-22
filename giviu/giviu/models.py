@@ -164,7 +164,15 @@ class Giftcard(models.Model):
 
     def get_validation_info(self):
         from markdown2 import markdown as md
-        return md(self.validation_info)
+        if self.validation_info is not None:
+            return md(self.validation_info)
+        return ''
+
+    def pretty_fine_print(self):
+        if '<' in self.fine_print:
+            return self.fine_print
+        from markdown2 import markdown as md
+        return md(self.fine_print)
 
     class Meta:
         db_table = 'giftcard'
