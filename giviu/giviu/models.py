@@ -128,6 +128,7 @@ class Giftcard(models.Model):
     title = models.CharField(max_length=255)
     slug = models.CharField(max_length=511, blank=False, null=False)
     kind = models.CharField(max_length=255)
+    priority = models.IntegerField(default=10)
     description = models.TextField()
     category = models.ForeignKey('GiftcardCategory', db_column='category_id')
     price = models.CharField(max_length=255)

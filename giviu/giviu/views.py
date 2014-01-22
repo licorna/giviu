@@ -112,12 +112,12 @@ def home(request, slug=None, division=None):
     campaigns = Campaign.objects.all()
     show_title = False
     if not division:
-        products = Giftcard.objects.filter(status=1)
+        products = Giftcard.objects.filter(status=1).order_by('-priority')
 
     if division == 'category':
         category = get_object_or_404(GiftcardCategory, slug=slug)
         products = Giftcard.objects.filter(category=category.id,
-                                           status=1)
+                                           status=1).order_by('-priority')
         show_title = True
         data = {
             'this_category': category,
@@ -125,7 +125,7 @@ def home(request, slug=None, division=None):
 
     if division == 'campaign':
         campaign = get_object_or_404(Campaign, slug=slug)
-        products = campaign.giftcards.all()
+        products = campaign.giftcards.all().order_by('-priority')
         data = {
             'this_campaign': campaign,
         }
