@@ -7,7 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
-    GiftcardCategory, Giftcard, GiftcardDesign,
+    GiftcardCategory, Giftcard, GiftcardDesign, Campaign,
     Users, Product
 )
 from merchant.models import MerchantTabs, Merchants
@@ -106,29 +106,41 @@ def do_register(request):
                               context_instance=RequestContext(request))
 
 
-def home(request, slug=None):
-    categories = GiftcardCategory.objects.all()
+def home(request, slug=None, division=None):
     data = {}
-    if slug:
+    categories = GiftcardCategory.objects.all()
+    campaigns = Campaign.objects.all()
+    show_title = False
+    if not division:
+        products = Giftcard.objects.filter(status=1)
+
+    if division == 'category':
         category = get_object_or_404(GiftcardCategory, slug=slug)
-        products = Giftcard.objects.filter(category__exact=category.id,
+        products = Giftcard.objects.filter(category=category.id,
                                            status=1)
         show_title = True
         data = {
             'this_category': category,
         }
-    else:
-        show_title = False
-        products = Giftcard.objects.filter(status=1)
-    all_product_len = Giftcard.objects.filter(status=1).count()
 
+    if division == 'campaign':
+        campaign = get_object_or_404(Campaign, slug=slug)
+        products = campaign.giftcards.all()
+        data = {
+            'this_campaign': campaign,
+        }
+
+    all_product_len = Giftcard.objects.filter(status=1).count()
     if request.user.is_authenticated():
+
         for product in products:
-            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid, product.id)
+            product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
+                                                                    product.id)
             product.get_own_like = Likes.does_user_likes(request.user.fbid,
                                                          product.id)
 
     data.update({
+        'campaigns': campaigns,
         'categories': categories,
         'products': products,
         'all_products_len': all_product_len,

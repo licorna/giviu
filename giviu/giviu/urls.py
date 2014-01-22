@@ -17,6 +17,12 @@ urlpatterns = patterns('',
                            'giviu.views.home',
                            name='home'),
 
+                       url(r'^giftcard/category/(?P<slug>[a-z-]+)$',
+                           'giviu.views.home', {'division': 'category'}, name='giftcard_category'),
+
+                       url(r'^campaign/(?P<slug>[a-z-]+)$',
+                           'giviu.views.home', {'division': 'campaign'}, name='giftcard_campaign'),
+
                        url(r'^giftcard/detail/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.giftcard_detail',
                            name='giftcard_detail'),
@@ -29,7 +35,6 @@ urlpatterns = patterns('',
                            'django.contrib.sitemaps.views.sitemap',
                            {'sitemaps': sitemaps}),
 
-    url(r'^giftcard/category/(?P<slug>[a-z-]+)$', 'giviu.views.home', name='giftcard_category'),
     url(r'^logout$', 'giviu.views.do_logout', name='logout'),
     url(r'^register', 'giviu.views.do_register', name='register'),
     url(r'^giftcard/checkout$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),

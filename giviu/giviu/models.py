@@ -164,6 +164,17 @@ class Giftcard(models.Model):
         db_table = 'giftcard'
 
 
+class Campaign(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=40)
+    slug = models.CharField(max_length=20)
+    color = models.CharField(max_length=9)
+    giftcards = models.ManyToManyField(Giftcard)
+
+    class Meta:
+        db_table = 'campaign'
+
+
 class Product(models.Model):
     # Los estados finales deberian ser cambiados
     # por estados que tengan sentido para un producto
