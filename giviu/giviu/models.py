@@ -142,6 +142,7 @@ class Giftcard(models.Model):
     provincia = models.CharField(max_length=5, blank=True)
     region = models.CharField(max_length=5, blank=True)
     fine_print = models.TextField()
+    validation_info = models.TextField()
 
     def __unicode__(self):
         return self.title
@@ -160,6 +161,10 @@ class Giftcard(models.Model):
 
     def get_absolute_url(self):
         return '/giftcard/detail/' + self.slug
+
+    def get_validation_info(self):
+        from markdown2 import markdown as md
+        return md(self.validation_info)
 
     class Meta:
         db_table = 'giftcard'

@@ -72,6 +72,7 @@ def simple_giftcard_send_notification(product):
         'name_from': product.giftcard_from.get_full_name(),
         'description': product.comment,
         'giftcard_design': product.design.image,
+        'validation_info': product.giftcard.get_validation_info(),
     }
     event_user_receives_product(product.giftcard_to.email, args2)
     product.already_sent = 1
