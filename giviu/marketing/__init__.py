@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import get_template
@@ -70,6 +72,7 @@ def simple_giftcard_send_notification(product):
         'name_from': product.giftcard_from.get_full_name(),
         'description': product.comment,
         'giftcard_design': product.design.image,
+        'validation_info': product.giftcard.get_validation_info(),
     }
     event_user_receives_product(product.giftcard_to.email, args2)
     product.already_sent = 1
@@ -118,7 +121,7 @@ def event_beta_registered_send_welcome(email):
     text_content = get_template('marketing_first.html').render(c)
     if settings.DEBUG:
         email = 'licorna@gmail.com'
-    msg = EmailMultiAlternatives('Gracias por registrarte en Giviu',
+    msg = EmailMultiAlternatives('¡Ven a conocer Giviu!',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])

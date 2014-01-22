@@ -15,7 +15,11 @@
       </form> -->
       <h3>Categorías</h3>
       <ul class="span9">
-        <li class="span9 {% if not this_category %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
+        {% for campaign in campaigns %}
+        <li class="span9 category {% if this_campaign.name == campaign.name %}selected{% endif %}"><a data-id="{{ campaign.id }}"  href="/campaign/{{ campaign.slug }}">{{ campaign.name }} <span id="count{{ campaign.id }}" style="color: {{ campaign.color }}">{{ campaign.giftcards.all|length }}</span></a></li>
+        {% endfor %}
+
+        <li class="span9 {% if not this_category and not this_campaign %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
         {% for category in categories %}
         {% if category.count > 0 %}
         <li class="span9 category {% if this_category.name == category.name %}selected{% endif %}"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}">{{ category.count }}</span></a></li>

@@ -65,6 +65,7 @@ def validate_giftcard(request, giftcard):
         return HttpResponseBadRequest()
 
     try:
+        giftcard = giftcard.replace('-', '')
         product = Product.objects.get(validation_code__exact=giftcard)
     except Product.DoesNotExist:
         return HttpResponse(

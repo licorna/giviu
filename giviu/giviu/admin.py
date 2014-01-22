@@ -10,6 +10,7 @@ from models import (
     Provincia,
     Region,
     Friend,
+    Campaign,
 )
 
 from merchant.models import Merchants, MerchantTabs
@@ -27,3 +28,4 @@ admin.site.register(Region)
 admin.site.register(Friend)
 admin.site.register(Merchants)
 admin.site.register(MerchantTabs)
+admin.site.register(Campaign)

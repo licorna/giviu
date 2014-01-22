@@ -14,7 +14,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from uuid import uuid4
-from utils import get_one_month, get_now
+from utils import get_now, get_three_month
 from merchant.models import Merchants
 from hashlib import sha224
 from social.models import Likes
@@ -128,6 +128,7 @@ class Giftcard(models.Model):
     title = models.CharField(max_length=255)
     slug = models.CharField(max_length=511, blank=False, null=False)
     kind = models.CharField(max_length=255)
+    priority = models.IntegerField(default=10)
     description = models.TextField()
     category = models.ForeignKey('GiftcardCategory', db_column='category_id')
     price = models.CharField(max_length=255)
@@ -141,6 +142,7 @@ class Giftcard(models.Model):
     provincia = models.CharField(max_length=5, blank=True)
     region = models.CharField(max_length=5, blank=True)
     fine_print = models.TextField()
+    validation_info = models.TextField()
 
     def __unicode__(self):
         return self.title
@@ -160,8 +162,31 @@ class Giftcard(models.Model):
     def get_absolute_url(self):
         return '/giftcard/detail/' + self.slug
 
+    def get_validation_info(self):
+        from markdown2 import markdown as md
+        if self.validation_info is not None:
+            return md(self.validation_info)
+        return ''
+
+    def pretty_fine_print(self):
+        if '<' in self.fine_print:
+            return self.fine_print
+        from markdown2 import markdown as md
+        return md(self.fine_print)
+
     class Meta:
         db_table = 'giftcard'
+
+
+class Campaign(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=40)
+    slug = models.CharField(max_length=20)
+    color = models.CharField(max_length=9)
+    giftcards = models.ManyToManyField(Giftcard)
+
+    class Meta:
+        db_table = 'campaign'
 
 
 class Product(models.Model):
@@ -184,7 +209,7 @@ class Product(models.Model):
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
     comment = models.TextField()
     status = models.CharField(max_length=255)
-    expiration_date = models.DateField(default=lambda: get_one_month())
+    expiration_date = models.DateField(default=lambda: get_three_month())
     validation_date = models.DateTimeField(blank=True, null=True)
     design = models.ForeignKey(GiftcardDesign, db_column='design')
     price = models.CharField(max_length=255)
@@ -337,7 +362,7 @@ class Users(AbstractBaseUser):
         return self.birthday
 
     def is_normal_user(self):
-        return (len(self.fbid) < 56 and not self.is_merchant)
+        return (len(self.fbid) < 56 and self.is_merchant == 0)
 
     def get_short_name(self):
         return self.first_name
