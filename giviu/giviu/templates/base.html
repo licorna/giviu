@@ -69,7 +69,10 @@
         <div class="span2">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
         </div>
-        <nav class="span7 col showyourlove">
+        <div class="span3 tagline col">
+          <strong>Busca y envia regalos originales</strong>
+        </div>
+        <nav class="span4 col showyourlove">
           <ul>
             {% if user.is_authenticated %}
             <li><a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a></li>
@@ -81,7 +84,7 @@
             </li>
             {% else %}
             <li><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
-            <li><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+            <li><a href="/page/como-funciona" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
             {% endif %}
           </ul>
         </nav>
