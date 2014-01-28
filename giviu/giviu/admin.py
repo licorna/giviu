@@ -13,10 +13,15 @@ from models import (
     Campaign,
 )
 
-from merchant.models import Merchants, MerchantTabs
 
+class UsersAdmin(admin.ModelAdmin):
+    fields = ('first_name', 'last_name', 'email',
+              'birthday', 'fbid')
 
-admin.site.register(Users)
+    def queryset(self, request):
+        return self.model.objects.filter(is_merchant=0)
+
+admin.site.register(Users, UsersAdmin)
 admin.site.register(GiftcardCategory)
 admin.site.register(GiftcardDesign)
 admin.site.register(Giftcard)
@@ -26,6 +31,4 @@ admin.site.register(Comuna)
 admin.site.register(Provincia)
 admin.site.register(Region)
 admin.site.register(Friend)
-admin.site.register(Merchants)
-admin.site.register(MerchantTabs)
 admin.site.register(Campaign)
