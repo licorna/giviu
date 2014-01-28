@@ -437,6 +437,7 @@ class PaymentTransaction(models.Model):
     operation_number = models.CharField(max_length=20)
     authorization_code = models.CharField(max_length=20)
     amount = models.CharField(max_length=10)
+    use_credits = models.CharField(max_length=40, blank=True)
     state = models.CharField(max_length=30, default='PREPARING')
     psp_token = models.CharField(max_length=60)
     raw_response = models.TextField(blank=True)

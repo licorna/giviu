@@ -13,6 +13,7 @@ from marketing import (event_merchant_notification_giftcard_was_bought,
                        simple_giftcard_send_notification)
 from merchant_notifications.signals import merchant_notification
 from datetime import datetime
+from credits import finalize_use_user_credits
 
 
 if settings.DEVELOPMENT:
@@ -97,6 +98,9 @@ def pp_response(request, token, **kwargs):
         product.set_state('RESPONSE_FROM_PP_SUCCESS')
         transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
 
+        if transaction.use_credits is not None:
+            finalize_use_user_credits(transaction.use_credits)
+
         args0 = {
             'merchant_name': product.giftcard.merchant.name,
             'product_name': product.giftcard.title,
@@ -149,14 +153,8 @@ def pp_response(request, token, **kwargs):
     else:
         product.set_state('RESPONSE_FROM_PP_ERROR')
         transaction.set_state('RESPONSE_FROM_PP_ERROR')
+        if transaction.use_credits is not None:
+            finalize_use_user_credits(transaction.use_credits, False)
         data = {}
         return render_to_response('error.html', data,
                                   context_instance=RequestContext(request))
-
-
-
-def prueba(request):
-    data = {
-
-    }
-    return render_to_response('prueba.html')

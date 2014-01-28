@@ -13,6 +13,7 @@ from models import (
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
 from marketing import event_user_registered
+from credits import user_credits, use_user_credits
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -235,6 +236,22 @@ def giftcard_confirmation(request):
     except ValidationError:
         return HttpResponseBadRequest()
 
+    trx_credit = user_credits(request.user.fbid)
+    try:
+        price = int(price)
+    except ValueError:
+        return HttpResponseBadRequest()
+
+    credits = {'uuid': 'none'}
+    if trx_credit['amount'] > 0:
+        if trx_credit['amount'] >= price:
+            credits_used = price
+            price = 0
+        else:
+            credits_used = trx_credit['amount']
+            price = price - credits_used
+        credits = use_user_credits(request.user.fbid, credits_used)
+
     try:
         giftcard = Giftcard.objects.get(pk=int(request.POST['giftcard-id']))
     except Giftcard.DoesNotExist:
@@ -243,12 +260,17 @@ def giftcard_confirmation(request):
     design = GiftcardDesign.objects.get(pk=int(design))
 
     #TODO: Comprobar que la transaccion fue creada exitosamente
-    response, transaction = transaction_create(price)
+    response, transaction = transaction_create(str(price))
     try:
         trx_id = response['trx_id']
     except KeyError:
-        #TODO: patalear
-        pass
+        logger.critical('Transaction was not created')
+
+    if credits['uuid'] is not 'none':
+        transaction.use_credits = credits['uuid']
+        transaction.save()
+    else:
+        transaction.use_credits = None
 
     try:
         customer = Users.objects.get(email=email_to)
@@ -280,6 +302,8 @@ def giftcard_confirmation(request):
         'trx_id': trx_id,
         'design': product.design
     }
+    if transaction.use_credits:
+        data['credits'] = credits_used
     data.update(csrf(request))
 
     return render_to_response('checkout_confirmation.html',
