@@ -13,7 +13,7 @@ from models import (
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
 from marketing import event_user_registered
-from credits import user_credits, use_user_credits
+from credits import user_credits, use_user_credits, add_user_credits
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -81,6 +81,7 @@ def do_register(request):
                                                  gender=gender)
             # Send email to registered user.!
             event_user_registered(user.email, user.get_full_name())
+            add_user_credits(facebook_id, 2000, 'Giviu Registration Credits')
         else:
             if 'facebookId' in request.POST:
                 facebook_id = request.POST['facebookId']
