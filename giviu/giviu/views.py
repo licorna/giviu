@@ -133,8 +133,9 @@ def home(request, slug=None, division=None):
         }
 
     all_product_len = Giftcard.objects.filter(status=1).count()
+    credits = None
     if request.user.is_authenticated():
-
+        credits = user_credits(request.user.fbid)
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
@@ -148,6 +149,9 @@ def home(request, slug=None, division=None):
         'all_products_len': all_product_len,
         'show_title': show_title
     })
+    if credits:
+        print 'credits', credits
+        data['credits'] = credits['amount']
     return render_to_response('giftcard.html', data,
                               context_instance=RequestContext(request))
 
@@ -191,7 +195,7 @@ def giftcard_custom(request, slug):
 @login_required
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def user(request):
-    categories = GiftcardCategory.objects.all()    
+    categories = GiftcardCategory.objects.all()
     products = Product.objects.filter(giftcard_to=request.user, state='RESPONSE_FROM_PP_SUCCESS',  already_sent=1)
     data = {
         'products': products,
@@ -253,6 +257,7 @@ def giftcard_confirmation(request):
         return HttpResponseBadRequest()
 
     credits = {'uuid': 'none'}
+    credits_used = 0
     if trx_credit['amount'] > 0:
         if trx_credit['amount'] >= price:
             credits_used = price
@@ -290,7 +295,7 @@ def giftcard_confirmation(request):
 
     product = Product(giftcard_from=request.user,
                       giftcard_to=customer,
-                      price=price,
+                      price=price + credits_used,
                       design=design,
                       send_date=date,
                       comment=comment,
@@ -363,7 +368,7 @@ def response_not_found(request):
     categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('404.html',data,
                               context_instance=RequestContext(request))
 
@@ -372,7 +377,7 @@ def search(request):
     categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('search.html',data,
                               context_instance=RequestContext(request))
 
@@ -381,51 +386,51 @@ def page_who_we_are(request):
     categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('page_who_we_are.html',data,
                               context_instance=RequestContext(request))
 
 
 def page_who_its_work(request):
-    categories = GiftcardCategory.objects.all()    
+    categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('page_who_its_work.html',data,
                               context_instance=RequestContext(request))
 
 
 def page_faq(request):
-    categories = GiftcardCategory.objects.all()    
+    categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }        
+    }
     return render_to_response('page_faq.html',data,
                               context_instance=RequestContext(request))
 
 
 def page_enterprise(request):
-    categories = GiftcardCategory.objects.all()    
+    categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('page_enterprise.html',data,
                               context_instance=RequestContext(request))
 
 
 def page_contact(request):
-    categories = GiftcardCategory.objects.all()    
+    categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('page_contact.html',data,
                               context_instance=RequestContext(request))
 
 
 def page_terms(request):
-    categories = GiftcardCategory.objects.all()    
+    categories = GiftcardCategory.objects.all()
     data = {
         'categories': categories,
-    }    
+    }
     return render_to_response('page_terms.html',data,
                               context_instance=RequestContext(request))

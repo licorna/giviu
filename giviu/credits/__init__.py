@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def get_credits_db():
     try:
-        database = pymongo.MongoClient(settings.SOCIAL['CREDITS_MONGO_HOST']).credits
+        database = pymongo.MongoClient(settings.SOCIAL['CREDITS_MONGO_HOST'])
     except:
         logger.critical('Unable to connect to ' + settings.SOCIAL['CREDITS_MONGO_HOST'])
         return None
@@ -44,6 +44,8 @@ def user_credits(fbid):
     if not db:
         return {'status': 'no user credits', 'amount': 0}
 
+    unmark_user_credits(fbid)
+
     credits = db.credits.find({'fbid': fbid})
     if credits.count() == 0:
         return {'status': 'no user credits', 'amount': 0}
@@ -53,7 +55,7 @@ def user_credits(fbid):
         sum += credit['amount']
 
     if sum == 0:
-        return {'status': 'no user credits', 'amount': 0}
+        return {'status': 'no user available credits', 'amount': 0}
 
     return {'status': 'user has credits', 'amount': sum}
 
@@ -70,7 +72,7 @@ def mark_user_credits(fbid, amount):
         'fbid': fbid,
         'amount': -amount,
         'datetime': datetime.now(),
-        'expiration': datetime.now() + timedelta(minutes=20),
+        'expiration': datetime.now() + timedelta(minutes=10),
         'status': 'marked',
         'uuid': uuid,
     }
@@ -107,3 +109,15 @@ def finalize_use_user_credits(uuid, used=True):
         db.credits.remove({'uuid': uuid})
 
     return {'status': 'credits marked as used'}
+
+
+def unmark_user_credits(fbid):
+    db = get_credits_db()
+    if not db:
+        return False
+
+    res = db.credits.remove({'fbid':fbid,
+                       'status':'marked',
+                       'expiration': {'$lt': datetime.now()}})
+
+    return res['n'] > 0
