@@ -32,8 +32,6 @@ def add_user_credits(fbid, amount, description, expiration=None):
         'expiration': expiration,
     }
 
-    print d
-
     db.credits.insert(d)
     return True
 
@@ -116,8 +114,8 @@ def unmark_user_credits(fbid):
     if not db:
         return False
 
-    res = db.credits.remove({'fbid':fbid,
-                       'status':'marked',
-                       'expiration': {'$lt': datetime.now()}})
+    res = db.credits.remove({'fbid': fbid,
+                             'status': 'marked',
+                             'expiration': {'$lt': datetime.now()}})
 
     return res['n'] > 0
