@@ -38,7 +38,7 @@
     <style>
 
       #giftCardList[data-columns]::before {
-      content: '3 .column.size-1of3';
+      content: '4 .column.size-1of4';
       }
 
       #calendar[data-columns]::before {
@@ -70,7 +70,13 @@
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
         </div>
         <div class="span3 tagline col">
-          <strong>Busca y envia regalos originales</strong>
+          {% for category in categories %}
+          {% if category.count > 0 %}
+            <a href="/giftcard/category/{{ category.slug }}" class="span3 {% if this_category.name == category.name %}selected{% endif %}">
+            {{ category.name }}
+            </a>     
+          {% endif %}
+          {% endfor %}
         </div>
         <nav class="span4 col showyourlove">
           <ul>
@@ -79,7 +85,7 @@
             <li id="userInfo">
               <a href="/user">
                 <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
-                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong></span>
+                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong> | creditos: $2.500</span>
               </a>
             </li>
             {% else %}

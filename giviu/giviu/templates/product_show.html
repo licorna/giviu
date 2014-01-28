@@ -1,70 +1,570 @@
-{% extends "base.html" %}
 {% load locale_price %}
 {% block content %}
-<!-- <center>
-	<span style="font-size:200px;" class="icon-shocked"></span></br></br></br>
-	<strong>Esta giftcard no existe </br>¿Seguro que no estas haciendo trampa?</strong>
-</center> -->
-<section class="show">
-	<div class="giftcardcontainer span9">
-		<span class="span9 title">
-			<strong>¡{{ product.giftcard_to.get_full_name }}, has recibido una giftcard!</strong>
-		</span>
+<div  style="font-size:12px; background-color:#ececec; margin:0px; padding:0px;">
 
-		<figure class="span5 giftCardStyle" >
-			<img class="span9" src="{{ product.design }}"/>
-		</figure>
-		<span class="span4 from col">
-			<figure>
-				<img src="https://graph.facebook.com/{{ product.giftcard_from.fbid }}/picture?width=100&height=100"/> 
-			</figure>
-			<strong>{{ product.giftcard_from.get_full_name }}:</strong>
-		</span>
-		<div class="span4 coment col">
-			<p>"{{ product.comment }}"</p>
-		</div>
-		<div class="span4 code col">
-			Código: <strong>{{ hash }}</strong>
-		</div>
-	</div>
-</section>
+	<!--start 100% wrapper (white background) -->
+	<table width="100%" id="mainStructure"  border="0" cellspacing="0" cellpadding="0" style="background-color:#ececec;">
+	 <!--START TOP NAVIGATION ​LAYOUT-->
+	  <tr>
+	    <td valign="top">
+	      <table width="100%"  align="center" border="0" cellspacing="0" cellpadding="0"   style="background-color:#ececec;" >
 
 
-<section class="show finePrint ">
-	<div class="moreInfo span9">
-		<figure class="span2">
-			<img class="span9" src="{{ product.giftcard.image }}">
-		</figure>
-		<div class="span6 col principalInfo">
-			<div class="span9">Tienda: <strong>{{ product.giftcard.merchant.name }}</strong></div>
-			<div class="span9">Producto: <strong>{{ product.giftcard }}</strong></div>
-			{% if product.giftcard.kind == '0' %}
-			<div class="span9">Valor giftcard: <strong>{{ product.giftcard.price|clp }}</strong></div>
-	      	{% endif %}
-		</div>
-	</div>
+	      <!-- START CONTAINER NAVIGATION -->
+	      <tr>
+	        <td align="center" valign="top"  class="fix-box">
+	          
+	          <!-- start top navigation container -->
+	          <table width="600"  align="center" border="0" cellspacing="0" cellpadding="0" class="container" bgcolor="#ececec" style="background-color:#ececec;">
+	            
+	            <tr>
+	              <td valign="top" >
+	                  
 
-	<div class="moreInfo span5">
-		<div class="span9">
-<!-- 			<h3><span class="icon-checkmark"></span> ¿Como validar esta giftcard?</h3>
- -->			<p>Solo debes acercarte a la tienda <strong>"{{ product.giftcard.merchant.name }}"</strong> ubicada en <strong>{{ product.giftcard.merchant.address }}</strong> mostrando esta giftcard impresa o digital.</p>
-			<p>Si tienes alguna duda, puedes escribir a <strong>{{ product.giftcard.merchant.contact_email }} </strong>, ademas puedes ver mas información de la empresa haciendo <a href="/partner/{{ product.giftcard.merchant.slug }}">click aquí</a></p>
-		</div>
-	</div>
+	                <!-- start top navigaton -->
+	                <table width="560" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" >
 
-	<div class="moreInfo span4 col">
-		<div class="span9 col fine-print">
-			<h3><span class="icon-menu"></span> Detalles de tu giftcard</h3>
-			<ul>
-				<li>Esta giftcard es válida hasta el <strong>{{ product.expiration_date|date:"d/m/Y" }}</strong></li>
-			</ul>
-			{{ product.giftcard.fine_print|safe}}
-		</div>
-	</div>
-</section>
-<script>
-$(document).ready(function(){
-	$('header').hide();
-});
-</script>
+	                  <!-- start space -->
+	                  <tr>
+	                    <td valign="top" height="20"  >
+	                    </td>
+	                  </tr>
+	                  <!-- end space -->
+
+	                  <tr>
+	                    <td valign="middle">
+	                    
+	                    <!--start content nav -->
+
+	                        </td>
+	                      </tr>
+	                      <!--end call us -->
+
+	                    </table>
+	                    <!--end content nav -->
+
+	                   </td>
+	                 </tr>
+
+	                  <!-- start space -->
+	                  <tr>
+	                    <td valign="top" height="20"  >
+	                    </td>
+	                  </tr>
+	                  <!-- end space -->
+
+	               </table>
+	               <!-- end top navigaton -->
+	              </td>
+	            </tr>
+	          </table>
+	          <!-- end top navigation container -->
+
+	        </td>
+	      </tr>
+	      
+
+	       <!-- END CONTAINER NAVIGATION -->
+	  
+	      </table>
+	    </td>
+	  </tr>
+	   <!--END TOP NAVIGATION ​LAYOUT-->
+
+
+
+	  
+	  <!--START IMAGE HEADER LAYOUT-->
+
+	  <tr>
+	    <td valign="top" class="fix-box">
+	      <table  width="100%"   align="center" border="0" cellspacing="0" cellpadding="0"  class="full-width"   style="background-color:#ececec;">
+
+
+	      <tr>
+	        <td class="full-width" width="100%" align="center" valign="top" >
+	          <!-- start header container -->  
+	          <table width="600"  align="center" border="0" cellspacing="0" cellpadding="0"  class="full-width" style="background-color:#ffffff; ">
+
+	            <tr>
+	              <td valign="top" align="center" >
+
+	                <a href="#">
+	                  <img class="image-100-percent" src="{{ product.design }}" width="600" alt="image_header_600x300"  style="max-width:600px display:block; " border="0" hspace="0" vspace="0"/>  
+	                </a>
+	              </td>
+	            </tr>
+
+	          </table>
+	          <!-- end header container --> 
+	        </td>
+	      </tr>
+	    </table>
+	  </td>
+	</tr>
+	  <!--END IMAGE HEADER LAYOUT-->  
+
+
+
+	  <!-- START SHADOW-->  
+	       <tr>
+	        <td  width="100%" align="center" valign="top" class="fix-box">
+	         
+	          <table width="600" height="11" align="center" border="0" cellspacing="0" cellpadding="0"  class="full-width" style="background-color: #ffffff;"  >
+	           
+	            <tr>
+	              <td valign="top" height="11" align="center">
+
+	                  <img class="image-100-percent" src="http://commondatastorage.googleapis.com/site-images/mailing/new-template/shadow.png" width="596" alt="shadow"  style="max-height:11px; max-width:600px; display:block; "/>  
+	              </td>
+	            </tr>
+	          </table>
+	        </td>
+	      </tr>
+	  <!-- END SHADOW --> 
+
+
+
+
+	 <tr>
+	   <td align="center" valign="top" class="fix-box">
+
+	     <!-- start layout-16 container width 600px --> 
+	     <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container" bgcolor="#ffffff" style="background-color: #ffffff; ">
+	       <tbody><tr>
+	         <td valign="top">
+
+	           <!-- start layout-16 container width 560px --> 
+	           <table width="560" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" bgcolor="#ffffff" style="background-color:#ffffff;">
+
+	             <!--start space height --> 
+	             <tbody><tr>
+	               <td height="20"></td>
+	             </tr>
+	             <!--end space height --> 
+
+
+	           <!-- start heading -->               
+	           <tr>     
+	             <td valign="top">
+	               <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="text-align:center;">
+	                 <tbody><tr>
+	                  
+	                   <td align="center" style=" font-size: 18px; line-height: 22px; font-family: Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:300; text-align:left;">
+	                     <span style="color: #555555; font-weight:300;">
+	                       <a href="#" style="text-decoration: none; color: rgb(85, 85, 85); font-weight: 300;"><span style="color: #9b59b6;">{{ product.giftcard_from.get_full_name }} te ha enviado una giftcard a traves de giviu </span></a>
+	                     </span>
+	                   </td>
+
+	                 </tr>
+
+	          
+	               </tbody></table>
+	             </td>
+	           </tr>
+	           <!-- end heading -->  
+
+	           <!--start space height --> 
+	           <tr>
+	             <td height="15"></td>
+	           </tr>
+	           <!--end space height -->              
+	            
+	            <!-- start text content -->
+	             <tr>
+	               <td valign="top">
+	                 <table border="0" cellspacing="0" cellpadding="0" align="left">
+	                   
+
+	                   <tbody><tr>
+	                     <td style="font-size: 13px; line-height: 22px; font-family:Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:normal; text-align:left; ">
+	                      
+	                         <center>
+	                         {{ product.comment }}
+	                         </center>
+
+	                     </td>
+	                   </tr>
+
+	                  <!--start space height --> 
+	                   <tr>
+	                     <td height="20"></td>
+	                   </tr>
+	                   <!--end space height --> 
+	                 </tbody></table>
+	               </td>
+	               
+	             </tr>
+	             <!-- end text content -->            
+	             <!-- start text content -->
+	             <tr>
+	               <td valign="top">
+	                 <table border="0" cellspacing="0" cellpadding="0" align="left">
+	                   
+
+	                   <tbody>
+	                    <tr>
+	                      <td width="auto" align="center" valign="middle" height="30" style=" background-color:#efefef;  border-radius:5px; background-clip: padding-box;font-size:13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#f05e5e; font-weight: 300; padding-left:18px; padding-right:18px; ">
+	                        <span style="color: #ffffff; font-weight: 300;">
+	                          <a href="#" style="text-decoration: none; font-size:18px; color: #999; font-weight: 300;">
+	                            Tu código de giftcard es: <strong>{{ hash }}</strong>
+	                          </a>
+	                        </span>
+	                      </td>
+	                    </tr>
+
+	                  <!--start space height --> 
+	                   <tr>
+	                     <td height="20"></td>
+	                   </tr>
+	                   <!--end space height --> 
+	                 </tbody></table>
+	               </td>
+	               
+	             </tr>
+	             <!-- end text content -->
+	              
+	           </tbody></table>
+	           <!-- end layout-16 container width 560px --> 
+	         </td>
+	       </tr>
+	     </tbody></table>
+	     <!-- end layout-16 container width 600px --> 
+	   </td>
+	 </tr>
+	<tr>
+
+
+
+	      <tr>
+	        <td width="100%" align="center" valign="top" class="fix-box">
+	         
+	          <table width="600" height="11" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" style="background-color: #ffffff;">
+	           
+	            <tbody><tr>
+	              <td valign="top" height="11" align="center">
+
+	                  <img class="image-100-percent" src="http://commondatastorage.googleapis.com/site-images/mailing/new-template/shadow.png" width="596" alt="shadow" style="max-height:11px; max-width:600px; display:block; ">  
+	              </td>
+	            </tr>
+	          </tbody></table>
+	        </td>
+	      </tr>
+
+
+
+	<tr>
+	   <td align="center" valign="top" class="fix-box">
+
+	     <!-- start layout-6 container width 600px --> 
+	     <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container" bgcolor="#ffffff" style="background-color: #ffffff; ">
+	       <tbody><tr>
+	         <td valign="top">
+
+	           <!-- start layout-6 container width 560px --> 
+	           <table width="560" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" bgcolor="#ffffff" style="background-color:#ffffff;">
+
+
+	             <!--start space height --> 
+	             <tbody><tr>
+	               <td height="20"></td>
+	             </tr>
+	             <!--end space height --> 
+
+	             <!-- start image content --> 
+	             <tr>
+	               <td valign="top" width="100%">
+
+	                                    
+
+	                 <!-- start content left --> 
+	                 <table width="270" border="0" cellspacing="0" cellpadding="0" align="left" class="full-width">
+
+	                  <tbody><tr>
+	                     <td valign="top">
+
+	                       <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+	                         <tbody><tr>
+	                            
+	                          <td valign="top" align="left">
+	                             <a href="#" style="text-decoration: none;">
+	                               <img class="image-100-percent" src="{{ product.giftcard.image }}" width="270" alt="image11_270x146" style="display:block; max-width:270px; " border="0" hspace="0" vspace="0"> 
+	                             </a>
+	                           </td>
+	                        
+	        
+	                         </tr>
+	                       </tbody></table>
+
+	                     </td>
+	                   </tr>
+
+	                   <!--start space height --> 
+	                   <tr>
+	                     <td height="20"></td>
+	                   </tr>
+	                   <!--end space height --> 
+
+
+	                 </tbody></table>
+	                 <!-- end content left --> 
+
+
+	                  <!-- start space width --> 
+	                 <table class="remove" width="1" border="0" cellpadding="0" cellspacing="0" align="left" style="font-size: 0;line-height: 0;border-collapse: collapse;">
+	                   <tbody><tr>
+	                     <td width="0" height="2" style="font-size: 0;line-height: 0;border-collapse: collapse;">
+	                       <p style="padding-left: 20px;">&nbsp;</p>
+	                     </td>
+	                   </tr>
+	                 </tbody></table>
+	                 <!-- end space width --> 
+
+
+
+	                   <!-- start content left --> 
+	                 <table width="270" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width">
+	                   
+
+	                   <!-- start text content -->                       
+	                   <tbody>
+	<tr>
+	                     <td valign="top">
+	                       <table border="0" cellspacing="0" cellpadding="0" align="left">
+	                         <tbody><tr>
+	                           <td style=" font-size: 22px; line-height: 24px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:300; text-align:left;">
+	                             <span style="color: #555555; font-weight: 300;">
+	                               <a href="#" style="text-decoration: none; color: rgb(85, 85, 85); font-weight: 300;">
+	                                {{ product.giftcard.merchant.name }}<br>
+	                                <span style="color:#a3a2a2; font-size:16px; line-height: 20px; font-weight: 300;">{{ product.giftcard }}</span><br/>		
+	                                <span style="color:#a3a2a2; font-size:16px; line-height: 20px; font-weight: 300;">{% if product.giftcard.kind == '1' %}{{ product.price|clp }}{% endif %} </span>	
+
+	                               </a>
+	                             </span>
+	                           </td>
+	                         </tr>
+
+	                         <!--start space height --> 
+	                         <tr>
+	                           <td height="15"></td>
+	                         </tr>
+	                         <!--end space height --> 
+
+	                         <!--start space height --> 
+	                         <tr>
+	                           <td height="20"></td>
+	                         </tr>
+	                         <!--end space height --> 
+
+	                         <tr>
+	                           <td valign="top" width="auto">
+	                            
+	                             <!-- start button --> 
+	                             <table border="0" align="left" cellpadding="0" cellspacing="0" style="border:1px solid #ececed; border-radius:5px;">
+	                               <tbody><tr>
+	                                 <td width="auto" align="center" valign="middle" height="30" style=" background-color:#27ae60;  border-radius:5px; background-clip: padding-box;font-size:13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#f05e5e; font-weight: 300; padding-left:18px; padding-right:18px; ">
+
+	                                   <span style="color: #ffffff; font-weight: 300;">
+	                                     <a href="http://www.giviu.com/giftcard/detail/{{ product.giftcard.slug }}" style="text-decoration: none; color: #ffffff; font-weight: 300;">
+	                                       Ver más detales
+	                                     </a>
+	                                   </span>
+	                                 </td>
+	                               </tr>
+	                             </tbody></table>
+	                             <!-- end button --> 
+
+	                            <!-- start space width -->          
+	                            <table width="10" border="0" cellpadding="0" cellspacing="0" align="left" style=" font-size: 0;line-height: 0;border-collapse: collapse;">
+	                              <tbody><tr>
+	                                <td width="10" height="2" style="font-size: 0;line-height: 0;border-collapse: collapse;">
+	                                  <p style="padding-left: 10px;"></p>
+	                                </td>
+	                              </tr>
+	                            </tbody></table>
+	                            <!-- end space width-->   
+
+	                             </table>
+	                             <!-- end button --> 
+	                           </td>
+
+	                         </tr>
+
+	                       </tbody></table>
+	                     </td>
+	                   </tr>
+	                   <!-- end text content --> 
+	                 </tbody></table>
+	                 <!-- end content left -->   
+
+
+	               </td>
+	             </tr>
+	             <!-- end image content --> 
+	            
+	           </tbody></table>
+	           <!-- end layout-6 container width 560px --> 
+	         </td>
+	       </tr>
+	     </tbody>
+	     </table>
+	     <!-- end layout-6 container width 600px --> 
+	   </td>
+	 </tr>
+
+
+	      <tr>
+	        <td width="100%" align="center" valign="top" class="fix-box">
+	         
+	          <table width="600" height="11" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" style="background-color: #ffffff;">
+	           
+	            <tbody><tr>
+	              <td valign="top" height="11" align="center">
+
+	                  <img class="image-100-percent" src="http://commondatastorage.googleapis.com/site-images/mailing/new-template/shadow.png" width="596" alt="shadow" style="max-height:11px; max-width:600px; display:block; ">  
+	              </td>
+	            </tr>
+	          </tbody></table>
+	        </td>
+	      </tr>
+
+	 <tr>
+	   <td align="center" valign="top" class="fix-box">
+
+	     <!-- start layout-14 container width 600px --> 
+	     <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container" bgcolor="#ffffff" style="background-color: #ffffff;">
+	       <tbody><tr>
+	         <td valign="top">
+
+	           <!-- start layout-14 container width 560px --> 
+	           <table width="560" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" bgcolor="#ffffff" style="background-color:#ffffff;">
+
+	             <!--start space height --> 
+	             <tbody><tr>
+	               <td height="20"></td>
+	             </tr>
+	             <!--end space height --> 
+
+
+	              <!-- start text content --> 
+	                   <tr>
+	                     <td valign="top">
+	                       <table border="0" cellspacing="0" cellpadding="0" align="left">
+	                         <tbody><tr>
+	                           <td style=" font-size: 18px; line-height: 22px; font-family: Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:normal; text-align:left;">
+	                             <span style="color: #555555; font-weight: normal;">
+	                               <a href="#" style="text-decoration: none; color: rgb(85, 85, 85); font-weight: 300;">
+	                                 <singleline>Como validar esta giftcard</singleline>
+	                               </a>
+	                             </span>
+	                           </td>
+	                         </tr>
+
+	                        <!--start space height --> 
+	                         <tr>
+	                           <td height="15"></td>
+	                         </tr>
+	                         <!--end space height -->
+
+	                         <tr>
+	                           <td style="font-size: 13px; line-height: 22px; font-family:Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:normal; text-align:left; ">
+
+	                             <multiline>
+	                               {{ product.giftcard.validation_info }}
+	                             </multiline>
+
+	                           </td>
+	                         </tr>
+
+	                        <!--start space height --> 
+	                         <tr>
+	                           <td height="20"></td>
+	                         </tr>
+	                         <!--end space height --> 
+
+	                         <tr>
+	                           <td valign="top" width="auto">
+	                             <!-- start button -->                         
+	                             <table border="0" align="left" cellpadding="0" cellspacing="0">
+	                               <tbody><tr>
+	                                 <td width="auto" align="center" valign="middle" height="32" style="background-color: #27ae60; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-clip: padding-box; font-size: 13px; font-family: Arial, Tahoma, Helvetica, sans-serif; text-align: center; color: rgb(255, 255, 255); font-weight: normal; padding-left: 18px; padding-right: 18px;">
+
+	                                   <span style="color: #ffffff; font-weight: normal;">
+	                                     <a href="http://www.giviu.com/giftcard/detail/{{ product.giftcard.slug }}" style="text-decoration: none; color: rgb(255, 255, 255); font-weight: normal;">
+	                                       <singleline>Ver más detalles</singleline>
+	                                     </a>
+	                                   </span>
+	                                 </td>
+	                               </tr>
+	                             </tbody></table>
+	                             <!-- end button -->
+
+	                            <!-- start space width -->          
+	                            <table width="10" border="0" cellpadding="0" cellspacing="0" align="left" style=" font-size: 0;line-height: 0;border-collapse: collapse;">
+	                              <tbody><tr>
+	                                <td width="10" height="2" style="font-size: 0;line-height: 0;border-collapse: collapse;">
+	                                  <p style="padding-left: 10px;"></p>
+	                                </td>
+	                              </tr>
+	                            </tbody></table>
+	                            <!-- end space width-->   
+
+	                            </td>
+
+	                         </tr>
+
+	                       </tbody></table>
+	                     </td>
+	                   </tr>
+	                   <!-- end text content --> 
+
+	             <!--start space height --> 
+	             <tr>
+	               <td height="20"></td>
+	             </tr>
+	             <!--end space height --> 
+	           </tbody></table>
+	           <!-- end layout-14 container width 560px --> 
+	         </td>
+	       </tr>
+	 
+
+	     </tbody></table>
+	     <!-- end layout-14 container width 600px --> 
+	   </td>
+	 </tr>
+
+	 <!-- START SHADOW-->  
+	       <tr>
+	        <td  width="100%" align="center" valign="top" class="fix-box">
+	         
+	          <table width="600" height="11" align="center" border="0" cellspacing="0" cellpadding="0"  class="full-width" style="background-color: #ececec;"  >
+	           
+	            <tr>
+	              <td valign="top" height="11" align="center">
+
+	                  <img class="image-100-percent" src="http://commondatastorage.googleapis.com/site-images/mailing/new-template/shadow.png" width="596" alt="shadow"  style="max-height:11px; max-width:600px; display:block; "/>  
+	              </td>
+	            </tr>
+	          </table>
+	        </td>
+	      </tr>
+	  <!-- END SHADOW --> 
+
+	  <!-- START HEIGHT SPACE 20PX-->
+	 <tr>
+	   <td valign="top" align="center" >
+	     <table width="100%" height="20"  border="0" cellspacing="0" cellpadding="0" >
+	       <tr>
+	         <td valign="top" height="20">
+	          <img  src="http://commondatastorage.googleapis.com/site-images/mailing/new-template/space.png" width="20" alt="space" style="display:block; max-height:20px; max-width:20px;"> </td>
+	       </tr>
+	     </table>
+	   </td>
+	 </tr>
+	 <!-- END HEIGHT SPACE 20PX-->
+	</table>
+	<!-- end 100% wrapper (white background) -->
+</div>
+
 {% endblock %}
