@@ -7,12 +7,12 @@
 </section> -->
 
 <section class="container">
-  <div class="span2">
+<!--     <div class="span2">
     <aside class="span9">
-<!--       <form class="span9 search" action="/giftcard/search" method="get">
+    <form class="span9 search" action="/giftcard/search" method="get">
         <input type="text" class="span6" name="s" placeholder="¿Que estas buscando?"/>
         <input type="submit" class="span3 col btn inside" value="Buscar"/>
-      </form> -->
+      </form>
       <h3>Categorías</h3>
       <ul class="span9">
         {% for campaign in campaigns %}
@@ -28,7 +28,6 @@
       </ul>
     </aside>
 
-  <!--
     <aside class="span9 promo">
       <figure>
         <a href="#">
@@ -36,16 +35,14 @@
         </a>
       </figure>
     </aside>
-    -->
   </div>
 
-  <!--
   <section class="special span7" id="lucas">
     <span class="icon-close close"></span>
   </section>
   -->
 
-  <section class="span7" id="giftCardList" data-columns>
+  <section class="span9" id="giftCardList" data-columns>
     {% for product in products %}
     <article class="giftCardModule" data-source-id="{{ product.id }}">
       <figure>
@@ -93,5 +90,5 @@
 
   </section>
 </section>
-<a data-lightbox="campaign" href="/static/img/campaigns/modal_3_lucas.png"></a>
+<a data-lightbox="campaign" href="http://commondatastorage.googleapis.com/site-images%2Fcampaigns%2Fparapente.png"></a>
 {% endblock %}

@@ -38,7 +38,7 @@
     <style>
 
       #giftCardList[data-columns]::before {
-      content: '3 .column.size-1of3';
+      content: '4 .column.size-1of4';
       }
 
       #calendar[data-columns]::before {
@@ -69,19 +69,28 @@
         <div class="span2">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
         </div>
-        <nav class="span7 col showyourlove">
+        <div class="span3 tagline col">
+          {% for category in categories %}
+          {% if category.count > 0 %}
+            <a href="/giftcard/category/{{ category.slug }}" class="span3 {% if this_category.name == category.name %}selected{% endif %}">
+            {{ category.name }}
+            </a>     
+          {% endif %}
+          {% endfor %}
+        </div>
+        <nav class="span4 col showyourlove">
           <ul>
             {% if user.is_authenticated %}
             <li><a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a></li>
             <li id="userInfo">
               <a href="/user">
                 <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
-                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong></span>
+                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong> | creditos: $2.500</span>
               </a>
             </li>
             {% else %}
             <li><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
-            <li><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+            <li><a href="/page/como-funciona" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
             {% endif %}
           </ul>
         </nav>

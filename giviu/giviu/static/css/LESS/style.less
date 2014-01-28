@@ -5,6 +5,7 @@
 @import "base"; 
 @import "font.css"; 
 @import "lightbox.css";
+@import url(http://fonts.googleapis.com/css?family=Coustard);
 // Set all variables
 
 @totalColumns: 9;
@@ -220,6 +221,31 @@ header{
   background: #fff;
   height:100px;
   border-bottom:1px solid @greyBorder;
+  .tagline{
+    font-family:'Coustard', helvetica;
+    margin-top:17px;
+    a{ 
+      text-align:center;
+      padding: 38px 14px;
+      margin-top:-37px;
+      &.selected{
+        background-color:@insideAction;
+        position:relative;
+        color:#fff;
+        &:after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -8px;
+          width: 0; height: 0;
+          border-top: 8px solid @insideAction;
+          border-right: 8px solid transparent;
+          border-left: 8px solid transparent;
+        }
+      }
+    }
+  }
   .title{
     color:#fff;
     float: left;
@@ -1108,6 +1134,16 @@ nav{
       font-size:1.5em;
       color:@principalActions;
       margin-top:5px;
+      &.no-price{
+        text-decoration:line-through;
+        color:#ccc;
+        font-weight:lighter;
+        font-size:1.1em;
+      }
+      &.new-price{
+        line-height:inline-block;
+        font-sizr:1.8em;
+      }
     }
   }
   img{
