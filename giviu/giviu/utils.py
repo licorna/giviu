@@ -38,7 +38,7 @@ def get_data_for_header(request):
     from models import GiftcardCategory
     categories = GiftcardCategory.get_categories()
     if request.user.is_authenticated():
-        credits = user_credits(request.user.fbid)
+        credits = user_credits(request.user.fbid)['amount']
     else:
         credits = None
 

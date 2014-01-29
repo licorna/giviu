@@ -1,10 +1,11 @@
 {% load staticfiles %}
+{% load locale_price %}
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
   <head>
     <meta name="google-site-verification" content="xRtB_K0Azs8vEsau5QyO4uzCu28wEt9RCoLU378CV28" />
     <meta charset="utf-8">
-    <meta name="viewport" content="width-device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />    
+    <meta name="viewport" content="width-device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
     <meta http-equiv="Pragma" content="no-cache">
     <title>{% block title %}{% endblock %}Giviu - Buscar y Enviar Regalos Originales Personalizados</title>
     <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
@@ -48,7 +49,7 @@
 
       #giftCardSearch[data-columns]::before {
       content: '4 .column.size-1of4';
-      }      
+      }
 
       /* These are the classes that are going to be applied: */
       .column { float: left; margin:0px;}
@@ -75,7 +76,7 @@
           {% if category.count > 0 %}
             <a href="/giftcard/category/{{ category.slug }}" class="span3 {% if this_category.name == category.name %}selected{% endif %}">
             {{ category.name }}
-            </a>     
+            </a>
           {% endif %}
           {% endfor %}
         </div>
@@ -86,7 +87,7 @@
             <li id="userInfo">
               <a href="/user">
                 <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
-                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong> | creditos: $2.500</span>
+                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong>{% if credits %} | creditos: {{ credits|clp }} {% endif %}</span>
               </a>
             </li>
             {% else %}
