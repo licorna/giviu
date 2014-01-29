@@ -90,12 +90,17 @@ class GiftcardCategory(models.Model):
     status = models.CharField(max_length=255)
     parent_id = models.IntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    priority = models.IntegerField(blank=True)
 
     def count(self):
         return Giftcard.objects.filter(category__exact=self, status=1).count()
 
     def get_absolute_url(self):
         return '/giftcard/category/' + self.slug
+
+    @staticmethod
+    def get_categories():
+        return GiftcardCategory.objects.filter(status=1).order_by('priority')
 
     class Meta:
         db_table = 'giftcard_category'

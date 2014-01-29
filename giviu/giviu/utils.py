@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.contrib import sitemaps
 from django.conf import settings
+from credits import user_credits
 
 
 class GiftcardsSitemap(sitemaps.Sitemap):
@@ -31,6 +32,17 @@ class PartnersSitemap(sitemaps.Sitemap):
     def items(self):
         from merchant.models import Merchants
         return Merchants.objects.all()
+
+
+def get_data_for_header(request):
+    from models import GiftcardCategory
+    categories = GiftcardCategory.get_categories()
+    if request.user.is_authenticated():
+        credits = user_credits(request.user.fbid)
+    else:
+        credits = None
+
+    return {'categories': categories, 'credits': credits}
 
 
 MYSQL_DATE_FORMAT = '%Y-%m-%d'
