@@ -14,7 +14,11 @@ class Likes():
 
     @staticmethod
     def get_social_client():
-        mongo = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+        try:
+            mongo = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+        except pymongo.errors.ConnectionFailure:
+            logger.critical('Could not connect to Mongo server.')
+            return None
         return mongo.eve
 
     @staticmethod
@@ -32,11 +36,10 @@ class Likes():
             'Content-Type': 'application/json'
         }
         try:
-            response = requests.post(url, data=json.dumps(data), headers=headers)
-        except requests.exceptions.RequestException, e:
-            print e
-            # TODO: IMPORTANTE:
-            # ESTO SE DEBE LOGUEAR Y ALERTAR!!
+            response = requests.post(url, data=json.dumps(data),
+                                     headers=headers)
+        except requests.exceptions.RequestException:
+            logger.critical('Unable to connect to Social API.')
             return False
 
         return response.status_code < 300
@@ -57,6 +60,8 @@ class Likes():
             data.append(str_user % ddict)
 
         client = Likes.get_social_client()
+        if not client:
+            return False
         for friend in friend_ids:
             Likes.add_facebook_friend(fbid, friend, client)
 
@@ -97,6 +102,8 @@ class Likes():
     def add_facebook_friend(fbid, friend, client=None):
         if not client:
             client = Likes.get_social_client()
+            if not client:
+                return False
 
         result = client.friend.update({"fbid": fbid},
                                       {"$addToSet": {"friend_of": friend}})
@@ -117,7 +124,11 @@ class Likes():
         try:
             response = requests.get(url, data={}, headers=headers,
                                     timeout=Likes.TIMEOUT)
+        except requests.exceptions.Timeout:
+            logger.critical('Timeout when connecting to Social API')
+            return 0 if just_count else None
         except requests.exceptions.RequestException:
+            logger.critical('Error when connecting to Social API')
             return 0 if just_count else None
 
         if response.status_code == 200:
@@ -129,9 +140,7 @@ class Likes():
                     return 0
             return jres['_items']
 
-        if just_count:
-            return 0
-        return None
+        return 0 if just_count else None
 
     @staticmethod
     def does_user_likes(user, giftcard):
@@ -225,6 +234,8 @@ class Likes():
         '''Returns a list of facebook ids of friends that liked
         the given giftcard.'''
         client = Likes.get_social_client()
+        if not client:
+            return []
         result = client.friend.aggregate([
             {"$match": {"friend_of": fbid, "giftcard_likes": giftcard}},
             {"$group": {"_id": "$fbid"}}
@@ -248,6 +259,8 @@ class Likes():
     @staticmethod
     def get_facebook_friends_birthdays(fbid):
         client = Likes.get_social_client()
+        if not client:
+            return []
         result = client.friend.find(
             {"friend_of": fbid})
         result = filter(lambda x: len(x['birthday']) > 0, result)
@@ -258,6 +271,8 @@ class Likes():
     @staticmethod
     def add_close_facebook_friend(fbid, friend):
         client = Likes.get_social_client()
+        if not client:
+            return False
         result = client.friend.update({"fbid": fbid},
                                       {"$addToSet": {"close_friend": friend}})
         return result['updatedExisting'] and not result['err']
@@ -265,6 +280,8 @@ class Likes():
     @staticmethod
     def get_close_facebook_friends(fbid, month=None):
         client = Likes.get_social_client()
+        if not client:
+            return []
         result = client.friend.find({"fbid":fbid})
         try:
             close_friends = result[0]['close_friend']
