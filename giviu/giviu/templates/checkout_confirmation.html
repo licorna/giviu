@@ -19,8 +19,12 @@
     </div>
     <div class="span6 col">
       <h3>{{ giftcard.merchant.name }}</h3>
-
+      {% if credits %}
+      <strong class="price no-price">{{ price|clp }}</strong>
+      <strong class="price new-price">{{ credits|clp }}</strong>
+      {% else %}
       <strong class="price">{{ price|clp }}</strong>
+      {% endif %}
 
       <ul>
         <li><strong>Se le enviara a: </strong> {{ name_to }}</li>
