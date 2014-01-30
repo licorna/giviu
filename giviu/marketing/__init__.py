@@ -71,7 +71,7 @@ def simple_giftcard_send_notification(product):
 
     args2 = {
         'product_code': product.uuid,
-        #'name_to': product.giftcard_to.get_full_name(),
+        'name_to': product.giftcard_to.get_full_name(),
         'name_from': product.giftcard_from.get_full_name(),
         'description': product.comment,
         'giftcard_design': product.design.image,
