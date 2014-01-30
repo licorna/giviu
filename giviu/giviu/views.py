@@ -249,6 +249,7 @@ def giftcard_confirmation(request):
 
     credits = {'uuid': 'none'}
     credits_used = 0
+    original_price = price
     if trx_credit['amount'] > 0:
         if trx_credit['amount'] >= price:
             credits_used = price
@@ -301,6 +302,7 @@ def giftcard_confirmation(request):
         'send_date': date,
         'comment': comment,
         'price': price,
+        'original_price': original_price,
         'giftcard_design': request.POST['giftcard-design'],
         'giftcard': giftcard,
         'product_id': product_id,
