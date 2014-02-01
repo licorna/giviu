@@ -19,6 +19,7 @@ from utils import get_data_for_header
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
+from django.conf import settings
 
 import logging
 logger = logging.getLogger(__name__)
@@ -132,7 +133,7 @@ def home(request, slug=None, division=None):
         }
 
     all_product_len = Giftcard.objects.filter(status=1).count()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and settings.SOCIAL['FETCH_FRIEND_LIKES']:
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
@@ -337,7 +338,7 @@ def partner_info(request, merchant_slug):
     merchant = get_object_or_404(Merchants, slug=merchant_slug)
     tabs = MerchantTabs.objects.filter(parent_id=merchant.id)
     products = Giftcard.objects.filter(merchant=merchant.id, status=1)
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and settings.SOCIAL['FETCH_FRIEND_LIKES']:
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
                                                                     product.id)
