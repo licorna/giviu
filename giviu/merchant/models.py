@@ -1,5 +1,6 @@
 from django.db import models
 from api.models import ApiClientId
+from datetime import datetime
 
 
 class MerchantTabs(models.Model):
@@ -15,7 +16,7 @@ class MerchantTabs(models.Model):
 
 class Merchants(models.Model):
     id = models.AutoField(primary_key=True)
-    created = models.DateTimeField()
+    created = models.DateTimeField(null=False, default=datetime.now())
     name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
