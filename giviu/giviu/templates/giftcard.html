@@ -5,13 +5,15 @@
 <!-- <section class="container options">
   ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
 </section> -->
-<div style="width:100%; overflow:hidden; text-align:center; background-image:url('http://commondatastorage.googleapis.com/site-images%2Fcampaigns%2Flove2_back.png'); background-repeat:repeat-x;">
+{% if not this_campaign %}
+<div style="width:100%; overflow:hidden; text-align:center; background-image:url('https://commondatastorage.googleapis.com/site-images%2Fcampaigns%2Flove2_back.png'); background-repeat:repeat-x;">
   <center>
     <a href="/campaign/14-de-febrero">
       <img src="https://commondatastorage.googleapis.com/site-images%2Fcampaigns%2Flove2.png" style="margin:46px 0px"/>
     </a>
   </center>
 </div>
+{% endif %}
 <section class="container">
 <!--     <div class="span2">
     <aside class="span9">
