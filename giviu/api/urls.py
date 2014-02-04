@@ -46,4 +46,7 @@ urlpatterns = patterns('',
 
                        url(r'^internal/send-welcome-to-beta-users/$',
                            'api.internal.send_welcome_to_beta_users'),
+
+                       url(r'^internal/monthly-birthday-nl/$',
+                           'api.internal.send_marketing_monthly_birthday_nl'),
 )

@@ -246,10 +246,14 @@ class Likes():
         return data
 
     @staticmethod
-    def get_facebook_friends_birthdays(fbid):
+    def get_facebook_friends_birthdays(fbid, month=None):
         client = Likes.get_social_client()
-        result = client.friend.find(
-            {"friend_of": fbid})
+        find_dict = {"friend_of": fbid}
+        if month:
+            month = str(month).zfill(2)
+            find_dict['birthday'] = re.compile('^' + month)
+        result = client.friend.find(find_dict)
+
         result = filter(lambda x: len(x['birthday']) > 0, result)
         result = map(Likes.delete_metadata, result)
 

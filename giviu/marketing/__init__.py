@@ -135,3 +135,22 @@ def event_beta_registered_send_welcome(email):
                                  [email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+
+def marketing_send_marketing_monthly_birthday_nl(user, friends):
+    c = Context({
+        'user': user,
+        'friends': friends,
+    })
+    html_content = get_template('marketing_monthly_birthday_nl.html').render(c)
+    text_content = html_content
+    if settings.DEBUG:
+        email = DEBUG_EMAIL_RECEIVER
+    else:
+        email = user.email
+    msg = EmailMultiAlternatives(user.first_name + ' te ayudamos con los regalos de este mes.',
+                                 text_content,
+                                 settings.EMAIL_DEFAULT_FROM,
+                                 [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
