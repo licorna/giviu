@@ -145,7 +145,7 @@ def send_marketing_monthly_birthday_nl(request):
                            'friends': recommendations})
 
         if not just_check:
-            marketing_send_marketing_monthly_birthday_nl(user.email, friends)
+            marketing_send_marketing_monthly_birthday_nl(user, friends)
             #print 'just_check malo'
 
     data = {

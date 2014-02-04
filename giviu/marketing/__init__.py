@@ -6,7 +6,7 @@ from django.template.loader import get_template
 from django.conf import settings
 
 
-DEBUG_EMAIL_RECEIVER = 'sebastian@giviu.com'
+DEBUG_EMAIL_RECEIVER = 'licorna@gmail.com'
 
 
 def event_user_registered(email, name):
@@ -142,13 +142,13 @@ def marketing_send_marketing_monthly_birthday_nl(user, friends):
         'user': user,
         'friends': friends,
     })
-    html_content = get_template('marketing_monthly_birthday_nl.html').render(c)
+    html_content = get_template('marketing_birthday.html').render(c)
     text_content = html_content
     if settings.DEBUG:
         email = DEBUG_EMAIL_RECEIVER
     else:
         email = user.email
-    msg = EmailMultiAlternatives(user.first_name + ' te ayudamos con los regalos de este mes.',
+    msg = EmailMultiAlternatives(user.first_name + ', te ayudamos con los regalos de este mes.',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])
