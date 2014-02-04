@@ -20,7 +20,7 @@ urlpatterns = patterns('',
                        url(r'^giftcard/category/(?P<slug>[a-z-]+)$',
                            'giviu.views.home', {'division': 'category'}, name='giftcard_category'),
 
-                       url(r'^campaign/(?P<slug>[a-z-]+)$',
+                       url(r'^campaign/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.home', {'division': 'campaign'}, name='giftcard_campaign'),
 
                        url(r'^giftcard/detail/(?P<slug>[0-9a-z-]+)$',
