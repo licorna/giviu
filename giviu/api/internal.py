@@ -99,7 +99,10 @@ def send_welcome_to_beta_users(request):
 @require_GET
 def send_marketing_monthly_birthday_nl(request):
     d = Detector()
-    locale.setlocale(locale.LC_TIME, 'es_ES')
+    try:
+        locale.setlocale(locale.LC_TIME, 'es_ES.utf-8')
+    except:
+        logger.error('Unable to set es_ES.utf-8 locale')
 
     def is_male(full_name):
         return d.getGender(full_name.split()[0]) == MALE
