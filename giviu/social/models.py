@@ -5,7 +5,7 @@ from collections import defaultdict
 import re
 import pymongo
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('giviu')
 
 
 class Likes():
@@ -14,7 +14,12 @@ class Likes():
 
     @staticmethod
     def get_social_client():
-        mongo = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+        try:
+            mongo = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+        except pymongo.errors.ConnectionFailure:
+            logger.critical('Unable to connect to social mongo on ' +
+                            settings.SOCIAL['MONGO_HOST'])
+            return None
         return mongo.eve
 
     @staticmethod
