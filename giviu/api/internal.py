@@ -97,6 +97,11 @@ def send_welcome_to_beta_users(request):
 
 @require_GET
 def send_marketing_monthly_birthday_nl(request):
+    d = Detector()
+
+    def is_male(full_name):
+        return d.getGender(full_name.split()[0]) == MALE
+
     if 'client_id' not in request.GET:
         return HttpResponseBadRequest()
 
@@ -119,8 +124,9 @@ def send_marketing_monthly_birthday_nl(request):
                                              status=1).order_by('-priority')[:10]
     female_giftcards = Giftcard.objects.filter(gender='female',
                                                status=1).order_by('-priority')[:10]
+    uni_giftcards = Giftcard.objects.filter(gender='both',
+                                            status=1).order_by('-priority')[:10]
 
-    d = Detector()
     if settings.DEBUG:
         users = users[:1]
     month = datetime.now().month
@@ -132,10 +138,13 @@ def send_marketing_monthly_birthday_nl(request):
 
         recommendations = []
         for friend in friends:
+            recomendation_unisex = random.sample(uni_giftcards, 1)[0]
             if d.getGender(friend['first_name'].split()[0]) == MALE:
-                friend['recommended'] = random.sample(male_giftcards, 1)[0]
+                recomendation_sex = random.sample(male_giftcards, 1)[0]
             else:
-                friend['recommended'] = random.sample(female_giftcards, 1)[0]
+                recomendation_sex = random.sample(female_giftcards, 1)[0]
+            friend['recommended'] = random.sample([recomendation_sex,
+                                                   recomendation_unisex], 1)[0]
             recommendations.append({'name': friend['first_name'],
                                     'recommended': friend['recommended'].title,
                                     'birthday': friend['birthday'],
