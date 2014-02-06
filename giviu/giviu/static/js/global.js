@@ -25,7 +25,9 @@ $(document).ready(function(e){
 
     $('.mobileActions').on('click',menuDisplay);
 
-	 $('.giftcardsDesign').carouFredSel({
+	$('#principalSlide').carouFredSel();
+
+    $('.giftcardsDesign').carouFredSel({
         auto: false,
         circular: true,
         infinite: false,
