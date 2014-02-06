@@ -11,6 +11,7 @@ from marketing import (simple_giftcard_send_notification,
                        marketing_send_marketing_monthly_birthday_nl)
 
 from genderator.detector import Detector, MALE
+import locale
 
 from datetime import date, datetime
 import random
@@ -97,6 +98,15 @@ def send_welcome_to_beta_users(request):
 
 @require_GET
 def send_marketing_monthly_birthday_nl(request):
+    d = Detector()
+    try:
+        locale.setlocale(locale.LC_TIME, 'es_ES.utf-8')
+    except:
+        logger.error('Unable to set es_ES.utf-8 locale')
+
+    def is_male(full_name):
+        return d.getGender(full_name.split()[0]) == MALE
+
     if 'client_id' not in request.GET:
         return HttpResponseBadRequest()
 
@@ -119,27 +129,37 @@ def send_marketing_monthly_birthday_nl(request):
                                              status=1).order_by('-priority')[:10]
     female_giftcards = Giftcard.objects.filter(gender='female',
                                                status=1).order_by('-priority')[:10]
+    uni_giftcards = Giftcard.objects.filter(gender='both',
+                                            status=1).order_by('-priority')[:10]
 
-    d = Detector()
     if settings.DEBUG:
         users = users[:1]
-    month = datetime.now().month
+
+    now = datetime.now()
+    month_name = datetime.strftime(now, '%B')
     email_list = []
     for user in users:
-        friends = Likes.get_facebook_friends_birthdays(user.fbid, month)[:10]
+        friends = Likes.get_facebook_friends_birthdays(user.fbid, now.month)[:10]
         if len(friends) == 0:
             continue
 
         recommendations = []
         for friend in friends:
+            recomendation_unisex = random.sample(uni_giftcards, 1)[0]
             if d.getGender(friend['first_name'].split()[0]) == MALE:
-                friend['recommended'] = random.sample(male_giftcards, 1)[0]
+                recomendation_sex = random.sample(male_giftcards, 1)[0]
             else:
-                friend['recommended'] = random.sample(female_giftcards, 1)[0]
+                recomendation_sex = random.sample(female_giftcards, 1)[0]
+            friend['recommended'] = random.sample([recomendation_sex,
+                                                   recomendation_unisex], 1)[0]
             recommendations.append({'name': friend['first_name'],
                                     'recommended': friend['recommended'].title,
-                                    'birthday': friend['birthday'],
+                                    'birthday': friend['birthday'][3:5] +
+                                    ' de ' +
+                                    month_name,
                                     'fbid': friend['fbid']})
+
+            friend['birthday'] = friend['birthday'][3:5] + ' de ' + month_name
 
         email_list.append({'email': user.email,
                            'friends': recommendations})
