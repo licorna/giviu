@@ -37,27 +37,28 @@ def first_stage(request):
         return HttpResponseBadRequest()
 
     try:
+        payment = PaymentTransaction.objects.get(transaction_uuid=trx_id)
+        if payment.state == 'USING_CREDITS':
+            payment.set_state('USING_CREDITS_SUCCESS')
+            return redirect('/psp/success/' + payment.psp_token)
+        else:
+            payment.set_state('CLIENT_BEING_SENT_TO_PP')
+    except PaymentTransaction.MultipleObjectsReturned:
+        print 'multipleobjectreturned'
+        #TODO: Error grave
+        pass
+
+    token = request.POST['token']
+    # trx_id = request.POST['trx_id']
+    redirect_to = PUNTO_PAGOS_PHASE3_URL + '/' + token
+    redirect_head = '<meta http-equiv="refresh" content="4; %s" />'
+
+    try:
         product = Product.objects.get(uuid=request.POST['product_id'])
     except Product.DoesNotExist:
         return HttpResponseBadRequest()
 
     product.set_state('WAITING_CONFIRMATION_FROM_PP')
-
-    token = request.POST['token']
-    trx_id = request.POST['trx_id']
-    redirect_to = PUNTO_PAGOS_PHASE3_URL + '/' + token
-    redirect_head = '<meta http-equiv="refresh" content="4; %s" />'
-
-    try:
-        # TODO: Log
-        payment = PaymentTransaction.objects.get(transaction_uuid=trx_id)
-        last_state = payment.set_state('CLIENT_BEING_SENT_TO_PP')
-
-    except MultipleObjectsReturned:
-        print 'multipleobjectreturned'
-        #TODO: Error grave
-        pass
-
     data = {
         'additional_head': redirect_head % (redirect_to, ),
     }
@@ -68,7 +69,7 @@ def first_stage(request):
 def pp_response(request, token, **kwargs):
     status = kwargs.get('status', 'error') == 'success'
     try:
-        transaction = PaymentTransaction.objects.get(psp_token__exact=token)
+        transaction = PaymentTransaction.objects.get(psp_token=token)
         if transaction.is_closed():
             #TODO: La transaccion ya fue procesada, debe ser dirigido a
             #la pagina de checkout o la pagina de giftcards de usuarios.
@@ -87,16 +88,20 @@ def pp_response(request, token, **kwargs):
 
     try:
         product = Product.objects.get(transaction=transaction)
-    except DoesNotExist:
+    except Product.DoesNotExist:
         #TODO: Esto no puede ocurrir, porque violaria una restriccion de MySQL
         return HttpResponseBadRequest()
-    except MultipleObjectsReturned:
+    except Product.MultipleObjectsReturned:
         return HttpResponseBadRequest()
         #TODO: Error grave
 
     if status is True:
-        product.set_state('RESPONSE_FROM_PP_SUCCESS')
-        transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
+        if product.state == 'USING_CREDITS_SUCCESS':
+            product.set_state('USING_CREDITS_SUCCESS')
+            transaction.set_state('USING_CREDITS_SUCCESS')
+        else:
+            product.set_state('RESPONSE_FROM_PP_SUCCESS')
+            transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
 
         if transaction.use_credits is not None:
             finalize_use_user_credits(transaction.use_credits)

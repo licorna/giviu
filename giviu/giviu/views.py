@@ -22,7 +22,8 @@ from django.views.decorators.http import require_POST
 from django.conf import settings
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('giviu')
+activity = logging.getLogger('client_activity')
 
 
 def user_is_normal_user(user):
@@ -84,6 +85,7 @@ def do_register(request):
             # Send email to registered user.!
             event_user_registered(user.email, user.get_full_name())
             add_user_credits(facebook_id, 2000, 'Giviu Registration Credits')
+            activity.info('User registered: ' + facebook_id)
         else:
             if 'facebookId' in request.POST:
                 facebook_id = request.POST['facebookId']
@@ -227,6 +229,7 @@ def calendar(request):
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_confirmation(request):
     from puntopagos import transaction_create
+    from credits import transaction_create_no_psp
 
     for datum in ['giftcard-id', 'product-merchant-id', 'email-to']:
         if datum not in request.POST:
@@ -267,12 +270,15 @@ def giftcard_confirmation(request):
 
     design = GiftcardDesign.objects.get(pk=int(design))
 
-    #TODO: Comprobar que la transaccion fue creada exitosamente
-    response, transaction = transaction_create(str(price))
-    try:
-        trx_id = response['trx_id']
-    except KeyError:
-        logger.critical('Transaction was not created')
+    if price > 0:
+        #TODO: Comprobar que la transaccion fue creada exitosamente
+        response, transaction = transaction_create(str(price))
+        try:
+            trx_id = response['trx_id']
+        except KeyError:
+            logger.critical('Transaction was not created')
+    else:
+        response, transaction = transaction_create_no_psp(str(price))
 
     if credits['uuid'] is not 'none':
         transaction.use_credits = credits['uuid']

@@ -1,9 +1,37 @@
 import pymongo
 from django.conf import settings
 from datetime import datetime, timedelta
+import random
 from uuid import uuid4
+from string import digits
+from puntopagos import get_normalized_amount, now_rfc1123
+from giviu.models import PaymentTransaction
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('giviu')
+
+CREDITS_AUTH_HEADER = 'CREDITS-'
+
+
+def transaction_create_no_psp(amount):
+    amount = get_normalized_amount(amount)
+    trx_id = ''.join(random.sample(digits, 10))
+    current_datetime = now_rfc1123()
+    payment_method = 'credits'
+    token = str(uuid4())
+
+    payment = PaymentTransaction(
+        transaction_uuid=trx_id,
+        origin_timestamp=current_datetime,
+        auth_header=CREDITS_AUTH_HEADER + token,
+        payment_method=payment_method,
+        amount=amount,
+        state='USING_CREDITS',
+        psp_token=token,
+    )
+    payment.save()
+    response = {'trx_id': trx_id,
+                'token': token}
+    return response, payment
 
 
 def get_credits_db():

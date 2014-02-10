@@ -18,6 +18,7 @@ from utils import get_now, get_three_month
 from merchant.models import Merchants
 from hashlib import sha224
 from social.models import Likes
+from datetime import datetime
 
 
 class Calendar(models.Model):
@@ -201,7 +202,10 @@ class Product(models.Model):
     ALLOWED_STATES = ['PREPARING',
                       'WAITING_CONFIRMATION_FROM_PP',
                       'RESPONSE_FROM_PP_SUCCESS',
-                      'RESPONSE_FROM_PP_ERROR']
+                      'RESPONSE_FROM_PP_ERROR',
+                      'USING_CREDITS',
+                      'USING_CREDITS_SUCCESS',
+                      'USING_CREDITS_ERROR']
 
     id = models.IntegerField(primary_key=True)
     hash = models.CharField(max_length=255)
@@ -339,7 +343,7 @@ class Users(AbstractBaseUser):
     provincia = models.CharField(max_length=255, blank=True)
     comuna = models.CharField(max_length=255, blank=True)
     friends = models.TextField(blank=True)
-    created = models.DateField(blank=True, null=True)
+    created = models.DateField(blank=True, null=True, default=datetime.now())
     avatar = models.CharField(max_length=255, blank=True)
     last_purchase = models.DateField(blank=True, null=True)
     hash = models.CharField(max_length=255, blank=True)
@@ -432,7 +436,10 @@ class PaymentTransaction(models.Model):
                       'NOTIFIED_BY_PP',
                       'INFO_REQUESTED_TO_PP',
                       'RESPONSE_FROM_PP_SUCCESS',
-                      'RESPONSE_FROM_PP_ERROR']
+                      'RESPONSE_FROM_PP_ERROR',
+                      'USING_CREDITS',
+                      'USING_CREDITS_SUCCESS',
+                      'USING_CREDITS_ERROR']
 
     id = models.AutoField(primary_key=True)
     transaction_uuid = models.CharField(max_length=40)
