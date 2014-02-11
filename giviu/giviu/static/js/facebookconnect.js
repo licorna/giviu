@@ -71,7 +71,7 @@
               birthday = response.birthday;
             }
             if(response.email==undefined){
-              email = '<input type="text" name="email" placeholder="ingresa tu correo electronico" class="span9 required email">';
+              email = '';//fix rapido
             }else{
               email = response.email;
             }
@@ -79,7 +79,8 @@
             var data = {
               name: first_name + ' ' + last_name,
               birthday: birthday,
-              email: email
+              email: email,
+              gender: gender
             };
             console.log(JSON.stringify(data));
             $.ajax({
