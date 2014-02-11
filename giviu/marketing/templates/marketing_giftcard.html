@@ -275,7 +275,7 @@
                      <td style=" font-size: 18px; line-height: 22px; font-family: Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:300; text-align:center;">
                        <span style="color: #555555; font-weight:300;">
                          <a href="#" style="text-decoration: none; color: rgb(85, 85, 85); font-weight: 300;">
-                           <span style="color: #27ae60; font-weight: 300;">{{ name_to }}</span> te ha enviado una giftcard
+                           <span style="color: #27ae60; font-weight: 300;">{{ name_from }}</span> te ha enviado una giftcard
                          </a>
                        </span>
                      </td>
@@ -472,7 +472,7 @@
                          <tr>
                            <td style="font-size: 20px; line-height: 20px; font-family:Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:normal; text-align:left; ">
                             {{ giftcard_name }} <br/>
-                            <span style="font-size: 15px;">{{ giftcard_amount }}</span>
+                            <span style="font-size: 15px;">{% if giftcard_amount %}{{ giftcard_amount }}{% endif %}</span>
                            </td>
                          </tr>
 
