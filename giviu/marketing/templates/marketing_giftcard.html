@@ -308,7 +308,7 @@
 
                              <span style="color: #ffffff; font-weight: normal;">
                                <span style="text-decoration: none; color: #999; font-weight: normal;">
-                                Código de tu giftcard: <strong>{{ product_code }}</strong>
+                                Código de tu giftcard: <strong>{{ validation_code }}</strong>
                                </span>
                              </span>
                            </td>
@@ -471,8 +471,10 @@
 
                          <tr>
                            <td style="font-size: 20px; line-height: 20px; font-family:Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:normal; text-align:left; ">
+                            {% if giftcard_amount %}
+                              <span style="font-size: 15px;">{{ giftcard_amount }} en </span>
+                              {% endif %} 
                             {{ giftcard_name }} <br/>
-                            <span style="font-size: 15px;">{% if giftcard_amount %}{{ giftcard_amount }}{% endif %}</span>
                            </td>
                          </tr>
 

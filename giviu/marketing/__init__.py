@@ -68,7 +68,6 @@ def simple_giftcard_send_notification(product):
     }
     event_user_confirmation_sends_giftcard(product.giftcard_from.email,
                                            args1)
-
     args2 = {
         'product_code': product.uuid,
         'name_to': product.giftcard_to.get_full_name(),
