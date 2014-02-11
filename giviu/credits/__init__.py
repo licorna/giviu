@@ -5,7 +5,6 @@ import random
 from uuid import uuid4
 from string import digits
 from puntopagos import get_normalized_amount, now_rfc1123
-from giviu.models import PaymentTransaction
 import logging
 logger = logging.getLogger('giviu')
 
@@ -13,6 +12,7 @@ CREDITS_AUTH_HEADER = 'CREDITS-'
 
 
 def transaction_create_no_psp(amount):
+    from giviu.models import PaymentTransaction
     amount = get_normalized_amount(amount)
     trx_id = ''.join(random.sample(digits, 10))
     current_datetime = now_rfc1123()

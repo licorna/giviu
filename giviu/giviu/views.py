@@ -279,6 +279,7 @@ def giftcard_confirmation(request):
             logger.critical('Transaction was not created')
     else:
         response, transaction = transaction_create_no_psp(str(price))
+        trx_id = response['trx_id']
 
     if credits['uuid'] is not 'none':
         transaction.use_credits = credits['uuid']

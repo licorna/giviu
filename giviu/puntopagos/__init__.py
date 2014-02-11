@@ -6,7 +6,6 @@ from time import mktime
 import base64
 import requests
 from string import Template
-from giviu.models import PaymentTransaction
 import json
 from string import digits
 import random

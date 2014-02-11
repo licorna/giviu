@@ -36,6 +36,7 @@ def first_stage(request):
     if 'product_id' not in request.POST:
         return HttpResponseBadRequest()
 
+    trx_id = request.POST['trx_id']
     try:
         payment = PaymentTransaction.objects.get(transaction_uuid=trx_id)
         if payment.state == 'USING_CREDITS':
@@ -79,13 +80,26 @@ def pp_response(request, token, **kwargs):
         #TODO: Log
         return HttpResponseBadRequest()
 
-    status, response = transaction_check(
-        token,
-        transaction.transaction_uuid,
-        transaction.amount,
-        transaction.origin_timestamp
-    )
-
+    if transaction.state != 'USING_CREDITS_SUCCESS':
+        status, response = transaction_check(
+            token,
+            transaction.transaction_uuid,
+            transaction.amount,
+            transaction.origin_timestamp
+        )
+        payment_method = response['medio_pago_descripcion']
+        payment_total = response['monto']
+        payment_date = response['fecha_aprobacion']
+        payment_operation_number = response['numero_operacion']
+        payment_authorization_code = response['codigo_autorizacion']
+    else:
+        import locale
+        locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
+        payment_method = 'Creditos'
+        payment_total = '0'
+        payment_date = datetime.strftime(datetime.now(), '%d %B, %Y')
+        payment_operation_number = None
+        payment_authorization_code = None
     try:
         product = Product.objects.get(transaction=transaction)
     except Product.DoesNotExist:
@@ -96,15 +110,12 @@ def pp_response(request, token, **kwargs):
         #TODO: Error grave
 
     if status is True:
-        if product.state == 'USING_CREDITS_SUCCESS':
+        if transaction.state == 'USING_CREDITS_SUCCESS':
             product.set_state('USING_CREDITS_SUCCESS')
             transaction.set_state('USING_CREDITS_SUCCESS')
         else:
             product.set_state('RESPONSE_FROM_PP_SUCCESS')
             transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
-
-        if transaction.use_credits is not None:
-            finalize_use_user_credits(transaction.use_credits)
 
         args0 = {
             'merchant_name': product.giftcard.merchant.name,
@@ -123,14 +134,14 @@ def pp_response(request, token, **kwargs):
             customer.save()
 
         args = {
-            'payment_method': response['medio_pago_descripcion'],
-            'payment_total': response['monto'],
-            'payment_date': response['fecha_aprobacion'],
-            'payment_operation_number': response['numero_operacion']
+            'payment_method': payment_method,
+            'payment_total': payment_total,
+            'payment_date': payment_date,
+            'payment_operation_number': payment_operation_number,
         }
         event_user_buy_product_confirmation(product.giftcard_from.email, args)
-        transaction.operation_number = response['numero_operacion']
-        transaction.authorization_code = response['codigo_autorizacion']
+        transaction.operation_number = payment_operation_number
+        transaction.authorization_code = payment_authorization_code
 
         now = datetime.now()
         if (product.send_date.year == now.year and
@@ -139,8 +150,9 @@ def pp_response(request, token, **kwargs):
 
             simple_giftcard_send_notification(product)
 
-        transaction.raw_response = response
-        transaction.save()
+        if product.state != 'USING_CREDITS_SUCCESS':
+            transaction.raw_response = response
+            transaction.save()
 
         _code = product.validation_code
         _code = _code[:4] + '-' + _code[4:]
@@ -149,10 +161,12 @@ def pp_response(request, token, **kwargs):
                                    code=_code,
                                    ammount=product.price)
 
-        data = {
-            'transaction': response,
-            'product': product
-        }
+        data = {'product': product}
+        if product.state == 'USING_CREDITS_SUCCESS':
+            data.update({'used_credits': product.price})
+        else:
+            data.update({'transaction': response})
+
         return render_to_response('success.html', data,
                                   context_instance=RequestContext(request))
     else:
