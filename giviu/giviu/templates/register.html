@@ -24,7 +24,7 @@
             <img src="/static/img/loaderBackGreen.gif"/>
           </center>
         </div>
-        
+
         <div class="confirm">
           <div class="span3">
             <figure class="span8">
@@ -34,6 +34,10 @@
           <div class="span6">
               <form method="post" id="register" action="/register">
                 {% csrf_token %}
+                {% if referer %}
+                <input type="hidden" name="referer" value="{{ referer }}" />
+                <p>Has sido invitado por {{ referer_name }}, cuyo fbid es {{ referer_fbid }}.</p>
+                {% endif %}
                 <ul>
                   <li id="facebook-name"></li>
                   <li id="facebook-birth"></li>
