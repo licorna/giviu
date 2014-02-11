@@ -6,32 +6,41 @@
   ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
 </section> -->
 {% if not this_campaign %}
-<ul id="principalSlide">
-<!--   <li class="span9" id="friend" sytle="">
-
-  </li> -->
-  <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback-love.png);">
-      <a href="/campaign/14-de-febrero" class="span9">
-        <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Flove.png"/>
-     </a>
-  </li>  
-  <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback_babytuto.png);">
-      <a href="https://www.giviu.com/giftcard/detail/tienda-de-articulos-para-bebes" class="span9">
-        <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbaby-tuto2.png"/>
-     </a>
-  </li> 
-  <li class="span9 fuud" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback-fuud.png)">
-      <a href="/partner/fuud" class="span9">
-        <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Ffuud2.png"/>
-     </a>
-  </li>
-  <li class="span9 parapente" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbackparapente.png)">
-      <a href="/giftcard/detail/vuelo-en-parapente-fotos-video" class="span9">
-        <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fparapente.png"/>
-     </a>
-  </li>
-
-</ul>
+<div id="bigSlide" class="span9">
+  <div id="slidepag" class="span9"></div>
+  <ul id="principalSlide">
+    {% if user.is_authenticated %}
+    <li class="span9 friend">
+      <div class="container" id="friend" >
+        <div id="friendTitle" class="span9">
+        </div>    
+        <div id="friendImages" class="span9">
+        </div>
+      </div>
+    </li>
+    {% endif %}
+    <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback-love.png);">
+        <a href="/campaign/14-de-febrero" class="span9">
+          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Flove.png"/>
+       </a>
+    </li>  
+    <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback_babytuto.png);">
+        <a href="https://www.giviu.com/giftcard/detail/tienda-de-articulos-para-bebes" class="span9">
+          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbaby-tuto2.png"/>
+       </a>
+    </li> 
+    <li class="span9 fuud" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback-fuud.png)">
+        <a href="/partner/fuud" class="span9">
+          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Ffuud2.png"/>
+       </a>
+    </li>
+    <li class="span9 parapente" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbackparapente.png)">
+        <a href="/giftcard/detail/vuelo-en-parapente-fotos-video" class="span9">
+          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fparapente.png"/>
+       </a>
+    </li> -->
+  </ul>
+</div>
 {% endif %}
 
 {% if this_campaign %}
@@ -128,32 +137,38 @@
 <a data-lightbox="campaign" href="/static/img/campaigns/modal_3_lucas.png"></a>
 
  <script type="text/javascript">
-// $(document).ready(function(){
+$(document).ready(function(){
 
-//   f = new Date();
-//   month = [ "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december" ];
-//   getFriends(month[f.getMonth()]);
+  f = new Date();
+  month = [ "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december" ];
+  getFriends(month[f.getMonth()]);
 
-//   function getFriends(month){
-//     $.get( "/api/social/get-close-facebook-friends/"+$("#fb-id").val()+"?month="+month)
-//       .done(function(data){
-//         $('#friend').html('<center><h3>Tienes '+data.length+' amigos de cumpleaños este mes</h3>¿ya tienes su regalo?</center>')
-//         var friends = 0;
-//         $.each(data, function(key,value) {
+  function getFriends(month){
+    $.get( "/api/social/get-close-facebook-friends/"+$("#fb-id").val()+"?month="+month)
+      .done(function(data){
+        $('#friendTitle').html('<h3>Tienes '+data.length+' amigos de cumpleaños este mes</h3>¿ya tienes su regalo?')
+        var friends = 0;
+        if(data.length==0){
+          $('#friendTitle').html('<h3>¿Aun no has creado tu calendario?</h3>')
+          $('#friendImages').append('<br/><span class="icon-calendar" style="font-size:100px;"></span><br><br><a href="user/calendar" class="startNow">Comienza aquí</a>');
 
-//           var day = value.birthday.split('/');
-//           var day = day[1];
-//           var friend_birthday = '<figure class="friendBirthaySlide"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=200&amp;height=200"><figcaption><b>'+day+'</b></figcaption></figure>';
-//           $('#friend').append(friend_birthday);
+        }else{
+          $.each(data, function(key,value) {
+            if(key>=5){
+              return false;
+            }
+            var day = value.birthday.split('/');
+            var day = day[1];
 
-//         })
+            var friend_birthday = '<figure class="friendBirthaySlide"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=200&amp;height=200"><figcaption><b>'+day+'</b></figcaption></figure>';
+            $('#friendImages').append(friend_birthday);
 
-//       })
-//   }
+          })
+        }
+      })
+  }
 
-
-
-// });
+});
  </script>
 
 {% endblock %}

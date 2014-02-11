@@ -27,7 +27,9 @@ $(document).ready(function(e){
 
 	$('#principalSlide').carouFredSel({
         auto: true ,
-        scroll: 700
+        scroll: 700,
+        pagination: "#slidepag"
+
     });
 
     $('#principalSlide li').css('width',$('body').css('width'));

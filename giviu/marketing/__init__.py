@@ -68,7 +68,6 @@ def simple_giftcard_send_notification(product):
     }
     event_user_confirmation_sends_giftcard(product.giftcard_from.email,
                                            args1)
-
     args2 = {
         'product_code': product.uuid,
         'name_to': product.giftcard_to.get_full_name(),
@@ -80,7 +79,7 @@ def simple_giftcard_send_notification(product):
         'merchant_name': product.giftcard.merchant.name,
         'giftcard_name': product.giftcard.title,
         'giftcard_image': product.giftcard.image,
-        'giftcard_amount': product.price if product.giftcard.kind == 1 else 0,
+        'giftcard_amount': product.price if product.giftcard.kind == 1 else None,
     }
     event_user_receives_product(product.giftcard_to.email, args2)
     product.already_sent = 1
