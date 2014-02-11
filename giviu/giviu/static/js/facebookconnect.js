@@ -85,7 +85,7 @@
             $.ajax({
               type: 'POST',
               contentType: 'application/json; charset=utf-8',
-              url: 'api/social/add-user-from-facebook/'+response.id,
+              url: '/api/social/add-user-from-facebook/'+response.id,
               data: JSON.stringify(data),
               cache: false,
               dataType: 'json',
@@ -122,9 +122,9 @@
     FB.api('/'+idloginUser+'/friends?fields=name,birthday,email', function(response) {
       // TODO: Arreglar!
       $.ajax({
-        type: 'POST',
+        type: "POST",
         contentType: 'application/json; charset=utf-8',
-        url: 'api/social/add-friends-from-facebook/'+idloginUser,
+        url: '/api/social/add-friends-from-facebook/'+idloginUser,
         cache: false,
         data: JSON.stringify(response.data),
         dataType: 'json',
