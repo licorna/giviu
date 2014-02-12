@@ -318,10 +318,7 @@ def giftcard_confirmation(request):
         'trx_id': trx_id,
         'design': product.design
     }
-    if transaction.use_credits:
-        data['credits'] = credits_used
     data.update(csrf(request))
-
     return render_to_response('checkout_confirmation.html',
                               data,
                               context_instance=RequestContext(request))
