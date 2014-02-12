@@ -472,7 +472,7 @@
                          <tr>
                            <td style="font-size: 20px; line-height: 20px; font-family:Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:normal; text-align:left; ">
                             {% if giftcard_amount %}
-                              <span style="font-size: 15px;">{{ giftcard_amount }} en </span>
+                              <span style="font-size: 20px;">{{ giftcard_amount }} en </span>
                               {% endif %} 
                             {{ giftcard_name }} <br/>
                            </td>
@@ -605,7 +605,7 @@
 
                    <tr>
                      <td style="font-size: 14px; width:100%; line-height: 22px; font-family:Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:normal; text-align:center; ">
-                        {{ validation_info }}
+                        {{ validation_info|safe }}
                      </td>
                    </tr>
 
