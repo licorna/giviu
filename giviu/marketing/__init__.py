@@ -6,7 +6,7 @@ from django.template.loader import get_template
 from django.conf import settings
 
 
-DEBUG_EMAIL_RECEIVER = 'licorna@gmail.com'
+DEBUG_EMAIL_RECEIVER = 'sebastian@giviu.com'
 
 
 def event_user_registered(email, name):
@@ -79,7 +79,7 @@ def simple_giftcard_send_notification(product):
         'merchant_name': product.giftcard.merchant.name,
         'giftcard_name': product.giftcard.title,
         'giftcard_image': product.giftcard.image,
-        'giftcard_amount': product.price if product.giftcard.kind == 1 else None,
+        'giftcard_amount': product.price if product.giftcard.kind == '1' else None,
     }
     event_user_receives_product(product.giftcard_to.email, args2)
     product.already_sent = 1
