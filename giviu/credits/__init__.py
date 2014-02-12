@@ -164,8 +164,8 @@ def add_user_referer(fbid, referral_fbid):
     else:
         db.referral.update({'_id': user_referral['_id']},
                            {'$addToSet': {'referrals': referral_fbid}})
-        if len(user_referral['referrals']) >= 2:
-            add_user_credits(fbid, 1000, '10 usuarios referidos y registrados.')
+        if len(user_referral['referrals']) >= 4:
+            add_user_credits(fbid, 1000, '5 usuarios referidos y registrados.')
             db.referral.update({'_id': user_referral['_id']},
                                {'$set': {'used': True}})
 
