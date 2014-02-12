@@ -24,7 +24,6 @@
             <img src="/static/img/loaderBackGreen.gif"/>
           </center>
         </div>
-
         <div class="confirm">
           <div class="span3">
             <figure class="span8">
@@ -36,7 +35,6 @@
                 {% csrf_token %}
                 {% if referer %}
                 <input type="hidden" name="referer" value="{{ referer }}" />
-                <p>Has sido invitado por {{ referer_name }}, cuyo fbid es {{ referer_fbid }}.</p>
                 {% endif %}
                 <ul>
                   <li id="facebook-name"></li>
@@ -47,6 +45,20 @@
             <a href="#" class="btn confirmBtn">ingresar</a>
           </div>
         </div>
+        {% if referer %}
+        <div class="referer">
+          <div class="span9 content">
+            <div class="span1">
+              <figure >
+                <img src="https://graph.facebook.com/{{ referer_fbid }}/picture?width=30&amp;amp;height=30">
+              </figure>
+            </div>
+            <div class="span8">
+              {{ referer_name }}, te ha invitado a Giviu
+            </div>
+          </div>
+        </div>
+        {% endif %}
         <small class="tinytext span9">Te prometemos que no publicaremos nada en tu nombre</small>
 
       </center>
