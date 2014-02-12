@@ -167,6 +167,9 @@ def pp_response(request, token, **kwargs):
         else:
             data.update({'transaction': response})
 
+        if transaction.use_credits is not None:
+            finalize_use_user_credits(transaction.use_credits)
+
         return render_to_response('success.html', data,
                                   context_instance=RequestContext(request))
     else:
