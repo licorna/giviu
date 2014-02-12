@@ -235,6 +235,7 @@ def calendar(request):
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_confirmation(request):
     from puntopagos import transaction_create
+    from credits import transaction_create_no_psp
 
     for datum in ['giftcard-id', 'product-merchant-id', 'email-to']:
         if datum not in request.POST:
@@ -275,12 +276,16 @@ def giftcard_confirmation(request):
 
     design = GiftcardDesign.objects.get(pk=int(design))
 
-    #TODO: Comprobar que la transaccion fue creada exitosamente
-    response, transaction = transaction_create(str(price))
-    try:
+    if price > 0:
+        #TODO: Comprobar que la transaccion fue creada exitosamente
+        response, transaction = transaction_create(str(price))
+        try:
+            trx_id = response['trx_id']
+        except KeyError:
+            logger.critical('Transaction was not created')
+    else:
+        response, transaction = transaction_create_no_psp(str(price))
         trx_id = response['trx_id']
-    except KeyError:
-        logger.critical('Transaction was not created')
 
     if credits['uuid'] is not 'none':
         transaction.use_credits = credits['uuid']
@@ -319,10 +324,7 @@ def giftcard_confirmation(request):
         'trx_id': trx_id,
         'design': product.design
     }
-    if transaction.use_credits:
-        data['credits'] = credits_used
     data.update(csrf(request))
-
     return render_to_response('checkout_confirmation.html',
                               data,
                               context_instance=RequestContext(request))

@@ -3,7 +3,7 @@
 {% block content %}
 
 <section class="container">
-  <section class="payment_response">	
+  <section class="payment_response">
   	<section class="span7">
   		<h2>Tu compra  en Giviu ha terminado satisfactoriamente</h2>
   		<h3>Información del producto</h3>
@@ -20,29 +20,35 @@
   				</ul>
   			</div>
   		</div>
-  		
+
   		<h3>Información de pago</h3>
   		<div class="giftcardDetail span9">
+                  {% if used_credits %}
+                  <ul class="span4">
+                    <li>Precio Final: Has utilizado {{ used_credits|clp}}</li>
+                  </ul>
+                  {% else %}
 	  		<ul class="span4">
 	  			<li>Metodo de pago: <strong>{{ transaction.medio_pago_descripcion }}</strong></li>
 	  			<li>Monto: <strong>{{ transaction.monto|clp }}</strong></li>
 	  			<li>Fecha: <strong>{{ transaction.fecha_aprobacion }}</strong></li>
-	  		</ul>	  		
+	  		</ul>
 	  		<ul class="span5 col">
 	  			<li>Numero de cuotas: <strong>{{ transaction.num_cuotas }}</strong></li>
 	  			<li>Numero operacion: <strong>{{ transaction.numero_operacion }}</strong></li>
 	  		</ul>
-	  	</div>  
+                  {% endif %}
+	  	</div>
 
 	  	<span class="span9">
 	  		 <center>
 	  		 	Comparte Giviu<br/>
 			  	<a class="social facebook share" href="http://www.facebook.com/sharer.php?u=http://www.giviu.com">
 					<span class="icon-facebook"></span>
-				</a>                  
+				</a>
 				<a class="social twitter share" href="https://twitter.com/intent/tweet?url=http://www.giviu.com&text=Yo ya utilizo Giviu y tu?&via=giviuchile" >
 					<span class="icon-twitter"></span>
-				</a>                     
+				</a>
 				<a class="social google share" href="https://plus.google.com/share?url=http://www.giviu.com">
 					<span class="icon-google-plus"></span>
 				</a>
@@ -50,7 +56,7 @@
 
 	  	</span>
   	</section>
-	
+
 	<aside class="span2 col misGiftCards">
 		<h2><span class="icon-question"></span> ¿Necesitas ayuda?</h2>
 		<p>Si tienes alguna duda te recomendamos primero revisar nuestra seccion de <a href="/page/preguntas-frecuentes">preguntas frecuentes</a>, si aun tienes dudas contáctate con nosotros al correo <a href="#">soporte@giviu.com</a></p>
@@ -60,6 +66,3 @@
 </section>
 
 {% endblock %}
-
-
-
