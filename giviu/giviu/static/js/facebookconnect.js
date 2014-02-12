@@ -71,7 +71,7 @@
               birthday = response.birthday;
             }
             if(response.email==undefined){
-              email = '<input type="text" name="email" placeholder="ingresa tu correo electronico" class="span9 required email">';
+              email = '';//fix rapido
             }else{
               email = response.email;
             }
@@ -79,13 +79,14 @@
             var data = {
               name: first_name + ' ' + last_name,
               birthday: birthday,
-              email: email
+              email: email,
+              gender: gender
             };
             console.log(JSON.stringify(data));
             $.ajax({
               type: 'POST',
               contentType: 'application/json; charset=utf-8',
-              url: 'api/social/add-user-from-facebook/'+response.id,
+              url: '/api/social/add-user-from-facebook/'+response.id,
               data: JSON.stringify(data),
               cache: false,
               dataType: 'json',
@@ -122,9 +123,9 @@
     FB.api('/'+idloginUser+'/friends?fields=name,birthday,email', function(response) {
       // TODO: Arreglar!
       $.ajax({
-        type: 'POST',
+        type: "POST",
         contentType: 'application/json; charset=utf-8',
-        url: 'api/social/add-friends-from-facebook/'+idloginUser,
+        url: '/api/social/add-friends-from-facebook/'+idloginUser,
         cache: false,
         data: JSON.stringify(response.data),
         dataType: 'json',

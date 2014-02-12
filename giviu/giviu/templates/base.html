@@ -101,6 +101,13 @@
         </div>
       </div>
     </header>
+    {% if user.is_authenticated %}
+    <div class="span9" id="referal">
+      <center>
+       <a class="referer" href="http://www.facebook.com/sharer.php?u=www.giviu.com/referer/{{ user.referer }}"><span class="icon-facebook"></span> Invita a tus amigos y gana dinero para comprar en Giviu <strong>click aquí</strong> </a>
+      </center>
+    </div>
+    {% endif %}
         <nav class="mobile" style="display:none;">
           <input type="hidden" id="fb-id" value="{{ user.fbid }}"/>
           <ul>

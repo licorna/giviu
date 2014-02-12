@@ -68,4 +68,6 @@ urlpatterns = patterns('',
 
     url(r'^psp/', include('psp.urls')),
     url(r'^puntopagos/', include('puntopagos.urls')),
+
+    url(r'^referer/', include('referer.urls')),
 )

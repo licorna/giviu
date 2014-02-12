@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% block title %}Ingresa a Giviu | {% endblock %}
+{% block meta %}
+    <meta property="og:image" content="https://commondatastorage.googleapis.com/site-images/images/referer.png"/>
+    <meta property="og:title" content="Invita a tus amigos y gana dinero" />
+    <meta property="og:description" content="Por cada 5 amigos que invites, Giviu te regala 1.000 para comprar en Giviu." />
+    <meta property="og:url" content="https://www.giviu.com/referer/{{ referer }}" />
+{% endblock %}
 {% block content %}
+
 <section class="register">
   <section id="registercontent">
     <section class="span9 image" id="selecttype">
@@ -24,7 +32,6 @@
             <img src="/static/img/loaderBackGreen.gif"/>
           </center>
         </div>
-        
         <div class="confirm">
           <div class="span3">
             <figure class="span8">
@@ -34,6 +41,9 @@
           <div class="span6">
               <form method="post" id="register" action="/register">
                 {% csrf_token %}
+                {% if referer %}
+                <input type="hidden" name="referer" value="{{ referer }}" />
+                {% endif %}
                 <ul>
                   <li id="facebook-name"></li>
                   <li id="facebook-birth"></li>
@@ -43,6 +53,20 @@
             <a href="#" class="btn confirmBtn">ingresar</a>
           </div>
         </div>
+        {% if referer %}
+        <div class="referer">
+          <div class="span9 content">
+            <div class="span1">
+              <figure >
+                <img src="https://graph.facebook.com/{{ referer_fbid }}/picture?width=30&amp;amp;height=30">
+              </figure>
+            </div>
+            <div class="span8">
+              {{ referer_name }}, te ha invitado a Giviu
+            </div>
+          </div>
+        </div>
+        {% endif %}
         <small class="tinytext span9">Te prometemos que no publicaremos nada en tu nombre</small>
 
       </center>

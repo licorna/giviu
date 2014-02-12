@@ -347,6 +347,7 @@ class Users(AbstractBaseUser):
     avatar = models.CharField(max_length=255, blank=True)
     last_purchase = models.DateField(blank=True, null=True)
     hash = models.CharField(max_length=255, blank=True)
+    referer = models.CharField(blank=False, max_length=8, default=lambda: str(uuid4())[:8])
     fbid = models.CharField(unique=True, max_length=56, blank=True)
     is_active = models.IntegerField(null=False, blank=False, default=1)
     is_admin = models.IntegerField(null=False, blank=False, default=0)

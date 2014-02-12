@@ -13,7 +13,8 @@ from models import (
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
 from marketing import event_user_registered
-from credits import user_credits, use_user_credits, add_user_credits
+from credits import (user_credits, use_user_credits, add_user_credits,
+                     add_user_referer)
 from utils import get_data_for_header
 
 from django.core.validators import validate_email
@@ -23,7 +24,6 @@ from django.conf import settings
 
 import logging
 logger = logging.getLogger('giviu')
-activity = logging.getLogger('client_activity')
 
 
 def user_is_normal_user(user):
@@ -55,6 +55,7 @@ def do_register(request):
             gender = request.POST['gender']
             birthday = request.POST['birth']
             #birthday = birthday[6:] + '-' + birthday[0:2] + '-' + birthday[3:5]
+            referer = request.POST.get('referer', None)
             full_name = first_name + ' ' + last_name
 
             try:
@@ -85,7 +86,12 @@ def do_register(request):
             # Send email to registered user.!
             event_user_registered(user.email, user.get_full_name())
             add_user_credits(facebook_id, 2000, 'Giviu Registration Credits')
-            activity.info('User registered: ' + facebook_id)
+            if referer is not None:
+                try:
+                    user = Users.objects.get(referer=referer)
+                except Users.DoesNotExist:
+                    logger.info('Unable to find %s referer.' % (referer))
+                add_user_referer(user.fbid, facebook_id)
         else:
             if 'facebookId' in request.POST:
                 facebook_id = request.POST['facebookId']

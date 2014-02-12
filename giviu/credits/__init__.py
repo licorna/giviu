@@ -147,3 +147,26 @@ def unmark_user_credits(fbid):
                              'expiration': {'$lt': datetime.now()}})
 
     return res['n'] > 0
+
+
+def add_user_referer(fbid, referral_fbid):
+    db = get_credits_db()
+    if not db:
+        return False
+
+    user_referral = db.referral.find_one({'fbid': fbid, 'used': False})
+    if user_referral is None:
+        db.referral.insert({
+            'fbid': fbid,
+            'referrals': [referral_fbid],
+            'used': False,
+        })
+    else:
+        db.referral.update({'_id': user_referral['_id']},
+                           {'$addToSet': {'referrals': referral_fbid}})
+        if len(user_referral['referrals']) >= 2:
+            add_user_credits(fbid, 1000, '10 usuarios referidos y registrados.')
+            db.referral.update({'_id': user_referral['_id']},
+                               {'$set': {'used': True}})
+
+    return True

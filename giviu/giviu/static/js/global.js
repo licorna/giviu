@@ -22,6 +22,7 @@ $(document).ready(function(e){
 
     $//('#logout').on('click',logout);
     $('.share').on('click',share);
+    $('.referer').on('click',referer);
 
     $('.mobileActions').on('click',menuDisplay);
 
@@ -115,6 +116,12 @@ function confirmSendInviteFriends(e){
 function share(e){
     e.preventDefault();
     var url = $(this).attr('href')+encodeURIComponent(document.URL);
+    window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=650');
+}
+
+function referer(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
     window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=650');
 }
 
