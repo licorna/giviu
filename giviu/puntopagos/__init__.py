@@ -84,6 +84,7 @@ def transaction_create(amount):
     auth_header = authorization_header(trx_id, amount, current_datetime)
     payment_method = get_punto_pago_payment_method()
 
+    from giviu.models import PaymentTransaction
     payment = PaymentTransaction(
         transaction_uuid=trx_id,
         origin_timestamp=current_datetime,
@@ -151,6 +152,7 @@ def transaction_check(token, trx_id, amount, date):
         'Accept': 'application/json'
     }
 
+    from giviu.models import PaymentTransaction
     payment = PaymentTransaction.objects.get(psp_token__exact=token)
     payment.set_state('INFO_REQUESTED_TO_PP')
 
