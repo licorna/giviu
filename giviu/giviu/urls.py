@@ -54,6 +54,7 @@ urlpatterns = patterns('',
     url(r'^page/empresas$', 'giviu.views.page_enterprise', name='page_enterprise'),
     url(r'^page/contacto$', 'giviu.views.page_contact', name='page_contact'),
     url(r'^page/terminos-y-condiciones$', 'giviu.views.page_terms', name='page_terms'),
+    url(r'^page/prensa$', 'giviu.views.interviews', name='interviews'),
 
     url(r'^404$', 'giviu.views.response_not_found', name='response_not_found'),
 

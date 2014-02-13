@@ -415,6 +415,11 @@ def page_contact(request):
     return render_to_response('page_contact.html', data,
                               context_instance=RequestContext(request))
 
+def interviews(request):
+    data = {}
+    data.update(get_data_for_header(request))
+    return render_to_response('interviews.html', data,
+                              context_instance=RequestContext(request))
 
 def page_terms(request):
     data = {}
