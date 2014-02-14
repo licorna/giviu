@@ -5,7 +5,7 @@
 <!-- <section class="container options">
   ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
 </section> -->
-{% if not this_campaign %}
+{% if not this_campaign and not search %}
 <div id="bigSlide" class="span9">
   <div id="slidepag" class="span9"></div>
   <ul id="principalSlide">
@@ -13,7 +13,7 @@
     <li class="span9 friend">
       <div class="container" id="friend" >
         <div id="friendTitle" class="span9">
-        </div>    
+        </div>
         <div id="friendImages" class="span9">
         </div>
       </div>
@@ -23,12 +23,12 @@
         <a href="/campaign/14-de-febrero" class="span9">
           <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Flove.png"/>
        </a>
-    </li>  
+    </li>
     <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback_babytuto.png);">
         <a href="https://www.giviu.com/giftcard/detail/tienda-de-articulos-para-bebes" class="span9">
           <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbaby-tuto2.png"/>
        </a>
-    </li> 
+    </li>
     <li class="span9 fuud" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback-fuud.png)">
         <a href="/partner/fuud" class="span9">
           <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Ffuud2.png"/>
@@ -87,6 +87,13 @@
   -->
 
   <section class="span9" id="giftCardList" data-columns>
+    {% if not products %}
+    {% if search %}
+    <h1>No se encontraron productos para la busqueda {{ search_term }}.</h1>
+    {% else %}
+    <h1>Por otro motivo no hay productos.</h1>
+    {% endif %}
+    {% endif %}
     {% for product in products %}
     <article class="giftCardModule" data-source-id="{{ product.id }}">
       <figure>
@@ -172,7 +179,3 @@ $(document).ready(function(){
  </script>
 
 {% endblock %}
-
-
-
-
