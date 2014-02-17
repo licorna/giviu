@@ -4,6 +4,7 @@ from django.shortcuts import (render_to_response, redirect,
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import AnonymousUser
+from django.db.models import Q
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
@@ -121,26 +122,30 @@ def do_register(request):
 def home(request, slug=None, division=None):
     data = {}
     show_title = False
+
+    search = request.GET.get('q', None)
     if not division:
-        products = Giftcard.objects.filter(status=1).order_by('-priority')
+        if search and len(search) > 2:
+            data.update({'search': True, 'search_term': search})
+            products = Giftcard.objects.filter(Q(status=1),
+                                    Q(title__contains=search) |
+                                    Q(description__contains=search))
+        else:
+            products = Giftcard.objects.filter(status=1).order_by('-priority')
 
     if division == 'category':
         category = get_object_or_404(GiftcardCategory, slug=slug)
         products = Giftcard.objects.filter(category=category.id,
                                            status=1).order_by('-priority')
         show_title = True
-        data = {
-            'this_category': category,
-        }
+        data.update({'this_category': category})
 
     if division == 'campaign':
         campaign = get_object_or_404(Campaign, slug=slug)
         products = campaign.giftcards.all().order_by('-priority')
-        data = {
-            'this_campaign': campaign,
-        }
+        data.update({'this_campaign': campaign})
 
-    all_product_len = Giftcard.objects.filter(status=1).count()
+    #all_product_len = Giftcard.objects.filter(status=1).count()
     if request.user.is_authenticated() and settings.SOCIAL['FETCH_FRIEND_LIKES']:
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
@@ -150,7 +155,7 @@ def home(request, slug=None, division=None):
 
     data.update({
         'products': products,
-        'all_products_len': all_product_len,
+        #'all_products_len': all_product_len,
         'show_title': show_title
     })
     data.update(get_data_for_header(request))

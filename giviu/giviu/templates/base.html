@@ -66,7 +66,7 @@
 
   </head>
   <body class="cf">
-    <header class="span9">
+    <header class="span9 {% if products %}header{% endif %}">
       <div class="container">
         <div class="span2">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
@@ -81,7 +81,7 @@
           {% endfor %}
         </div>
         <nav class="span4 col showyourlove">
-          <ul>
+<!--           <ul>
             {% if user.is_authenticated %}
             <li><a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a></li>
             <li id="userInfo">
@@ -94,20 +94,37 @@
             <li><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
             <li><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
             {% endif %}
+          </ul> -->
+
+          <ul>
+            {% if user.is_authenticated %}
+            <li id="userInfo">
+              <a href="/user">
+                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong>
+                {% if credits %} | creditos: <strong>{{ credits|clp }}</strong> {% endif %}</span>
+                 <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
+              </a>
+              <a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a>
+            </li>
+            {% else %}
+            <li class="not-logged"><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
+            <li class="not-logged"><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+            {% endif %}
           </ul>
+
         </nav>
         <div class="mobileActions" style="display:none;">
           <a href="#" class="btn secondary"><span class="icon-menu"></span></a>
         </div>
       </div>
     </header>
-    {% if user.is_authenticated %}
+<!--     {% if user.is_authenticated %}
     <div class="span9" id="referal">
       <center>
        <a class="referer" href="http://www.facebook.com/sharer.php?u=www.giviu.com/referer/{{ user.referer }}"><span class="icon-facebook"></span> Invita a tus amigos y gana dinero para comprar en Giviu <strong>click aquí</strong> </a>
       </center>
     </div>
-    {% endif %}
+    {% endif %} -->
         <nav class="mobile" style="display:none;">
           <input type="hidden" id="fb-id" value="{{ user.fbid }}"/>
           <ul>
