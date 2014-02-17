@@ -90,10 +90,10 @@ function reviewModalCampaign(){
         fechaResta=(((fechaResta/1000)/60)/60)/24;   
         fechaResta = parseInt(fechaResta);         
         if(fechaResta>=2) {
-            //$('[data-lightbox="campaign"]').trigger('click');
+            $('[data-lightbox="campaign"]').trigger('click');
         }
     }else{
-        //$('[data-lightbox="campaign"]').trigger('click');
+        $('[data-lightbox="campaign"]').trigger('click');
     }
 
 }
