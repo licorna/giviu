@@ -19,11 +19,6 @@
       </div>
     </li>
     {% endif %}
-    <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback-love.png);">
-        <a href="/campaign/14-de-febrero" class="span9">
-          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Flove.png"/>
-       </a>
-    </li>
     <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback_babytuto.png);">
         <a href="https://www.giviu.com/giftcard/detail/tienda-de-articulos-para-bebes" class="span9">
           <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbaby-tuto2.png"/>
@@ -85,15 +80,23 @@
     <span class="icon-close close"></span>
   </section>
   -->
-
-  <section class="span9" id="giftCardList" data-columns>
     {% if not products %}
-    {% if search %}
-    <h1>No se encontraron productos para la busqueda {{ search_term }}.</h1>
-    {% else %}
-    <h1>Por otro motivo no hay productos.</h1>
+      {% if search %}
+        <center>
+          <span class="icon-sad"></span> No se encontraron productos para la búsqueda <strong>"{{ search_term }}"</strong>, intentalo nuevamente.
+          </br>
+          <form action="/" method="GET" class="span9">
+            <input type="text" placeholder="Ingresa tu búsqueda" style="margin-top:30px;"/>
+            <input type="submit" value="Buscar" class="btn primary" style="padding:9px 5px;font-size:0.8em">
+          </form>
+        </center>
+
+      {% else %}
+        <h1>Por otro motivo no hay productos.</h1>
+      {% endif %}
     {% endif %}
-    {% endif %}
+  <section class="span9" id="giftCardList" data-columns>
+
     {% for product in products %}
     <article class="giftCardModule" data-source-id="{{ product.id }}">
       <figure>
