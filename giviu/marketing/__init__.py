@@ -75,7 +75,7 @@ def simple_giftcard_send_notification(product):
         'description': product.comment,
         'giftcard_design': product.design.image,
         'validation_info': product.giftcard.get_validation_info(),
-        'validation_code': product.validation_code,
+        'validation_code': product.get_validation_code(),
         'merchant_name': product.giftcard.merchant.name,
         'giftcard_name': product.giftcard.title,
         'giftcard_image': product.giftcard.image,

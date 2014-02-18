@@ -304,15 +304,14 @@ def giftcard_confirmation(request):
         customer = Users.objects.create_inactive_user(email_to, name_to)
         customer = Users.objects.get(email=email_to)
 
-    product = Product(giftcard_from=request.user,
-                      giftcard_to=customer,
-                      price=price + credits_used,
-                      design=design,
-                      send_date=date,
-                      comment=comment,
-                      giftcard=giftcard,
-                      transaction=transaction)
-    product.save()
+    product = Product.new(giftcard_from=request.user,
+                          giftcard_to=customer,
+                          price=price + credits_used,
+                          design=design,
+                          send_date=date,
+                          comment=comment,
+                          giftcard=giftcard,
+                          transaction=transaction)
     product_id = product.uuid
 
     data = {
