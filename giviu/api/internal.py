@@ -12,6 +12,7 @@ from marketing import (simple_giftcard_send_notification,
 
 from genderator.detector import Detector, MALE
 import locale
+from external_codes import add_external_codes_for_giftcard
 
 from datetime import date, datetime
 import random
@@ -174,4 +175,16 @@ def send_marketing_monthly_birthday_nl(request):
         'actually_sent': not just_check,
     }
     return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
+
+
+def add_external_codes(request, giftcard):
+    get_object_or_404(Giftcard, id=giftcard)
+    just_check = request.GET.get('just_check', 'true') != 'false'
+
+    external_codes = json.loads(request.body)
+    print external_codes
+    add_external_codes_for_giftcard(giftcard, external_codes)
+
+    return HttpResponse(json.dumps({'status': 'ok'}), content_type='application/json',
                         status=200)

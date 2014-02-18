@@ -14,6 +14,19 @@ def connect():
     return mongo.eve
 
 
+def add_external_codes_for_giftcard(giftcard, external_codes):
+    client = connect()
+    if not client:
+        return None
+
+    ecs = []
+    for ec in external_codes:
+        ecs.append({'status': 'available',
+                    'giftcard_id': giftcard,
+                    'code': ec})
+    client.external_codes.insert(ecs)
+
+
 def get_external_codes_for_giftcard(giftcard):
     client = connect()
     if not client:
