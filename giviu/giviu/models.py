@@ -19,6 +19,9 @@ from merchant.models import Merchants
 from hashlib import sha224
 from social.models import Likes
 from datetime import datetime
+from external_codes import get_external_codes_for_giftcard
+import logging
+logger = logging.getLogger('giviu')
 
 
 class Calendar(models.Model):
@@ -144,9 +147,7 @@ class Giftcard(models.Model):
     status = models.IntegerField(blank=False, default=1)
     sold_quantity = models.IntegerField()
     gender = models.CharField(max_length=20, blank=True)
-    comuna = models.CharField(max_length=5, blank=True)
-    provincia = models.CharField(max_length=5, blank=True)
-    region = models.CharField(max_length=5, blank=True)
+    external_codes = models.IntegerField(null=True)
     fine_print = models.TextField()
     validation_info = models.TextField()
 
@@ -179,6 +180,12 @@ class Giftcard(models.Model):
             return self.fine_print
         from markdown2 import markdown as md
         return md(self.fine_print)
+
+    def get_external_code(self):
+        external_code = get_external_codes_for_giftcard(self)
+        if external_code is None:
+            logger.critical('No external codes for giftcard')
+        return external_code
 
     class Meta:
         db_table = 'giftcard'
