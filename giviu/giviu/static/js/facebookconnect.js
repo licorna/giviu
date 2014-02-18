@@ -72,10 +72,11 @@
             }
             if(response.email==undefined){
               email = '';//fix rapido
+              email_input = '<input type="text" name="email2" class="required email" placeholder="Ingresa tu e-mail."/>';
             }else{
               email = response.email;
+              email_input = response.email;
             }
-
             var data = {
               name: first_name + ' ' + last_name,
               birthday: birthday,
@@ -107,7 +108,7 @@
             $('#register').append('<input type="hidden" name="facebookId" value="'+response.id+'">');
             $('#facebook-name').html(first_name);
             $('#facebook-birth').html(birthday);
-            $('#facebook-email').html(email);
+            $('#facebook-emails').html(email_input);
             //alertMessage('Invita a tus amigos','inviteFriends');
             showInfo();
           }
@@ -118,9 +119,14 @@
     }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
   }
 
+  $(document).on('change', '[name="email2"]', function(event){
+    valor = $(this).val()
+    $('[name="email"]').val(valor);
+  });
+  $('#register').validate();
 
   function friends(idloginUser) {
-    FB.api('/'+idloginUser+'/friends?fields=name,birthday,email', function(response) {
+    FB.api('/'+idloginUser+'/friends?fields=name,birthday,email,gender', function(response) {
       // TODO: Arreglar!
       $.ajax({
         type: "POST",
@@ -143,6 +149,7 @@
      e.preventDefault();
      $('#register').submit();
   })
+
   function showPreload(){
     $('#btn-login').hide('fast');
     $('.loader').slideDown('fast');
