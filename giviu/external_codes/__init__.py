@@ -36,4 +36,4 @@ def get_external_codes_for_giftcard(giftcard):
                                             'status': 'available'})
     client.external_codes.update({'_id': ecode['_id']},
                                  {'$set': {'status': 'used'}})
-    return ecode.code
+    return ecode['code']

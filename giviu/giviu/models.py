@@ -267,8 +267,8 @@ class Product(models.Model):
         return self.validation_code
 
     @classmethod
-    def new(**kwargs):
-        product = Product(kwargs)
+    def new(*args, **kwargs):
+        product = Product(**kwargs)
         if product.giftcard.external_codes:
             product.external_code = product.giftcard.get_external_code()
         product.save()
