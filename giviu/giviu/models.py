@@ -19,6 +19,9 @@ from merchant.models import Merchants
 from hashlib import sha224
 from social.models import Likes
 from datetime import datetime
+from external_codes import get_external_codes_for_giftcard
+import logging
+logger = logging.getLogger('giviu')
 
 
 class Calendar(models.Model):
@@ -144,9 +147,7 @@ class Giftcard(models.Model):
     status = models.IntegerField(blank=False, default=1)
     sold_quantity = models.IntegerField()
     gender = models.CharField(max_length=20, blank=True)
-    comuna = models.CharField(max_length=5, blank=True)
-    provincia = models.CharField(max_length=5, blank=True)
-    region = models.CharField(max_length=5, blank=True)
+    external_codes = models.BooleanField(default=False)
     fine_print = models.TextField()
     validation_info = models.TextField()
 
@@ -180,6 +181,12 @@ class Giftcard(models.Model):
         from markdown2 import markdown as md
         return md(self.fine_print)
 
+    def get_external_code(self):
+        external_code = get_external_codes_for_giftcard(self)
+        if external_code is None:
+            logger.critical('No external codes for giftcard')
+        return external_code
+
     class Meta:
         db_table = 'giftcard'
 
@@ -211,6 +218,7 @@ class Product(models.Model):
     hash = models.CharField(max_length=255)
     uuid = models.CharField(max_length=40, default=lambda: str(uuid4()))
     validation_code = models.CharField(max_length=8)
+    external_code = models.CharField(max_length=24, blank=True)
     send_date = models.DateField(blank=True)
     already_sent = models.IntegerField(default=0)
     created = models.DateTimeField(default=lambda: get_now())
@@ -252,6 +260,19 @@ class Product(models.Model):
         if self.validation_date is None:
             return 'No ha sido validada'
         return self.validation_date
+
+    def get_validation_code(self):
+        if self.giftcard.external_codes:
+            return self.external_code
+        return self.validation_code
+
+    @classmethod
+    def new(*args, **kwargs):
+        product = Product(**kwargs)
+        if product.giftcard.external_codes:
+            product.external_code = product.giftcard.get_external_code()
+        product.save()
+        return product
 
     class Meta:
         db_table = 'product'
