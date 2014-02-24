@@ -183,8 +183,8 @@ def add_external_codes(request, giftcard):
     just_check = request.GET.get('just_check', 'true') != 'false'
 
     external_codes = json.loads(request.body)
-    print external_codes
-    add_external_codes_for_giftcard(giftcard, external_codes)
+    if just_check is not False:
+        add_external_codes_for_giftcard(int(giftcard), external_codes)
 
     return HttpResponse(json.dumps({'status': 'ok'}), content_type='application/json',
                         status=200)
