@@ -64,6 +64,14 @@ $(document).ready(function(e){
 
     });
 
+    $('#slideDetail').carouFredSel({
+        auto: true ,
+        circular: true,
+        infinite: true,
+        scroll: 700,
+        items: 1
+    });
+
     $('#principalSlide li').css('width',$('body').css('width'));
 
     $('.giftcardsDesign').carouFredSel({
