@@ -128,6 +128,17 @@ class GiftcardDesign(models.Model):
         return self.image
 
 
+class GiftcardMedia(models.Model):
+    id = models.AutoField(primary_key=True)
+    media_type = models.CharField(max_length=24, default='image/png')
+    url = models.CharField(max_length=512)
+    giftcard = models.ForeignKey('Giftcard', db_column='giftcard_id',
+                                 related_name='media')
+
+    class Meta:
+        db_table = 'giftcard_media'
+
+
 class Giftcard(models.Model):
     id = models.AutoField(primary_key=True)
     merchant = models.ForeignKey(Merchants, db_column='merchant_id')
