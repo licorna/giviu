@@ -128,6 +128,20 @@ class GiftcardDesign(models.Model):
         return self.image
 
 
+class GiftcardMedia(models.Model):
+    id = models.AutoField(primary_key=True)
+    media_type = models.CharField(max_length=24, default='image/png')
+    url = models.CharField(max_length=512)
+    giftcard = models.ForeignKey('Giftcard', db_column='giftcard_id',
+                                 related_name='media')
+
+    def __unicode__(self):
+        return self.url
+
+    class Meta:
+        db_table = 'giftcard_media'
+
+
 class Giftcard(models.Model):
     id = models.AutoField(primary_key=True)
     merchant = models.ForeignKey(Merchants, db_column='merchant_id')
@@ -174,6 +188,9 @@ class Giftcard(models.Model):
         if self.validation_info is not None:
             return md(self.validation_info)
         return ''
+
+    def media_images(self):
+        return self.media.filter(media_type='image/png')
 
     def pretty_fine_print(self):
         if '<' in self.fine_print:
