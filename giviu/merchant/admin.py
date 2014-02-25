@@ -37,7 +37,7 @@ class MerchantUserAdmin(admin.ModelAdmin):
 class MerchantAdmin(admin.ModelAdmin):
     fields = ('name', 'slug', 'address', 'country',
               'contact_name', 'contact_email', 'contact_phone',
-              'contact_rut', 'rut', 'website', 'logo')
+              'contact_rut', 'rut', 'website', 'logo', 'description')
 
     def save_model(self, request, obj, form, change):
         obj.save()  # I need to save preemptive so I have an id later on.
