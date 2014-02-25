@@ -12,6 +12,7 @@ DATABASES = {
         'HOST': '',
     }
 }
+
 SOCIAL = {
     'ENDPOINT': 'http://127.0.0.1:5000',
     'TIMEOUT': 30,
@@ -19,3 +20,5 @@ SOCIAL = {
     'CREDITS_MONGO_HOST': 'localhost:4000',
     'FETCH_FRIEND_LIKES': False,
 }
+
+DEBUG_EMAIL_RECEIVER = 'testing@giviu.com'
