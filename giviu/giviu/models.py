@@ -186,6 +186,9 @@ class Giftcard(models.Model):
             return md(self.validation_info)
         return ''
 
+    def media_images(self):
+        return self.media.filter(media_type='image/png')
+
     def pretty_fine_print(self):
         if '<' in self.fine_print:
             return self.fine_print
