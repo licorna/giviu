@@ -135,6 +135,9 @@ class GiftcardMedia(models.Model):
     giftcard = models.ForeignKey('Giftcard', db_column='giftcard_id',
                                  related_name='media')
 
+    def __unicode__(self):
+        return self.url
+
     class Meta:
         db_table = 'giftcard_media'
 
