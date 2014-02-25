@@ -1,0 +1,21 @@
+# DO NOT MODIFY THIS FILE
+# INSTEAD COPY IT'S CONTENTS INTO IT'S OWN
+# local_settings.py WITH YOUR OWN DATA
+#
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'giviu_dev',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'HOST': '',
+    }
+}
+SOCIAL = {
+    'ENDPOINT': 'http://127.0.0.1:5000',
+    'TIMEOUT': 30,
+    'MONGO_HOST': 'localhost:4000',
+    'CREDITS_MONGO_HOST': 'localhost:4000',
+    'FETCH_FRIEND_LIKES': False,
+}
