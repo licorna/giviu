@@ -8,11 +8,13 @@ from landing.models import BetaRegisteredUser
 from social.models import Likes
 from marketing import (simple_giftcard_send_notification,
                        event_beta_registered_send_welcome,
-                       marketing_send_marketing_monthly_birthday_nl)
+                       marketing_send_marketing_monthly_birthday_nl,
+                       marketing_send_daily_birthday)
 
 from genderator.detector import Detector, MALE
 import locale
 from external_codes import add_external_codes_for_giftcard
+from relevance import get_relevant_giftcard_for_friend
 
 from datetime import date, datetime
 import random
@@ -94,6 +96,58 @@ def send_welcome_to_beta_users(request):
     }
 
     return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
+
+
+@require_GET
+def send_marketing_daily_birthday_nl(request):
+    if 'client_id' not in request.GET:
+        return HttpResponseBadRequest()
+
+    just_check = request.GET.get('just_check', 'true') != 'false'
+    just_try = request.GET.get('just_try', 'no')
+
+    client_id = request.GET['client_id']
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
+
+    if just_try != 'no':
+        users = Users.objects.filter(email=just_try)
+    else:
+        users = Users.objects.filter(is_active=1,
+                                     is_receiving=0,
+                                     is_merchant=0)
+
+    now = datetime.today()
+    email_list = []
+    for user in users:
+        friends = Likes.get_facebook_friends_birthdays(user.fbid,
+                                                       now.month,
+                                                       now.day)
+        if len(friends) == 0:
+            continue
+
+        recommendations = []
+        for friend in friends:
+            relevant_giftcard = get_relevant_giftcard_for_friend(friend)
+            friend['recommended'] = relevant_giftcard
+            recommendations.append({
+                'name': friend['first_name'],
+                'recommended': friend['recommended'].title,
+                'birthday': 'Hoy',
+                'fbid': friend['fbid']
+            })
+
+        email_list.append({
+            'email': user.email,
+            'friends': recommendations
+        })
+
+        if not just_check:
+            marketing_send_daily_birthday(user, friends)
+
+    return HttpResponse(json.dumps(email_list), content_type='application/json',
                         status=200)
 
 

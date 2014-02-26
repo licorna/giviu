@@ -6,16 +6,13 @@ from django.template.loader import get_template
 from django.conf import settings
 
 
-DEBUG_EMAIL_RECEIVER = 'sebastian@giviu.com'
-
-
 def event_user_registered(email, name):
     '''This event triggers when the user registers.'''
     c = Context({'name': name})
     html_content = get_template('marketing_welcome.html').render(c)
     text_content = get_template('marketing_welcome.text').render(c)
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives('Bienvenido a Giviu',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
@@ -31,7 +28,7 @@ def event_user_buy_product_confirmation(email, args):
     html_content = get_template('marketing_buy_confirmation.html').render(c)
     text_content = get_template('marketing_buy_confirmation.html').render(c)
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives('Confirmacion de compra en Giviu',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
@@ -48,7 +45,7 @@ def event_user_receives_product(email, args):
     text_content = get_template('marketing_giftcard.html').render(c)
     subject = 'Has recibido una giftcard de ' + args['name_from']
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives(subject,
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
@@ -96,7 +93,7 @@ def event_user_confirmation_sends_giftcard(email, args):
     text_content = get_template('marketing_sender_notification.html').render(c)
     subject = 'La giftcard regalada a ' + args['name_to'] + ' ha sido enviada'
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives(subject,
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
@@ -113,7 +110,7 @@ def event_merchant_notification_giftcard_was_bought(email, args):
     html_content = get_template('marketing_merchant_notification.html').render(c)
     text_content = get_template('marketing_merchant_notification.html').render(c)
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives('Has vendido una giftcard',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
@@ -127,7 +124,7 @@ def event_beta_registered_send_welcome(email):
     html_content = get_template('marketing_first.html').render(c)
     text_content = get_template('marketing_first.html').render(c)
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives('¡Ven a conocer Giviu!',
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
@@ -144,10 +141,40 @@ def marketing_send_marketing_monthly_birthday_nl(user, friends):
     html_content = get_template('marketing_birthday.html').render(c)
     text_content = html_content
     if settings.DEBUG:
-        email = DEBUG_EMAIL_RECEIVER
+        email = settings.DEBUG_EMAIL_RECEIVER
     else:
         email = user.email
     msg = EmailMultiAlternatives(user.first_name + ', te ayudamos con los regalos de este mes.',
+                                 text_content,
+                                 settings.EMAIL_DEFAULT_FROM,
+                                 [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+
+
+def marketing_send_daily_birthday(user, friends):
+    c = Context({
+        'user': user,
+        'friends': friends,
+    })
+
+    html_content = get_template('marketing_birthday.html').render(c)
+    text_content = html_content
+    if settings.DEBUG:
+        email = settings.DEBUG_EMAIL_RECEIVER
+    else:
+        email = user.email
+
+    if len(friends) == 0:
+        return
+    if len(friends) == 1:
+        subject = friends[0]['first_name'] + u' está de cumpleaños y te recomendamos qué regalarle'
+    if len(friends) == 2:
+        subject = friends[0]['first_name'] + friends[1]['first_name'] + u' están de cumpleaños y te recomendamos qué regalarles'
+    if len(friends) > 2:
+        subject = friends[0]['first_name'] + ' y otros ' + str(len(friends) - 1) + u' amigos están de cumpleaños hoy y te recomendamos qué regalarles'
+
+    msg = EmailMultiAlternatives(subject,
                                  text_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])
