@@ -241,6 +241,15 @@ class Likes():
         return []
 
     @staticmethod
+    def get_likes_from_friend(fbid):
+        client = Likes.get_social_client()
+        if client is not None:
+            result = client.friend.find_one({'fbid': fbid},
+                                            {'giftcard_likes': 1})
+            return result
+        return None
+
+    @staticmethod
     def delete_metadata(data):
         del(data['_id'])
         del(data['created'])
@@ -251,15 +260,20 @@ class Likes():
         return data
 
     @staticmethod
-    def get_facebook_friends_birthdays(fbid, month=None):
+    def get_facebook_friends_birthdays(fbid, month=None, day=None, limit=5):
         client = Likes.get_social_client()
         find_dict = {"friend_of": fbid}
         if month:
             month = str(month).zfill(2)
-            find_dict['birthday'] = re.compile('^' + month)
-        result = client.friend.find(find_dict)
+            regex = '^' + month
+            if day:
+                day = str(day).zfill(2)
+                regex += '/' + day
+            find_dict['birthday'] = re.compile(regex)
+        result = client.friend.find(find_dict).limit(limit)
 
         result = filter(lambda x: len(x['birthday']) > 0, result)
+        # TODO: Change for projection
         result = map(Likes.delete_metadata, result)
 
         return result

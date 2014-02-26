@@ -150,3 +150,33 @@ def marketing_send_marketing_monthly_birthday_nl(user, friends):
                                  [email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+
+def marketing_send_daily_birthday(user, friends):
+    c = Context({
+        'user': user,
+        'friends': friends,
+    })
+
+    html_content = get_template('marketing_birthday.html').render(c)
+    text_content = html_content
+    if settings.DEBUG:
+        email = settings.DEBUG_EMAIL_RECEIVER
+    else:
+        email = user.email
+
+    if len(friends) == 0:
+        return
+    if len(friends) == 1:
+        subject = friends[0]['first_name'] + u' está de cumpleaños y te recomendamos qué regalarle'
+    if len(friends) == 2:
+        subject = friends[0]['first_name'] + friends[1]['first_name'] + u' están de cumpleaños y te recomendamos qué regalarles'
+    if len(friends) > 2:
+        subject = friends[0]['first_name'] + ' y otros ' + str(len(friends) - 1) + u' amigos están de cumpleaños hoy y te recomendamos qué regalarles'
+
+    msg = EmailMultiAlternatives(subject,
+                                 text_content,
+                                 settings.EMAIL_DEFAULT_FROM,
+                                 [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
