@@ -57,7 +57,10 @@
       .size-1of2 { width: 50%; }
 
       /* Also, don't forget to add this: */
-      [data-columns]::before { display: none; }
+      [data-columns]::before {
+      display: block;
+      height: 0;
+      visibility: hidden; }
 
     </style>
 
