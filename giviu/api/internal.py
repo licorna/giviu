@@ -16,7 +16,8 @@ import locale
 from external_codes import add_external_codes_for_giftcard
 from relevance import get_relevant_giftcard_for_friend
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+import calendar
 import random
 import json
 import logging
@@ -241,4 +242,99 @@ def add_external_codes(request, giftcard):
         add_external_codes_for_giftcard(int(giftcard), external_codes)
 
     return HttpResponse(json.dumps({'status': 'ok'}), content_type='application/json',
+                        status=200)
+
+
+def sold_giftcards_for_period(request):
+    client_id = request.GET.get('client_id', None)
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
+
+    now = datetime.now()
+    date_from = request.GET.get('from', None)
+    date_to = request.GET.get('to', None)
+
+    if not date_from:
+        date_from = datetime(year=now.year, month=now.month, day=1)
+    else:
+        try:
+            date_from = datetime.strptime(date_from, '%Y-%m-%d')
+        except ValueError:
+            return HttpResponseBadRequest('Unparseable from')
+
+    if not date_to:
+        last_day = calendar.monthrange(now.year, now.month)[1]
+        date_to = datetime(year=now.year, month=now.month, day=last_day)
+    else:
+        try:
+            date_to = datetime.strptime(date_to, '%Y-%m-%d')
+        except ValueError:
+            return HttpResponseBadRequest('Unparseable to')
+
+    if date_from > date_to:
+        return HttpResponseBadRequest('From date > To date')
+
+    day1 = timedelta(days=1)
+    date_to += day1  # date_to should be inclusive
+    products = Product.objects.filter(created__range=(date_from,
+                                                      date_to))
+
+    data = []
+    for product in products:
+        data.append({
+            'price': product.price,
+            'merchant_name': product.giftcard.merchant.name,
+            'merchant_id': product.giftcard.merchant.id
+        })
+
+    return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
+
+
+def validated_giftcards_for_period(request):
+    client_id = request.GET.get('client_id', None)
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
+
+    now = datetime.now()
+    date_from = request.GET.get('from', None)
+    date_to = request.GET.get('to', None)
+
+    if not date_from:
+        date_from = datetime(year=now.year, month=now.month, day=1)
+    else:
+        try:
+            date_from = datetime.strptime(date_from, '%Y-%m-%d')
+        except ValueError:
+            return HttpResponseBadRequest('Unparseable from')
+
+    if not date_to:
+        last_day = calendar.monthrange(now.year, now.month)[1]
+        date_to = datetime(year=now.year, month=now.month, day=last_day)
+    else:
+        try:
+            date_to = datetime.strptime(date_to, '%Y-%m-%d')
+        except ValueError:
+            return HttpResponseBadRequest('Unparseable to')
+
+    if date_from > date_to:
+        return HttpResponseBadRequest('From date > To date')
+
+    day1 = timedelta(days=1)
+    date_to += day1  # date_to should be inclusive
+    products = Product.objects.filter(validation_date__range=(date_from,
+                                                              date_to),
+                                      validated=True)
+
+    data = []
+    for product in products:
+        data.append({
+            'price': product.price,
+            'merchant_name': product.giftcard.merchant.name,
+            'merchant_id': product.giftcard.merchant.id
+        })
+
+    return HttpResponse(json.dumps(data), content_type='application/json',
                         status=200)

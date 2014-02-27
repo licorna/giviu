@@ -50,6 +50,12 @@ urlpatterns = patterns('',
                        url(r'^internal/monthly-birthday-nl/$',
                            'api.internal.send_marketing_monthly_birthday_nl'),
 
+                       url(r'^internal/validated-giftcards-for-period$',
+                           'api.internal.validated_giftcards_for_period'),
+
+                       url(r'^internal/sold-giftcards-for-period$',
+                           'api.internal.sold_giftcards_for_period'),
+
                        url(r'^internal/daily-birthday-nl/$',
                            'api.internal.send_marketing_daily_birthday_nl'),
 
