@@ -30,9 +30,9 @@ def send_giftcards_for_today(request):
         return HttpResponseBadRequest()
 
     client_id = request.GET['client_id']
-    api_client = get_object_or_404(ApiClientId,
-                                   client_id=client_id,
-                                   merchant__slug='giviu')
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
 
     just_check = request.GET.get('just_check', 'true') != 'false'
 
@@ -278,7 +278,8 @@ def sold_giftcards_for_period(request):
     day1 = timedelta(days=1)
     date_to += day1  # date_to should be inclusive
     products = Product.objects.filter(created__range=(date_from,
-                                                      date_to))
+                                                      date_to),
+                                      state__regex='SUCCESS$')
 
     data = []
     for product in products:
