@@ -1,19 +1,27 @@
 from giviu.models import Users, Giftcard
 from social.models import Likes
-from random import sample
+from random import sample, randint
 from genderator.detector import Detector, MALE
+from django.db.models import Q
 
 
 def get_random_gender_giftcard(gender=None):
     if gender is None:
-        giftcards = Giftcard.objects.filter(status=1)
+        size = Giftcard.objects.filter(status=1).count()
+        index = randint(0, size - 1)
+        giftcards = Giftcard.objects.filter(status=1)[index]
     else:
-        giftcards = Giftcard.objects.filter(gender=gender,
-                                            status=1)
+        q = Q(gender=gender) | Q(gender='both')
+        size = Giftcard.objects.filter(q, status=1).count()
+        index = randint(0, size - 1)
+        print 'index,', index
+        giftcards = Giftcard.objects.filter(q, status=1)
+        print 'tamano gfs:', len(giftcards)
+        giftcards = giftcards[index]
     if not giftcards:
         return None
 
-    return sample(giftcards, 1)[0]
+    return giftcards
 
 
 def get_random_male_giftcard():

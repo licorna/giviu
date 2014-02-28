@@ -1,0 +1,11 @@
+<html>
+<body>
+{% block content %}
+<ol>
+  {% for user in users %}
+  <li>{{ user.get_full_name }} - <a href="/api/internal/daily-birthday-nl/?client_id=b1edf9d5f7dbc02b8a8b24dc8ac7837c0942e38c9300581265afcd84&just_try={{ user.email }}">Enviar Daily NL</a></li>
+  {% endfor %}
+</ol>
+{% endblock %}
+</body>
+</html>
