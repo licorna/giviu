@@ -149,7 +149,7 @@ input:-moz-placeholder {
   font-weight:300;  
   transition:0.2s linear all;
   cursor:pointer;
- &.inside{
+  &.inside{
     color:#fff;
     background-color:@insideAction;
     border:1px solid @insideAction;
@@ -207,12 +207,38 @@ input:-moz-placeholder {
 
 .options{
     text-align:right;
-    padding-right:30px;
     font-size:0.7em;
-    margin-bottom:-15px;
     h1{
-    padding-left:15px;
+      padding-left:15px;
       text-align:left;
+    }
+    input[type="text"]{
+      margin-right:11px;
+      width:110px;
+    }    
+    submit{
+      background-color:@principalActions;
+      padding:7px 12px;
+    }
+    .description{
+      font-size:1.8em;
+      color:#B8B8B8;
+      font-family: 'Coustard', helvetica;
+      text-align:left;
+      figure{
+        float:left;
+        border-radius:50%;
+        overflow:hidden;
+        width:40px;
+        height:40px;
+        border:2px solid #27ae60;
+        margin-top: -6px;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      .name{
+        color: #27ae60;
+      }
     }
 }
 
@@ -914,7 +940,6 @@ nav{
   padding-bottom:10px;
   margin:0px 0px 10px 10px;
   position:relative;
-
   h2{
     font-weight:lighter;
     font-size:0.9em;
@@ -1058,6 +1083,74 @@ nav{
       }
     }
   }
+
+  /*nuevo diseño de modulo*/
+  &.new{
+    height:300px;
+    width:23.5%;
+    float:left;
+    border-radius:5px 5px 0px 0px;
+    transition:0.3s all linear;
+    position:relative;
+    figure{
+      border-bottom:0px;
+      margin-bottom:0px;
+      height:140px;
+      border-radius:5px 5px 0px 0px;
+      overflow:hidden;
+      img{
+        width:130%;
+        margin-left:-30px;
+        height:auto;
+      }
+    }
+    .baseContent{
+      background-color:#ffffff;
+      h2{
+        font-size:0.8em;
+        margin-top:15px;
+      }
+      strong{
+        font-size:1.2em;
+      }
+      select{
+        padding:5px;
+      }
+    }
+    .moduleDescription{
+      position: absolute;
+      background-color: #fff;
+      top: -1px;
+      width: 200px;
+      right: -200px;
+      z-index: 999;
+      height:310px;
+      border-right:1px solid @greyBorder;
+      border-top:1px solid @greyBorder;
+      border-bottom:1px solid @greyBorder;
+      box-shadow: 2px 0 5px 1px rgba(0,0,0,0.1);
+      transition:0.3s linear all;
+      border-left:1px dotted #999;
+      border-radius:0px 5px 5px 0px;
+      display:none;
+      p{
+        margin:10px;
+        font-size:0.7em;
+        line-height:1.5em;
+      }
+    }
+    &:hover{
+      box-shadow: 0 0 3px 2px rgba(0,0,0,0.1);
+      border-radius:5px 0px 0px 0px;
+      .moduleDescription{
+        display:block;
+      }
+      figure{
+        border-radius:5px 0px 0px 0px;
+      }
+    }
+  }
+  /*fin nuevo diseño modulo*/
 
 }
 

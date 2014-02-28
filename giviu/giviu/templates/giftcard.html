@@ -2,10 +2,19 @@
 {% load locale_price %}
 {% block title %}{{ this_category }}{% if show_title %} | {% endif %}{% endblock %}
 {% block content %}
-<!-- <section class="container options">
-  ordenar por: <a href="#"> precio</a> | <a href="#"> tipo</a>
-</section> -->
-{% if not this_campaign and not search %}
+<section class="container options">
+<!--   <div class="span7 description">
+    ¡Busca, personaliza y regala giftcards a quien quieras!
+  </div> -->
+  <div class="span7 description">
+    <figure class="avatarHeader"><img src="https://graph.facebook.com/729998412/picture?width=40&amp;height=40"></figure>
+    <span class="name">Sebatian</span> está de cumpleaños hoy, te recomendamos el mejor regálo.
+  </div>
+  <form action="/" action="get" class="span2">
+    <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
+  </form>
+</section>
+<!-- {% if not this_campaign and not search %}
 <div id="bigSlide" class="span9">
   <div id="slidepag" class="span9"></div>
   <ul id="principalSlide">
@@ -36,7 +45,7 @@
     </li>
   </ul>
 </div>
-{% endif %}
+{% endif %} -->
 
 {% if this_campaign %}
 <div class="container">
@@ -86,7 +95,7 @@
           <span class="icon-sad"></span> No se encontraron productos para la búsqueda <strong>"{{ search_term }}"</strong>, intentalo nuevamente.
           </br>
           <form action="/" method="GET" class="span9">
-            <input type="text" placeholder="Ingresa tu búsqueda" style="margin-top:30px;"/>
+            <input type="text" placeholder="Ingresa tu búsqueda" name="q" style="margin-top:30px;"/>
             <input type="submit" value="Buscar" class="btn primary" style="padding:9px 5px;font-size:0.8em">
           </form>
         </center>
@@ -95,57 +104,84 @@
         <h1>Por otro motivo no hay productos.</h1>
       {% endif %}
     {% endif %}
-  <section class="span9" id="giftCardList" data-columns>
+  <section class="span9" id="giftCardList" >
+
+    <article class="giftCardModule new" data-source-id="51">
+      <figure>
+        <span class="like disabled " original-title="Agregar a favoritos" data-source-id="51" data-source-type="1"><span class="icon-heart"></span></span>
+        <a href="/giftcard/detail/tienda-eglu">
+          <img src="https://commondatastorage.googleapis.com/site-images%2Fgiftcards%2Feglu%2Fmontos.png">
+        </a>
+      </figure>
+      <div class="baseContent span9">
+        <a href="/giftcard/detail/tienda-eglu"><h2>Tienda E-glú</h2></a>
+        <h4>en <a href="/partner/eglu">E-glú</a></h4>
+        <center>
+          <select class="" name="webmenu" onchange="showValue(this.value)">
+            <option value="5000">$ 5.000</option>
+            <option value="8000">$ 8.000</option>
+            <option value="10000">$ 10.000</option>
+          </select>
+        </center>
+        <a href="/giftcard/detail/tienda-eglu" class="btn primary">Regalar</a>
+      </div>
+    </article>
 
     {% for product in products %}
-    <article class="giftCardModule" data-source-id="{{ product.id }}">
+    <article class="giftCardModule new" data-source-id="{{ product.id }}">
       <figure>
         <span class="like {% if not user.is_authenticated %}disabled{% endif %} {% if product.get_own_like %} active {% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
         <a href="/giftcard/detail/{{ product.slug }}">
           <img src="{{ product.image }}">
         </a>
       </figure>
-      <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title }}</h2></a>
-      <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
-      {% if product.kind == '1' %}
-      <center>
-        <select class="" name="webmenu"  onchange="showValue(this.value)">
-          {% for price in product.get_price %}
-          <option value="{{ price }}">{{ price|clp }}</option>
-          {% endfor %}
-        </select>
-      </center>
-      {% endif %}
-      {% if product.kind == '0' %}
-      <strong class="span9">{{ product.get_price|clp }}</strong>
-      {% endif %}
-      <a href="/giftcard/detail/{{ product.slug }}" class="btn primary">Regalar</a>
-      <!--
-      {% if product.sold_quantity < 5 %}
-      <div class="quantity">
-        Quedan <strong>{{ product.sold_quantity }}</strong> productos ¡Apresurate!
-      </div>
-      {% endif %}
-      -->
-      {% if product.get_friend_likes %}
-      <div class="friends">
-        <div class="ico">
-          <span class="icon-smiley"></span>
+      <div class="baseContent span9">
+        <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:7 }}</h2></a>
+        <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+        {% if product.kind == '1' %}
+        <center>
+          <select class="" name="webmenu"  onchange="showValue(this.value)">
+            {% for price in product.get_price %}
+            <option value="{{ price }}">{{ price|clp }}</option>
+            {% endfor %}
+          </select>
+        </center>
+        {% endif %}
+        {% if product.kind == '0' %}
+        <strong class="span9">{{ product.get_price|clp }}</strong>
+        {% endif %}
+        <a href="/giftcard/detail/{{ product.slug }}" class="btn primary">Regalar</a>
+        <!--
+        {% if product.sold_quantity < 5 %}
+        <div class="quantity">
+          Quedan <strong>{{ product.sold_quantity }}</strong> productos ¡Apresurate!
         </div>
-        {% for friend in product.get_friend_likes %}
-        <figure>
-          <img src="https://graph.facebook.com/{{ friend }}/picture?width=40&height=40">
-        </figure>
-        {% endfor %}
-      </div>
+        {% endif %}
+        -->
+        <div class="moduleDescription">
+          <p>
+            {{ product.description|truncatewords:25 }}
+          </p>
+        </div>
+        {% if product.get_friend_likes %}
+        <div class="friends">
+          <div class="ico">
+            <span class="icon-smiley"></span>
+          </div>
+          {% for friend in product.get_friend_likes %}
+          <figure>
+            <img src="https://graph.facebook.com/{{ friend }}/picture?width=40&height=40">
+          </figure>
+          {% endfor %}
+        </div>
       {% endif %}
+      </div>
+
     </article>
     {% endfor %}
 
   </section>
-</section>
-<a data-lightbox="campaign" href="https://storage.googleapis.com/site-images/campaigns/regalo-discos.png"></a>
-
+ </section>
  <script type="text/javascript">
 $(document).ready(function(){
 
