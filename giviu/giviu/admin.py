@@ -3,6 +3,7 @@ from models import (
     Users,
     GiftcardCategory,
     GiftcardDesign,
+    GiftcardMedia,
     Giftcard,
     Product,
     Service,
@@ -24,6 +25,7 @@ class UsersAdmin(admin.ModelAdmin):
 admin.site.register(Users, UsersAdmin)
 admin.site.register(GiftcardCategory)
 admin.site.register(GiftcardDesign)
+admin.site.register(GiftcardMedia)
 admin.site.register(Giftcard)
 admin.site.register(Product)
 admin.site.register(Service)

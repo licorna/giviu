@@ -20,12 +20,18 @@
   <div class="span5 giftcardImage">
     <figure class="span9">
       <span class="like big tooltipInfo {% if not user.is_authenticated %}disabled{% endif %} {% if user_like %}active{% endif %}"  data-source-id="{{ giftcard.id }}" data-source-type="1"><span class="icon-heart"></span></span>
-      <img class="span9" src="{{ giftcard.image }}">
-<!--         <ul id="slideDetail" class="span9 col" style="height:200px!important;">
-          <li style="float:left;">
-            <img src="{{ image }}">
-          </li>
-        </ul> -->
+      <ul id="slideDetail" class="span9 col" style="height:200px!important;">
+        <li style="float:left;">
+          <img class="span9" src="{{ giftcard.image }}"/>
+        </li>
+      {% if giftcard.media_images %}
+        {% for image in giftcard.media_images %}
+        <li style="float:left;">
+          <img class="span9" src="{{image}}"/>
+        </li>
+        {% endfor %}
+      {% endif %}
+      </ul> 
     </figure>
     <section class="span9 merchantInfo">
       <figure>
