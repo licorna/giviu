@@ -14,7 +14,9 @@ from marketing import (simple_giftcard_send_notification,
 from genderator.detector import Detector, MALE
 import locale
 from external_codes import add_external_codes_for_giftcard
-from relevance import get_relevant_giftcard_for_friend
+from relevance import (get_relevant_giftcard_for_friend,
+                       get_saved_recommendations,
+                       store_current_recommendations)
 
 from datetime import date, datetime, timedelta
 import calendar
@@ -121,34 +123,40 @@ def send_marketing_daily_birthday_nl(request):
                                      is_merchant=0)
 
     now = datetime.today()
-    email_list = []
-    for user in users:
-        friends = Likes.get_facebook_friends_birthdays(user.fbid,
-                                                       now.month,
-                                                       now.day)
+    response = []
+    for user in users[:6]:
+        friends = get_saved_recommendations(user)
+        if friends:
+            print 'tenemos recomandaciones preparadas para', user.id
+            print friends
+        else:
+            print 'no tenemos recomendaciones preparadas para', user.id
+            friends = Likes.get_facebook_friends_birthdays(user.fbid,
+                                                           now.month,
+                                                           now.day)
+            if not friends:
+                continue
+            recommendations = []
+            for friend in friends:
+                friend['recommended'] = get_relevant_giftcard_for_friend(friend)
+                gf = Giftcard.objects.get(friend['recommended'])
+                recommendations.append({
+                    'name': friend['first_name'],
+                    'recommended_title': gf.title,
+                    'birthday': 'Hoy',
+                    'fbid': friend['fbid']
+                })
+            store_current_recommendations(friends, user)
+
         if len(friends) == 0:
             continue
 
-        recommendations = []
-        for friend in friends:
-            relevant_giftcard = get_relevant_giftcard_for_friend(friend)
-            friend['recommended'] = relevant_giftcard
-            recommendations.append({
-                'name': friend['first_name'],
-                'recommended': friend['recommended'].title,
-                'birthday': 'Hoy',
-                'fbid': friend['fbid']
-            })
-
-        email_list.append({
-            'email': user.email,
-            'friends': recommendations
-        })
+        response.append({user.fbid: friends})
 
         if not just_check:
-            marketing_send_daily_birthday(user, friends)
+            marketing_send_daily_birthday(user, friends['friends'])
 
-    return HttpResponse(json.dumps(email_list), content_type='application/json',
+    return HttpResponse(json.dumps(response), content_type='application/json',
                         status=200)
 
 

@@ -1,8 +1,47 @@
-from giviu.models import Users, Giftcard
+from giviu.models import Giftcard
 from social.models import Likes
 from random import sample, randint
 from genderator.detector import Detector, MALE
 from django.db.models import Q
+from datetime import datetime
+import pymongo
+from django.conf import settings
+import logging
+logger = logging.getLogger('giviu')
+
+
+def store_current_recommendations(current, user):
+    try:
+        client = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+    except pymongo.errors.ConnectionFailure:
+        logger.critical('Unable to connect to social mongo on ' +
+                        settings.SOCIAL['MONGO_HOST'])
+        return None
+
+    client = client.eve
+
+    data = {
+        'user_id': user.id,
+        'date': datetime.now(),
+        'friends': current
+    }
+    client.relevance.insert(data)
+
+    return True
+
+
+def get_saved_recommendations(user):
+    try:
+        client = pymongo.MongoClient(settings.SOCIAL['MONGO_HOST'])
+    except pymongo.errors.ConnectionFailure:
+        logger.critical('Unable to connect to social mongo on ' +
+                        settings.SOCIAL['MONGO_HOST'])
+        return None
+
+    client = client.eve
+    response = client.relevance.find_one({'user_id': user.id})
+    if response is not None and 'friends' in response:
+        return response['friends']
 
 
 def get_random_gender_giftcard(gender=None):
@@ -70,9 +109,9 @@ def get_relevant_giftcard_for_friend(friend):
         if 'giftcard_likes' in friend_likes:
             like = sample(friend_likes['giftcard_likes'], 1)[0]
 
-            return Giftcard.objects.get(id=like)
+            return like
 
-    gf = get_random_giftcard_for_name_detected_gender(friend['first_name'])
+    gf = get_random_giftcard_for_name_detected_gender(friend['first_name']).id
     if not gf:
         return None
 
