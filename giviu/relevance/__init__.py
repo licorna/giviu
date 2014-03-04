@@ -46,15 +46,19 @@ def get_saved_recommendations(user):
 
 def get_random_gender_giftcard(gender=None):
     if gender is None:
-        size = Giftcard.objects.filter(status=1).count()
+        size = Giftcard.objects.filter(status=1,
+                                       priority__gte=50).count()
         index = randint(0, size - 1)
-        giftcards = Giftcard.objects.filter(status=1)[index]
+        giftcards = Giftcard.objects.filter(status=1,
+                                            priority__gte=50)[index]
     else:
         q = Q(gender=gender) | Q(gender='both')
-        size = Giftcard.objects.filter(q, status=1).count()
+        size = Giftcard.objects.filter(q, status=1,
+                                       priority__gte=50).count()
         index = randint(0, size - 1)
         print 'index,', index
-        giftcards = Giftcard.objects.filter(q, status=1)
+        giftcards = Giftcard.objects.filter(q, status=1,
+                                            priority__gte=50)
         print 'tamano gfs:', len(giftcards)
         giftcards = giftcards[index]
     if not giftcards:
