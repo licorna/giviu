@@ -389,7 +389,7 @@
 	                                   <div style="line-height:100%;">
 	                                    <span style="text-decoration: none; color: #555555; font-weight: normal;">
 	                                      <a href="https://www.giviu.com/giftcard/detail/{{ friend.recommended.slug }}" style="text-decoration: none; color: rgb(85, 85, 85); font-weight: normal;">
-	                                        <singleline> <span style="color:#27ae60;">{{ friend.birthday }}</span> - {{ friend.first_name }}</singleline>
+	                                        <singleline>{{ friend.first_name }}</singleline>
 	                                      </a>
 	                                    </span>
 	                                   </div>
@@ -434,7 +434,7 @@
 	                                 <td width="auto" align="center" valign="middle" height="32" style=" background-color:#27ae60;  border-radius:3px; background-clip: padding-box;font-size:13px; font-family: Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#ffffff; font-weight: normal; padding-left:18px; padding-right:18px; ">
 
 	                                   <span style="color: #ffffff; font-weight: normal;">
-	                                     <a href="https://www.giviu.com/giftcard/detail/{{ friend.recommended.slug }}" style="text-decoration: none; color: #ffffff; font-weight: normal;">
+	                                     <a href="{{ friend.recommended.slug }}" style="text-decoration: none; color: #ffffff; font-weight: normal;">
 	                                       <singleline>Regalar</singleline>
 	                                     </a>
 	                                   </span>

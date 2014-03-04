@@ -124,37 +124,38 @@ def send_marketing_daily_birthday_nl(request):
 
     now = datetime.today()
     response = []
+    count = 1
     for user in users[:6]:
+        print 'Procesando amigo', count, 'de', len(users)
+        count += 1
         friends = get_saved_recommendations(user)
-        if friends:
-            print 'tenemos recomandaciones preparadas para', user.id
-            print friends
-        else:
-            print 'no tenemos recomendaciones preparadas para', user.id
+        if not friends:
             friends = Likes.get_facebook_friends_birthdays(user.fbid,
                                                            now.month,
                                                            now.day)
             if not friends:
                 continue
-            recommendations = []
             for friend in friends:
-                friend['recommended'] = get_relevant_giftcard_for_friend(friend)
-                gf = Giftcard.objects.get(friend['recommended'])
-                recommendations.append({
-                    'name': friend['first_name'],
-                    'recommended_title': gf.title,
-                    'birthday': 'Hoy',
-                    'fbid': friend['fbid']
-                })
+                gf = Giftcard.objects.get(id=get_relevant_giftcard_for_friend(friend))
+                friend['recommended'] = {
+                    'id': gf.id,
+                    'title': gf.title,
+                    'slug': 'https://www.giviu.com' + gf.get_absolute_url(),
+                    'image': gf.image,
+                    'description': gf.description,
+                }
             store_current_recommendations(friends, user)
 
         if len(friends) == 0:
             continue
 
-        response.append({user.fbid: friends})
+        response.append({user.fbid: {
+            'name': user.first_name,
+            'date': now.strftime('%m/%d/%Y'),
+            'friends': friends}})
 
         if not just_check:
-            marketing_send_daily_birthday(user, friends['friends'])
+            marketing_send_daily_birthday(user, friends)
 
     return HttpResponse(json.dumps(response), content_type='application/json',
                         status=200)

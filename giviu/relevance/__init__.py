@@ -22,7 +22,7 @@ def store_current_recommendations(current, user):
 
     data = {
         'user_id': user.id,
-        'date': datetime.now(),
+        'date': datetime.now().strftime('%m/%d/%Y'),
         'friends': current
     }
     client.relevance.insert(data)
