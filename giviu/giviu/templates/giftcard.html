@@ -4,7 +4,7 @@
 {% block content %}
 <section class="container options">
   <div class="span7 description">
-    <span class="text"></span>
+    <span class="text">{% if not user.is_authenticated %}Busca, personaliza y regala giftcards a quien quieras{% endif %}</span>
   </div>
   <form action="/" action="get" class="span2" id="search">
     <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
@@ -94,7 +94,7 @@
           <a href="/giftcard/detail/{{ product.slug }}" class="btn primary more-detail-buy">Regalar</a>
           <div class="validation-type span9">
             {% if product.get_friend_likes %}
-            <span class="friend-count" data-source-id="{{ product.id }}" >5 amigos desean esto</span> |
+            <span class="friend-count" data-source-id="{{ product.id }}">{{ product.get_friend_likes|length }} Amigos desean esto</span> |
             {% endif %}
             <!-- Valido en <span class="icon-shop"></span> <span class="icon-laptop"></span> |  --><span class="like {% if not user.is_authenticated %}disabled{% endif %} " data-source-id="{{ product.id }}" data-source-type="1">Agregar a favoritos</span>
           </div>
@@ -114,15 +114,7 @@
                 <img src="https://graph.facebook.com/{{ friend }}/picture?width=40&height=40">
               </figure>   
             {% endfor %}
-                <figure class="friend-like">
-                <img src="https://graph.facebook.com/ESTELDESIGN/picture?width=40&height=40">
-              </figure>              
-              <figure class="friend-like">
-                <img src="https://graph.facebook.com/ESTELDESIGN/picture?width=40&height=40">
-              </figure>              
-              <figure class="friend-like">
-                <img src="https://graph.facebook.com/ESTELDESIGN/picture?width=40&height=40">
-              </figure> 
+
           </div>
         </div>
         {% endif %}
@@ -145,7 +137,6 @@ $(document).ready(function(){
       .done(function(data){
         var friends = 0;
         if(data.length==0 || data==""){
-          alert(data)
           $('.description .text').html('¡Busca, personaliza y regala giftcards a quien quieras!');
 
         }else{
@@ -156,7 +147,7 @@ $(document).ready(function(){
             var day = value.birthday.split('/');
             var day = day[1];
             var f = new Date();
-            if(f.getDate() != day){
+            if(f.getDate() == day){
               $('.description').append('<figure class="avatarHeader"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=60&amp;height=60"></figure>');
               $('.description .text').html('<span>'+value.first_name+',</span> Está de cumpleaños hoy');
               $('.description').addClass('small')
@@ -166,6 +157,7 @@ $(document).ready(function(){
               $('.description').append(friend_birthday);
               $('.description .text').html('<span>Están de cumpleaños este mes</span> encuentra los mejores regalos');
               $('.description').addClass('small');
+
             }
 
           })
