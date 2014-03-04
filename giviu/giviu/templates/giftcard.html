@@ -147,7 +147,7 @@ $(document).ready(function(){
             var day = value.birthday.split('/');
             var day = day[1];
             var f = new Date();
-            if(f.getDate() != day){
+            if(f.getDate() == day){
               $('.description').append('<figure class="avatarHeader"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=60&amp;height=60"></figure>');
               $('.description .text').html('<span>'+value.first_name+',</span> Está de cumpleaños hoy');
               $('.description').addClass('small')
@@ -157,7 +157,7 @@ $(document).ready(function(){
               $('.description').append(friend_birthday);
               $('.description .text').html('<span>Están de cumpleaños este mes</span> encuentra los mejores regalos');
               $('.description').addClass('small');
-              
+
             }
 
           })
