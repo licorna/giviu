@@ -125,7 +125,7 @@ def send_marketing_daily_birthday_nl(request):
     now = datetime.today()
     response = []
     count = 1
-    for user in users[:6]:
+    for user in users:
         print 'Procesando amigo', count, 'de', len(users)
         count += 1
         friends = get_saved_recommendations(user)
