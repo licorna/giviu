@@ -225,19 +225,29 @@ input:-moz-placeholder {
       color:#B8B8B8;
       font-family: 'Coustard', helvetica;
       text-align:left;
+      margin-top:10px;
       figure{
         float:left;
         border-radius:50%;
         overflow:hidden;
-        width:40px;
-        height:40px;
+        width:60px;
+        height:60px;
         border:2px solid #27ae60;
         margin-top: -6px;
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-right: 3px;
+        margin-top:-15px;
+      }
+      .text{
+        span{
+          color:@principalActions;
+          
+        }
       }
       .name{
         color: #27ae60;
+      }
+      &.small{
+        font-size:1.6em;
       }
     }
 }

@@ -4,12 +4,8 @@
 {% block content %}
 <section class="container options">
   <div class="span7 description">
-    ¡Busca, personaliza y regala giftcards a quien quieras!
+    <span class="text"></span>
   </div>
-<!--   <div class="span7 description">
-    <figure class="avatarHeader"><img src="https://graph.facebook.com/729998412/picture?width=40&amp;height=40"></figure>
-    <span class="name">Sebatian</span> está de cumpleaños hoy, te recomendamos el mejor regálo.
-  </div> -->
   <form action="/" action="get" class="span2" id="search">
     <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
   </form>
@@ -147,22 +143,30 @@ $(document).ready(function(){
   function getFriends(month){
     $.get( "/api/social/get-close-facebook-friends/"+$("#fb-id").val()+"?month="+month)
       .done(function(data){
-        $('#friendTitle').html('<h3>Tienes '+data.length+' amigos de cumpleaños este mes</h3>¿ya tienes su regalo?')
         var friends = 0;
-        if(data.length==0){
-          $('#friendTitle').html('<h3>¿Aun no has creado tu calendario?</h3>')
-          $('#friendImages').append('<br/><span class="icon-calendar" style="font-size:100px;"></span><br><br><a href="user/calendar" class="startNow">Comienza aquí</a>');
+        if(data.length==0 || data==""){
+          alert(data)
+          $('.description .text').html('¡Busca, personaliza y regala giftcards a quien quieras!');
 
         }else{
           $.each(data, function(key,value) {
-            if(key>=5){
+            if(key>=3){
               return false;
             }
             var day = value.birthday.split('/');
             var day = day[1];
-
-            var friend_birthday = '<figure class="friendBirthaySlide"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=200&amp;height=200"><figcaption><b>'+day+'</b></figcaption></figure>';
-            $('#friendImages').append(friend_birthday);
+            var f = new Date();
+            if(f.getDate() != day){
+              $('.description').append('<figure class="avatarHeader"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=60&amp;height=60"></figure>');
+              $('.description .text').html('<span>'+value.first_name+',</span> Está de cumpleaños hoy');
+              $('.description').addClass('small')
+              return false;
+            }else{
+              var friend_birthday = '<figure class="avatarHeader"><img src="https://graph.facebook.com/'+value.fbid+'/picture?width=60&amp;height=60"></figure>';
+              $('.description').append(friend_birthday);
+              $('.description .text').html('<span>Están de cumpleaños este mes</span> encuentra los mejores regalos');
+              $('.description').addClass('small');
+            }
 
           })
         }
@@ -170,6 +174,5 @@ $(document).ready(function(){
   }
 
 });
- </script>
-
+</script>
 {% endblock %}
