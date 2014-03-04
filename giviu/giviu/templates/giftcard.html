@@ -4,7 +4,7 @@
 {% block content %}
 <section class="container options">
   <div class="span7 description">
-    <span class="text"></span>
+    <span class="text">{% if not user.is_authenticated %}Busca, personaliza y regala giftcards a quien quieras{% endif %}</span>
   </div>
   <form action="/" action="get" class="span2" id="search">
     <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
@@ -94,7 +94,7 @@
           <a href="/giftcard/detail/{{ product.slug }}" class="btn primary more-detail-buy">Regalar</a>
           <div class="validation-type span9">
             {% if product.get_friend_likes %}
-            <span class="friend-count" data-source-id="{{ product.id }}" >amigos desean esto</span> |
+            <span class="friend-count" data-source-id="{{ product.id }}">{{ product.get_friend_likes|length }} Amigos desean esto</span> |
             {% endif %}
             <!-- Valido en <span class="icon-shop"></span> <span class="icon-laptop"></span> |  --><span class="like {% if not user.is_authenticated %}disabled{% endif %} " data-source-id="{{ product.id }}" data-source-type="1">Agregar a favoritos</span>
           </div>
