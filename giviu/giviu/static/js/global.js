@@ -34,8 +34,15 @@ $(document).ready(function(e){
          
         });
 
-
+    $('.friend-count').click(function(){
+        var thismodule = $(this).attr('data-source-id');
+        $('.moduleDescription[data-source-id="'+thismodule+'"]').show();
+    });
     
+    $('.new').mouseleave(function(){
+        $('.moduleDescription').hide();
+    });
+
 
     $(".like").click(function(){
         if($(this).hasClass('disabled')){

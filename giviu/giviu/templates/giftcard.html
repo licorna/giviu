@@ -3,56 +3,23 @@
 {% block title %}{{ this_category }}{% if show_title %} | {% endif %}{% endblock %}
 {% block content %}
 <section class="container options">
-<!--   <div class="span7 description">
-    ¡Busca, personaliza y regala giftcards a quien quieras!
-  </div> -->
   <div class="span7 description">
+    ¡Busca, personaliza y regala giftcards a quien quieras!
+  </div>
+<!--   <div class="span7 description">
     <figure class="avatarHeader"><img src="https://graph.facebook.com/729998412/picture?width=40&amp;height=40"></figure>
     <span class="name">Sebatian</span> está de cumpleaños hoy, te recomendamos el mejor regálo.
-  </div>
-  <form action="/" action="get" class="span2">
+  </div> -->
+  <form action="/" action="get" class="span2" id="search">
     <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
   </form>
 </section>
-<!-- {% if not this_campaign and not search %}
-<div id="bigSlide" class="span9">
-  <div id="slidepag" class="span9"></div>
-  <ul id="principalSlide">
-    <li class="span9 love" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fback_babytuto.png);">
-        <a href="https://www.giviu.com/giftcard/detail/tienda-de-articulos-para-bebes" class="span9">
-          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbaby-tuto2.png"/>
-       </a>
-    </li> 
-    {% if user.is_authenticated %}
-    <li class="span9 friend">
-      <div class="container" id="friend" >
-        <div id="friendTitle" class="span9">
-        </div>
-        <div id="friendImages" class="span9">
-        </div>
-      </div>
-    </li>
-    {% endif %}
-    <li class="span9 parapente" style="background-image:url(https://storage.googleapis.com/site-images/campaigns/back-portaldisc.png)">
-        <a href="/giftcard/detail/regala-musica" class="span9">
-          <img src="https://storage.googleapis.com/site-images/campaigns/banner-portaldisc.png"/>
-       </a>
-    </li>
-    <li class="span9 parapente" style="background-image:url(https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fbackparapente.png)">
-        <a href="/giftcard/detail/vuelo-en-parapente-fotos-video" class="span9">
-          <img src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2Fparapente.png"/>
-       </a>
-    </li>
-  </ul>
-</div>
-{% endif %} -->
 
 {% if this_campaign %}
 <div class="container">
   <img width="100%;" src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2F{{ this_campaign.slug }}.png">
 </div>
 {% endif %}
-
 
 <section class="container">
 <!--     <div class="span2">
@@ -106,30 +73,9 @@
     {% endif %}
   <section class="span9" id="giftCardList" >
 
-    <article class="giftCardModule new" data-source-id="51">
-      <figure>
-        <span class="like disabled " original-title="Agregar a favoritos" data-source-id="51" data-source-type="1"><span class="icon-heart"></span></span>
-        <a href="/giftcard/detail/tienda-eglu">
-          <img src="https://commondatastorage.googleapis.com/site-images%2Fgiftcards%2Feglu%2Fmontos.png">
-        </a>
-      </figure>
-      <div class="baseContent span9">
-        <a href="/giftcard/detail/tienda-eglu"><h2>Tienda E-glú</h2></a>
-        <h4>en <a href="/partner/eglu">E-glú</a></h4>
-        <center>
-          <select class="" name="webmenu" onchange="showValue(this.value)">
-            <option value="5000">$ 5.000</option>
-            <option value="8000">$ 8.000</option>
-            <option value="10000">$ 10.000</option>
-          </select>
-        </center>
-        <a href="/giftcard/detail/tienda-eglu" class="btn primary">Regalar</a>
-      </div>
-    </article>
-
     {% for product in products %}
     <article class="giftCardModule new" data-source-id="{{ product.id }}">
-      <figure>
+      <figure class="giftcard">
         <span class="like {% if not user.is_authenticated %}disabled{% endif %} {% if product.get_own_like %} active {% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
         <a href="/giftcard/detail/{{ product.slug }}">
           <img src="{{ product.image }}">
@@ -138,19 +84,25 @@
       <div class="baseContent span9">
         <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:7 }}</h2></a>
         <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
-        {% if product.kind == '1' %}
-        <center>
-          <select class="" name="webmenu"  onchange="showValue(this.value)">
-            {% for price in product.get_price %}
-            <option value="{{ price }}">{{ price|clp }}</option>
-            {% endfor %}
-          </select>
-        </center>
-        {% endif %}
-        {% if product.kind == '0' %}
-        <strong class="span9">{{ product.get_price|clp }}</strong>
-        {% endif %}
-        <a href="/giftcard/detail/{{ product.slug }}" class="btn primary">Regalar</a>
+        <div class="newAction">
+          {% if product.kind == '1' %}
+            <select class="span5" name="webmenu"  onchange="showValue(this.value)">
+              {% for price in product.get_price %}
+              <option value="{{ price }}">{{ price|clp }}</option>
+              {% endfor %}
+            </select>
+          {% endif %}
+          {% if product.kind == '0' %}
+          <strong class="span5 price">{{ product.get_price|clp }}</strong>
+          {% endif %}
+          <a href="/giftcard/detail/{{ product.slug }}" class="btn primary more-detail-buy">Regalar</a>
+          <div class="validation-type span9">
+            {% if product.get_friend_likes %}
+            <span class="friend-count" data-source-id="{{ product.id }}" >5 amigos desean esto</span> |
+            {% endif %}
+            <!-- Valido en <span class="icon-shop"></span> <span class="icon-laptop"></span> |  --><span class="like {% if not user.is_authenticated %}disabled{% endif %} " data-source-id="{{ product.id }}" data-source-type="1">Agregar a favoritos</span>
+          </div>
+        </div>
         <!--
         {% if product.sold_quantity < 5 %}
         <div class="quantity">
@@ -158,23 +110,26 @@
         </div>
         {% endif %}
         -->
-        <div class="moduleDescription">
-          <p>
-            {{ product.description|truncatewords:25 }}
-          </p>
-        </div>
         {% if product.get_friend_likes %}
-        <div class="friends">
-          <div class="ico">
-            <span class="icon-smiley"></span>
+        <div class="moduleDescription" data-source-id="{{ product.id }}" >
+          <div class="friends-like">
+            {% for friend in product.get_friend_likes %}
+              <figure class="friend-like">
+                <img src="https://graph.facebook.com/{{ friend }}/picture?width=40&height=40">
+              </figure>   
+            {% endfor %}
+                <figure class="friend-like">
+                <img src="https://graph.facebook.com/ESTELDESIGN/picture?width=40&height=40">
+              </figure>              
+              <figure class="friend-like">
+                <img src="https://graph.facebook.com/ESTELDESIGN/picture?width=40&height=40">
+              </figure>              
+              <figure class="friend-like">
+                <img src="https://graph.facebook.com/ESTELDESIGN/picture?width=40&height=40">
+              </figure> 
           </div>
-          {% for friend in product.get_friend_likes %}
-          <figure>
-            <img src="https://graph.facebook.com/{{ friend }}/picture?width=40&height=40">
-          </figure>
-          {% endfor %}
         </div>
-      {% endif %}
+        {% endif %}
       </div>
 
     </article>
