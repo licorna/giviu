@@ -170,7 +170,7 @@ def marketing_send_daily_birthday(user, friends):
     if len(friends) == 1:
         subject = friends[0]['first_name'] + u' está de cumpleaños y te recomendamos qué regalarle'
     if len(friends) == 2:
-        subject = friends[0]['first_name'] + friends[1]['first_name'] + u' están de cumpleaños y te recomendamos qué regalarles'
+        subject = friends[0]['first_name'] + u' y ' + friends[1]['first_name'] + u' están de cumpleaños y te recomendamos qué regalarles'
     if len(friends) > 2:
         subject = friends[0]['first_name'] + ' y otros ' + str(len(friends) - 1) + u' amigos están de cumpleaños hoy y te recomendamos qué regalarles'
 
