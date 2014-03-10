@@ -47,47 +47,56 @@
 				<section class="span9">
 					<section class="span9 enterpriseTab" data-tab="giftcards" id="calendar" data-columns>
 					    {% for product in products %}
-					    <article class="giftCardModule" data-source-id="{{ product.id }}">
-					      <figure>
+					    <article class="giftCardModule new partner" data-source-id="{{ product.id }}">
+					      <figure class="giftcard">
 					        <span class="like {% if not user.is_authenticated %}disabled{% endif %} {% if product.get_own_like %} active {% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
 					        <a href="/giftcard/detail/{{ product.slug }}">
 					          <img src="{{ product.image }}">
 					        </a>
 					      </figure>
-					      <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title }}</h2></a>
-					      <h4><a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
-					      {% if product.kind == '1' %}
-					      <center>
-					        <select class="" name="webmenu"  onchange="showValue(this.value)">
-					          {% for price in product.get_price %}
-					          <option value="{{ price }}">{{ price|clp }}</option>
-					          {% endfor %}
-					        </select>
-					      </center>
-					      {% endif %}
-					      {% if product.kind == '0' %}
-					      <strong class="span9">{{ product.get_price|clp }}</strong>
-					      {% endif %}
-					      <a href="/giftcard/detail/{{ product.slug }}" class="btn primary">Regalar</a>
-					      <!--
-					      {% if product.sold_quantity < 5 %}
-					      <div class="quantity">
-					        Quedan <strong>{{ product.sold_quantity }}</strong> productos ¡Apresurate!
-					      </div>
-					      {% endif %}
-					      -->
-<!-- 					      {% if product.get_friend_likes %}
-					      <div class="friends">
-					        <div class="ico">
-					          <span class="icon-smiley"></span>
+					      <div class="baseContent span9">
+					        <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:7 }}</h2></a>
+					        <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+					        <div class="newAction">
+					          {% if product.kind == '1' %}
+					            <select class="span5" name="webmenu"  onchange="showValue(this.value)">
+					              {% for price in product.get_price %}
+					              <option value="{{ price }}">{{ price|clp }}</option>
+					              {% endfor %}
+					            </select>
+					          {% endif %}
+					          {% if product.kind == '0' %}
+					          <strong class="span5 price">{{ product.get_price|clp }}</strong>
+					          {% endif %}
+					          <a href="/giftcard/detail/{{ product.slug }}" class="btn primary more-detail-buy">Regalar</a>
+					          <div class="validation-type span9">
+					            {% if product.get_friend_likes %}
+					            <span class="friend-count" data-source-id="{{ product.id }}">{{ product.get_friend_likes|length }} Amigos desean esto</span> |
+					            {% endif %}
+					            <!-- Valido en <span class="icon-shop"></span> <span class="icon-laptop"></span> |  --><span class="like {% if not user.is_authenticated %}disabled{% endif %} " data-source-id="{{ product.id }}" data-source-type="1">Agregar a favoritos</span>
+					          </div>
 					        </div>
-					        {% for likes in product.get_friend_likes %}
-					        <figure>
-					          <img src="https://graph.facebook.com/{{ likes.fbid }}/picture?width=40&height=40">
-					        </figure>
-					        {% endfor %}
+					        <!--
+					        {% if product.sold_quantity < 5 %}
+					        <div class="quantity">
+					          Quedan <strong>{{ product.sold_quantity }}</strong> productos ¡Apresurate!
+					        </div>
+					        {% endif %}
+					        -->
+					        {% if product.get_friend_likes %}
+					        <div class="moduleDescription" data-source-id="{{ product.id }}" >
+					          <div class="friends-like">
+					            {% for friend in product.get_friend_likes %}
+					              <figure class="friend-like">
+					                <img src="https://graph.facebook.com/{{ friend }}/picture?width=40&height=40">
+					              </figure>   
+					            {% endfor %}
+
+					          </div>
+					        </div>
+					        {% endif %}
 					      </div>
-					      {% endif %} -->
+
 					    </article>
 					    {% endfor %}
 					</section>
