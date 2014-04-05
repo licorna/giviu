@@ -23,6 +23,8 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 from django.conf import settings
 
+from datetime import datetime
+
 import logging
 logger = logging.getLogger('giviu')
 
@@ -242,44 +244,65 @@ def giftcard_confirmation(request):
     from puntopagos import transaction_create
     from credits import transaction_create_no_psp
 
-    for datum in ['giftcard-id', 'product-merchant-id', 'email-to']:
+    for datum in ['giftcard-id', 'product-merchant-id']:
         if datum not in request.POST:
             return HttpResponseBadRequest()
-    email_to = request.POST['email-to']
-    name_to = request.POST['name-to']
-    comment = request.POST['comment']
-    price = request.POST['giftcard-price']
-    design = request.POST['giftcard-design']
-    date = request.POST['send-when']
-    try:
-        validate_email(email_to)
-    except ValidationError:
+
+    if 'email-to' not in request.POST and 'auto-validate' not in request.POST:
         return HttpResponseBadRequest()
 
-    trx_credit = user_credits(request.user.fbid)
-    try:
-        price = int(price)
-    except ValueError:
-        return HttpResponseBadRequest()
+    if 'auto-validate' not in request.POST:
+        email_to = request.POST['email-to']
+        name_to = request.POST['name-to']
+        comment = request.POST['comment']
+        price = request.POST['giftcard-price']
+        design = request.POST.get('giftcard-design', None)
+        date = request.POST['send-when']
+        try:
+            validate_email(email_to)
+        except ValidationError:
+            return HttpResponseBadRequest()
 
-    credits = {'uuid': 'none'}
-    credits_used = 0
-    original_price = price
-    if trx_credit['amount'] > 0:
-        if trx_credit['amount'] >= price:
-            credits_used = price
-            price = 0
-        else:
-            credits_used = trx_credit['amount']
-            price = price - credits_used
-        credits = use_user_credits(request.user.fbid, credits_used)
+        trx_credit = user_credits(request.user.fbid)
+        try:
+            price = int(price)
+        except ValueError:
+            return HttpResponseBadRequest()
+
+        credits = {'uuid': 'none'}
+        credits_used = 0
+        original_price = price
+        if trx_credit['amount'] > 0:
+            if trx_credit['amount'] >= price:
+                credits_used = price
+                price = 0
+            else:
+                credits_used = trx_credit['amount']
+                price = price - credits_used
+            credits = use_user_credits(request.user.fbid, credits_used)
+
+    else:
+        email_to = 'auto_validate@giviu.com'
+        date = datetime.today()
+        name_to = 'Auto Validate'
+        price = request.POST.get('giftcard-price', None)
+        try:
+            price = int(price)
+        except ValueError:
+            return HttpResponseBadRequest()
+        design = request.POST.get('giftcard-desing', None)
+        comment = request.POST.get('comment', '')
+        original_price = price
 
     try:
         giftcard = Giftcard.objects.get(pk=int(request.POST['giftcard-id']))
     except Giftcard.DoesNotExist:
         return HttpResponseBadRequest()
 
-    design = GiftcardDesign.objects.get(pk=int(design))
+    if design:
+        design = GiftcardDesign.objects.get(pk=int(design))
+    else:
+        design = GiftcardDesign.objects.get(pk=1)
 
     if price > 0:
         #TODO: Comprobar que la transaccion fue creada exitosamente
@@ -292,11 +315,15 @@ def giftcard_confirmation(request):
         response, transaction = transaction_create_no_psp(str(price))
         trx_id = response['trx_id']
 
-    if credits['uuid'] is not 'none':
-        transaction.use_credits = credits['uuid']
-        transaction.save()
+    if 'auto-validate' not in request.POST:
+        if credits['uuid'] is not 'none':
+            transaction.use_credits = credits['uuid']
+            transaction.save()
+        else:
+            transaction.use_credits = None
+
     else:
-        transaction.use_credits = None
+        credits_used = 0
 
     try:
         customer = Users.objects.get(email=email_to)
@@ -321,7 +348,7 @@ def giftcard_confirmation(request):
         'comment': comment,
         'price': price,
         'original_price': original_price,
-        'giftcard_design': request.POST['giftcard-design'],
+        'giftcard_design': design.id,
         'giftcard': giftcard,
         'product_id': product_id,
         'token': response['token'],

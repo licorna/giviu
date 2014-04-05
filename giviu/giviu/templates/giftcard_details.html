@@ -31,7 +31,7 @@
         </li>
         {% endfor %}
       {% endif %}
-      </ul> 
+      </ul>
     </figure>
     <section class="span9 merchantInfo">
       <figure>
@@ -89,9 +89,21 @@
     </div>
 
     <div class="span9 stepAction">
+      {% if giftcard.auto_validate %}
+      <!-- AUTO-VALIDATE -->
+      <form method="post" action="/giftcard/checkout">
+        {% csrf_token %}
+        <input type="hidden" value="{{ giftcard.id }}" name="giftcard-id">
+        <input type="hidden" value="{{ giftcard.merchant.id }}" name="product-merchant-id">
+        <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price">
+        <input type="hidden" value="on" name="auto-validate">
+        <input type="submit" class="span3 btn primary continue" value="Continuar!!"/>
+      </form>
+      {% else %}
       <a href="/giftcard/custom/{{ giftcard.slug }}" class="span3 btn primary continue">
         Continuar
       </a>
+      {% endif %}
     </div>
     <div class="span9 finePrint">
       <div class="span9 head"><span class="icon-menu"></span> Detalle</div>

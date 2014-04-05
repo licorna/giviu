@@ -4,6 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import get_template
 from django.conf import settings
+from marketing.models import EmailTemplate
 
 
 def event_user_registered(email, name):
@@ -83,6 +84,24 @@ def simple_giftcard_send_notification(product):
     product.save()
 
     return True
+
+
+def simple_giftcard_send_notification_auto_validate(template, product):
+    template = EmailTemplate.objects.get(name=template)
+    email = product.giftcard_to.email
+
+    c = Context({})
+    html_content = get_template(template.html_template).render(c)
+    text_content = get_template(template.text_template).render(c)
+    subject = template.subject.format(**locals())
+    if settings.DEBUG:
+        email = settings.DEBUG_EMAIL_RECEIVER
+    msg = EmailMultiAlternatives(subject,
+                                 text_content,
+                                 settings.EMAIL_DEFAULT_FROM,
+                                 [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
 
 
 def event_user_confirmation_sends_giftcard(email, args):

@@ -8,15 +8,21 @@
   		<h2>Tu compra  en Giviu ha terminado satisfactoriamente</h2>
   		<h3>Información del producto</h3>
   		<div class="giftcardDetail span9">
+                  {% if not product.giftcard.auto_validate %}
   			<figure class="span3">
   				<img src="{{ product.design.image }}" class="span9"/>
   			</figure>
+                  {% endif %}
   			<div class="span6 col">
   				<ul>
+                                  {% if not product.giftcard.auto_validate %}
 	  				<li><strong class="gift">{{ product.giftcard }}</strong></li>
 	  				<li>Giftcard regalada a: <strong>{{ product.giftcard_to.get_full_name }}</strong></li>
   					<li>Al correo: <strong>{{ product.giftcard_to.email }}</strong></li>
   					<li>Se enviara el: <strong>{{ product.send_date }}</strong></li>
+                                  {% else %}
+                                        <li><strong class="gift">Ya estás ayudando a {{ product.title }}</strong></li>
+                                  {% endif %}
   				</ul>
   			</div>
   		</div>

@@ -12,9 +12,11 @@
   <h2>Confirmación de compra</h2>
   <div class="span9 paymentInfo">
     <div class="span3">
+      {% if not giftcard.auto_validate %}
       <figure class="span9">
         <img src="{{ design.image }}">
       </figure>
+      {% endif %}
 
     </div>
     <div class="span6 col">
@@ -27,10 +29,14 @@
       {% endif %}
 
       <ul>
+        {% if giftcard.auto_validate %}
+        <li><strong>Estás ayudando a: </strong> {{ giftcard.title }}</li>
+        {% else %}
         <li><strong>Se le enviara a: </strong> {{ name_to }}</li>
         <li><strong>Al correo: </strong> {{ email_to }}</li>
         <li><strong>El día: </strong> {{ send_date }}</li>
         <li><strong>Mensaje: </strong> {{ comment }}</li>
+        {% endif %}
       </ul>
     </div>
   </div>

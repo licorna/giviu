@@ -163,6 +163,7 @@ class Giftcard(models.Model):
     gender = models.CharField(max_length=20, blank=True)
     external_codes = models.BooleanField(default=False)
     fine_print = models.TextField()
+    auto_validate = models.BooleanField(default=False)
     validation_info = models.TextField()
 
     def __unicode__(self):

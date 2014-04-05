@@ -10,7 +10,8 @@ from marketing import (event_merchant_notification_giftcard_was_bought,
                        event_user_buy_product_confirmation,
                        event_user_confirmation_sends_giftcard,
                        event_user_receives_product,
-                       simple_giftcard_send_notification)
+                       simple_giftcard_send_notification,
+                       simple_giftcard_send_notification_auto_validate)
 from merchant_notifications.signals import merchant_notification
 from datetime import datetime
 from credits import finalize_use_user_credits
@@ -117,14 +118,6 @@ def pp_response(request, token, **kwargs):
             product.set_state('RESPONSE_FROM_PP_SUCCESS')
             transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
 
-        args0 = {
-            'merchant_name': product.giftcard.merchant.name,
-            'product_name': product.giftcard.title,
-            'product_date': product.created.isoformat(),
-        }
-
-        event_merchant_notification_giftcard_was_bought(product.giftcard.merchant.contact_email, args0)
-
         try:
             customer = CustomerInfo.objects.get(user=product.giftcard_to,
                                                 merchant=product.giftcard.merchant)
@@ -139,27 +132,43 @@ def pp_response(request, token, **kwargs):
             'payment_date': payment_date,
             'payment_operation_number': payment_operation_number,
         }
-        event_user_buy_product_confirmation(product.giftcard_from.email, args)
         transaction.operation_number = payment_operation_number
         transaction.authorization_code = payment_authorization_code
-
-        now = datetime.now()
-        if (product.send_date.year == now.year and
-            product.send_date.month == now.month and
-            product.send_date.day == now.day):
-
-            simple_giftcard_send_notification(product)
 
         if product.state != 'USING_CREDITS_SUCCESS':
             transaction.raw_response = response
             transaction.save()
 
-        _code = product.validation_code
-        _code = _code[:4] + '-' + _code[4:]
-        merchant_notification.send(sender=request,
-                                   merchant=product.giftcard.merchant.id,
-                                   code=_code,
-                                   ammount=product.price)
+        # Next block will send notification emails
+        if not product.giftcard.auto_validate:
+            # Merchant notification
+            args0 = {
+                'merchant_name': product.giftcard.merchant.name,
+                'product_name': product.giftcard.title,
+                'product_date': product.created.isoformat(),
+            }
+            event_merchant_notification_giftcard_was_bought(product.giftcard.merchant.contact_email, args0)
+            _code = product.validation_code
+            _code = _code[:4] + '-' + _code[4:]
+            merchant_notification.send(sender=request,
+                                       merchant=product.giftcard.merchant.id,
+                                       code=_code,
+                                       ammount=product.price)
+
+            event_user_buy_product_confirmation(product.giftcard_from.email, args)
+            now = datetime.now()
+            if (product.send_date.year == now.year and
+                product.send_date.month == now.month and
+                product.send_date.day == now.day and
+                not product.giftcard.auto_validate):
+
+                simple_giftcard_send_notification(product)
+        else:
+            # Is auto_validation giftcard
+            # FIXME: 'levantemos_chile' parameter needs to be taken
+            # from somewhere else ;)
+            simple_giftcard_send_notification_auto_validate('levantemos_chile',
+                                                            product)
 
         data = {'product': product}
         if product.state == 'USING_CREDITS_SUCCESS':
