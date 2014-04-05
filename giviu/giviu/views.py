@@ -290,7 +290,7 @@ def giftcard_confirmation(request):
             price = int(price)
         except ValueError:
             return HttpResponseBadRequest()
-        design = request.POST.get('giftcard-desing', None)
+        design = request.POST.get('giftcard-design', 1)
         comment = request.POST.get('comment', '')
         original_price = price
 
@@ -299,10 +299,7 @@ def giftcard_confirmation(request):
     except Giftcard.DoesNotExist:
         return HttpResponseBadRequest()
 
-    if design:
-        design = GiftcardDesign.objects.get(pk=int(design))
-    else:
-        design = GiftcardDesign.objects.get(pk=1)
+    design = GiftcardDesign.objects.get(pk=int(design))
 
     if price > 0:
         #TODO: Comprobar que la transaccion fue creada exitosamente
@@ -321,7 +318,6 @@ def giftcard_confirmation(request):
             transaction.save()
         else:
             transaction.use_credits = None
-
     else:
         credits_used = 0
 
