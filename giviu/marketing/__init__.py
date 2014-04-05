@@ -88,7 +88,7 @@ def simple_giftcard_send_notification(product):
 
 def simple_giftcard_send_notification_auto_validate(template, product):
     template = EmailTemplate.objects.get(name=template)
-    email = product.giftcard_to.email
+    email = product.giftcard_from.email
 
     c = Context({})
     html_content = get_template(template.html_template).render(c)
