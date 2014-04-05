@@ -63,6 +63,38 @@
         </a>
     </div>
     <p class="span9">{{ giftcard.description|safe }}</p>
+    {% if giftcard.auto_validate %}
+    <div class="span9 value">
+      <div class="span6">
+        {% if giftcard.kind == '1' %}
+        Selecciona el valor de la giftcard
+        {% else %}
+        Valor giftcard
+        {% endif %}
+      </div>
+      <form method="post" action="/giftcard/checkout">
+      {% csrf_token %}
+        <div class="span3">
+          {% if giftcard.kind == '1' %}
+          <select class="span9 select" name="giftcard-price">
+            {% for price in giftcard.get_price %}
+            <option value="{{ price }}">{{ price|clp }}</option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <strong class="span9 productPrice">{{ giftcard.get_price|clp }}</strong>
+          <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price">
+          {% endif %}
+          <input type="hidden" value="{{ giftcard.id }}" name="giftcard-id">
+          <input type="hidden" value="{{ giftcard.merchant.id }}" name="product-merchant-id">
+          <input type="hidden" value="on" name="auto-validate">
+        </div>
+        <div class="span9 stepAction">
+          <input type="submit" class="span3 btn primary continue" value="Continuar!!"/>
+        </div>
+      </form>
+    </div>
+    {% else %}
     <div class="span9 value">
       <div class="span6">
         {% if giftcard.kind == '1' %}
@@ -89,22 +121,11 @@
     </div>
 
     <div class="span9 stepAction">
-      {% if giftcard.auto_validate %}
-      <!-- AUTO-VALIDATE -->
-      <form method="post" action="/giftcard/checkout">
-        {% csrf_token %}
-        <input type="hidden" value="{{ giftcard.id }}" name="giftcard-id">
-        <input type="hidden" value="{{ giftcard.merchant.id }}" name="product-merchant-id">
-        <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price">
-        <input type="hidden" value="on" name="auto-validate">
-        <input type="submit" class="span3 btn primary continue" value="Continuar!!"/>
-      </form>
-      {% else %}
       <a href="/giftcard/custom/{{ giftcard.slug }}" class="span3 btn primary continue">
         Continuar
       </a>
-      {% endif %}
     </div>
+    {% endif %} <!-- auto-validate -->
     <div class="span9 finePrint">
       <div class="span9 head"><span class="icon-menu"></span> Detalle</div>
       {{ giftcard.pretty_fine_print|safe }}
