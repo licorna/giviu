@@ -3,6 +3,8 @@ from utils import (GiftcardsSitemap,
                    CategoriesSitemap,
                    PartnersSitemap)
 
+from django.views.generic.base import RedirectView
+
 from django.contrib import admin
 admin.autodiscover()
 
@@ -22,6 +24,11 @@ urlpatterns = patterns('',
 
                        url(r'^campaign/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.home', {'division': 'campaign'}, name='giftcard_campaign'),
+
+                       # FIXME: Levantemos Chile URL was used incorrectly on Newsletter
+                       url(r'^giftcard/detail/ayudemos-a-levantar-chile$',
+                           RedirectView.as_view(url='/giftcard/detail/levantemos-el-norte-de-chile',
+                                                permanent=True)),
 
                        url(r'^giftcard/detail/(?P<slug>[0-9a-z-]+)$',
                            'giviu.views.giftcard_detail',
