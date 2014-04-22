@@ -1,10 +1,32 @@
 # -*- coding: utf-8 -*-
 
 from django.core.mail import EmailMultiAlternatives
+from django.core.mail.message import EmailMessage
 from django.template import Context
 from django.template.loader import get_template
 from django.conf import settings
 from marketing.models import EmailTemplate
+from json import dumps
+from datetime import datetime
+
+
+def event_sent_giftcards_for_today(content):
+    '''This event will trigger when giftcards for today are sent'''
+    today = datetime.now().strftime('%Y-%m-%d')
+    if settings.DEBUG:
+        email = [settings.DEBUG_EMAIL_RECEIVER]
+    else:
+        email = [x[1] for x in settings.GIVIU_FOUNDERS]
+    print 'sending to ' + str(email)
+    msg = EmailMessage()
+    msg.subject = 'Giftcards Sent ' + today
+    msg.body = 'Please find attached Giftcards Sent Today'
+    msg.from_email = settings.EMAIL_DEFAULT_FROM
+    msg.to = email
+    msg.attach(filename='data.json',
+               mimetype='application/json',
+               content=dumps(content))
+    msg.send()
 
 
 def event_user_registered(email, name):

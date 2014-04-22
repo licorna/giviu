@@ -9,7 +9,8 @@ from social.models import Likes
 from marketing import (simple_giftcard_send_notification,
                        event_beta_registered_send_welcome,
                        marketing_send_marketing_monthly_birthday_nl,
-                       marketing_send_daily_birthday)
+                       marketing_send_daily_birthday,
+                       event_sent_giftcards_for_today)
 
 from genderator.detector import Detector, MALE
 import locale
@@ -65,6 +66,7 @@ def send_giftcards_for_today(request):
         'actually_sent': not just_check,
     }
 
+    event_sent_giftcards_for_today(data)
     return HttpResponse(json.dumps(data), content_type='application/json',
                         status=200)
 
