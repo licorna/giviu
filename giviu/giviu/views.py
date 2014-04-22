@@ -144,7 +144,7 @@ def home(request, slug=None, division=None):
 
     if division == 'campaign':
         campaign = get_object_or_404(Campaign, slug=slug)
-        products = campaign.giftcards.all().order_by('-priority')
+        products = campaign.giftcards.filter(status=1).order_by('-priority')
         data.update({'this_campaign': campaign})
 
     #all_product_len = Giftcard.objects.filter(status=1).count()
