@@ -382,7 +382,7 @@ class Users(AbstractBaseUser):
     provincia = models.CharField(max_length=255, blank=True)
     comuna = models.CharField(max_length=255, blank=True)
     friends = models.TextField(blank=True)
-    created = models.DateField(blank=True, null=True, default=datetime.now())
+    created = models.DateField(blank=True, null=True, default=lambda: datetime.now())
     avatar = models.CharField(max_length=255, blank=True)
     last_purchase = models.DateField(blank=True, null=True)
     hash = models.CharField(max_length=255, blank=True)
