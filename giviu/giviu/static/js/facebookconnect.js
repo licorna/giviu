@@ -11,10 +11,6 @@
   FB.Event.subscribe('auth.authResponseChange', function(response) {
     if (response.status === 'connected') {
       newuser();
-    } else if (response.status === 'not_authorized') {
-      FB.login();
-    } else {
-      FB.login();
     }
     }, {scope: 'email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos'});
   };
@@ -151,7 +147,7 @@
   })
 
   function showPreload(){
-    $('#btn-login').hide('fast');
+    $('.register-option').hide('fast');
     $('.loader').slideDown('fast');
   }
 

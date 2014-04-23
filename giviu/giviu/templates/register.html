@@ -12,21 +12,21 @@
 <section class="register">
   <section id="registercontent">
     <section class="span9 image" id="selecttype">
-      <br/>
-      <br/>
-      <br/>
-      <br/>
       <center>
-        <h1><span class="icon-key"></span> Ingresa a Giviu</h1>
-        <p>Utilizando tu cuenta de facebook</p>
-        <a href="#" class="facebook fb-login-button" id="btn-login">
-          <span class="msg">
-            <fb:login-button size="large" onlogin="require('./log').info('onlogin callback')" scope="email user_birthday user_location friends_birthday">
-              Click aquí para ingresar
-            </fb:login-button>
-          </span>
-          <img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif">
-        </a>
+        <h1 class="margin-title "><span class="icon-key"></span> Registrate en giviu</h1>
+        <p class="slide-toggle">Te recomendamos hacerlo facebook</p>
+        <div class="register-option">
+          <a href="#" class="facebook fb-login-button" id="btn-login">
+            <span class="msg">
+              <fb:login-button size="large" onlogin="require('./log').info('onlogin callback')" scope="email user_birthday user_location friends_birthday">
+                Con tu cuenta de facebook
+              </fb:login-button>
+            </span>
+            <img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif">
+          </a>
+          o <span class="manual-register">ingresa tus datos manualmente</span>
+        </div>
+
         <div class="loader">
           <center>
             <img src="/static/img/loaderBackGreen.gif"/>
@@ -53,6 +53,24 @@
             <a href="#" class="btn confirmBtn">ingresar</a>
           </div>
         </div>
+
+        <div class="box-without">
+          <div class="span9">
+              <form method="post" id="register-single" action="/register">
+                <label class="span9">Nombre</label>
+                <input type="text" name="name" class="span9 required"  placeholder="Juan"/>                
+                <label class="span9">Correo electrónico</label>
+                <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
+                <label class="span9">Contraseña</label>
+                <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+                <label class="span9">Reingresa tu contraseña</label>
+                <input type="password" name="pass2" class="span9 required" placeholder="Password"/>
+                <a class="btn span9 white" href="#" onClick="$('#register-single').submit()"><center>Registrarse</center></a>
+              </form>
+              <small class="second-oportunity span9">Registrate con facebook y gana $2.000 para comprar.</small>
+          </div>
+        </div>
+
         {% if referer %}
         <div class="referer">
           <div class="span9 content">
@@ -65,9 +83,9 @@
               {{ referer_name }}, te ha invitado a Giviu
             </div>
           </div>
+          <small class="tinytext span9">Te prometemos que no publicaremos nada en tu nombre</small>
         </div>
         {% endif %}
-        <small class="tinytext span9">Te prometemos que no publicaremos nada en tu nombre</small>
 
       </center>
     </section>
@@ -91,4 +109,5 @@
       </div>
     </span>
 <script src="{% static "js/facebookconnect.js" %}"></script>
+
 {% endblock %}
