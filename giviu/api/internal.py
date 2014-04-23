@@ -10,7 +10,8 @@ from marketing import (simple_giftcard_send_notification,
                        event_beta_registered_send_welcome,
                        marketing_send_marketing_monthly_birthday_nl,
                        marketing_send_daily_birthday,
-                       event_sent_giftcards_for_today)
+                       event_sent_giftcards_for_today,
+                       event_remember_user_forgotten_giftcard)
 
 from genderator.detector import Detector, MALE
 import locale
@@ -347,6 +348,38 @@ def validated_giftcards_for_period(request):
             'merchant_name': product.giftcard.merchant.name,
             'merchant_id': product.giftcard.merchant.id
         })
+
+    return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
+
+
+def send_forgotten_giftcards(request):
+    '''Will send notification to clients whose Giftcards need to
+    be validated before expiring. Will check for giftcards to
+    expire in 1 month and two weeks.'''
+    client_id = request.GET.get('client_id', None)
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
+
+    days30 = datetime.now() + timedelta(days=30)
+    days15 = datetime.now() + timedelta(days=15)
+    products30 = Product.objects.filter(expiration_date=days30,
+                                        state='RESPONSE_FROM_PP_SUCCESS',
+                                        validation_date__isnull=True)
+    products15 = Product.objects.filter(expiration_date=days15,
+                                        state='RESPONSE_FROM_PP_SUCCESS',
+                                        validation_date__isnull=True)
+
+    data = []
+    for product in products30 + products15:
+        exp_date = product.expiration_date.strftime('%Y-%m-%d')
+        data.append({
+            'title': product.giftcard.title,
+            'to': product.giftcard_to.email,
+            'expiration_date': exp_date,
+        })
+        event_remember_user_forgotten_giftcard(product)
 
     return HttpResponse(json.dumps(data), content_type='application/json',
                         status=200)

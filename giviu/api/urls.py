@@ -61,4 +61,7 @@ urlpatterns = patterns('',
 
                        url(r'^internal/add-external-codes/(?P<giftcard>\d+)$',
                            'api.internal.add_external_codes'),
+
+                       url(r'^internal/send-forgotten-giftcards/$',
+                           'api.internal.send_forgotten_giftcards')
 )

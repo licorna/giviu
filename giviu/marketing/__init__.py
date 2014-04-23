@@ -77,6 +77,33 @@ def event_user_receives_product(email, args):
     msg.send()
 
 
+def event_remember_user_forgotten_giftcard(product):
+    '''This email is sent when a user forgot to validate his
+    giftcard and need to do it before it expires.'''
+    email = product.giftcard_to.email
+    c = Context({
+        'giftcard_design': product.design.image,
+        'name_from': product.giftcard_from.get_full_name(),
+        'validation_code': product.get_validation_code(),
+        'giftcard_image': product.giftcard.image,
+        'giftcard_amount': product.price if product.giftcard.kind == '1' else None,
+        'merchant_name': product.giftcard.merchant.name,
+        'giftcard_name': product.giftcard.title,
+        'validation_info': product.giftcard.get_validation_info()
+    })
+
+    subject = '¡Tienes una giftcard sin validar en Giviu!'
+    html_content = get_template('marketing_remember_giftcard.html').render(c)
+    if settings.DEBUG:
+        email = settings.DEBUG_EMAIL_RECEIVER
+    msg = EmailMultiAlternatives(subject,
+                                 html_content,
+                                 settings.EMAIL_DEFAULT_FROM,
+                                 [email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+
+
 def simple_giftcard_send_notification(product):
     '''This wrapper function will send both buyer and
     receiving parties the corresponding mailing when

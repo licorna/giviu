@@ -327,11 +327,15 @@ def giftcard_confirmation(request):
         customer = Users.objects.create_inactive_user(email_to, name_to)
         customer = Users.objects.get(email=email_to)
 
+    if type(date) == str:
+        date = datetime.strptime(date, '%Y-%m-%d')
+
     product = Product.new(giftcard_from=request.user,
                           giftcard_to=customer,
                           price=price + credits_used,
                           design=design,
                           send_date=date,
+                          expiration_date=date + timedelta(days=90),
                           comment=comment,
                           giftcard=giftcard,
                           transaction=transaction)
