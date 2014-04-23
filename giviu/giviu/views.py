@@ -340,7 +340,7 @@ def giftcard_confirmation(request):
                           expiration_date=date + timedelta(days=90),
                           comment=comment,
                           giftcard=giftcard,
-                          transaction=transaction.
+                          transaction=transaction,
                           validated=validated)
     product_id = product.uuid
 
