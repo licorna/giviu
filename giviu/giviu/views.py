@@ -23,7 +23,7 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 from django.conf import settings
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import logging
 logger = logging.getLogger('giviu')
@@ -258,6 +258,7 @@ def giftcard_confirmation(request):
         price = request.POST['giftcard-price']
         design = request.POST.get('giftcard-design', None)
         date = request.POST['send-when']
+        validated = 0
         try:
             validate_email(email_to)
         except ValidationError:
@@ -282,6 +283,7 @@ def giftcard_confirmation(request):
             credits = use_user_credits(request.user.fbid, credits_used)
 
     else:
+        validated = 1
         email_to = 'auto_validate@giviu.com'
         date = datetime.today()
         name_to = 'Auto Validate'
@@ -327,7 +329,7 @@ def giftcard_confirmation(request):
         customer = Users.objects.create_inactive_user(email_to, name_to)
         customer = Users.objects.get(email=email_to)
 
-    if type(date) == str:
+    if isinstance(date, basestring):
         date = datetime.strptime(date, '%Y-%m-%d')
 
     product = Product.new(giftcard_from=request.user,
@@ -338,7 +340,8 @@ def giftcard_confirmation(request):
                           expiration_date=date + timedelta(days=90),
                           comment=comment,
                           giftcard=giftcard,
-                          transaction=transaction)
+                          transaction=transaction.
+                          validated=validated)
     product_id = product.uuid
 
     data = {

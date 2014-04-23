@@ -1,6 +1,7 @@
 from django.http import (HttpResponse, HttpResponseBadRequest)
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
+from django.db.models import Q
 from django.conf import settings
 from giviu.models import Product, Users, Giftcard
 from api.models import ApiClientId
@@ -364,15 +365,12 @@ def send_forgotten_giftcards(request):
 
     days30 = datetime.now() + timedelta(days=30)
     days15 = datetime.now() + timedelta(days=15)
-    products30 = Product.objects.filter(expiration_date=days30,
-                                        state='RESPONSE_FROM_PP_SUCCESS',
-                                        validation_date__isnull=True)
-    products15 = Product.objects.filter(expiration_date=days15,
-                                        state='RESPONSE_FROM_PP_SUCCESS',
-                                        validation_date__isnull=True)
-
+    products = Product.objects.filter(Q(expiration_date=days30) |
+                                      Q(expiration_date=days15),
+                                      state='RESPONSE_FROM_PP_SUCCESS',
+                                      validation_date__isnull=True)
     data = []
-    for product in products30 + products15:
+    for product in products:
         exp_date = product.expiration_date.strftime('%Y-%m-%d')
         data.append({
             'title': product.giftcard.title,
