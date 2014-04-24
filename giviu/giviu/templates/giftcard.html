@@ -2,14 +2,14 @@
 {% load locale_price %}
 {% block title %}{{ this_category }}{% if show_title %} | {% endif %}{% endblock %}
 {% block content %}
-<section class="container options">
+<!-- <section class="container options">
   <div class="span9 description">
     <span class="text">{% if not user.is_authenticated %}Busca, personaliza y regala giftcards a quien quieras{% endif %}</span>
   </div>
-<!--   <form action="/" action="get" class="span2" id="search">
+  <form action="/" action="get" class="span2" id="search">
     <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
-  </form> -->
-</section>
+  </form> 
+</section> -->
 <section class="container">
   <div class="span2">
     <aside class="span9">
@@ -37,7 +37,8 @@
   <section class="span7 col" id="giftCardList" >
     {% if not search %}
       {% if this_campaign %}
-          <img style="margin-left:1.2%; width:98.2%"  src="https://commondatastorage.googleapis.com/site-images/images/slider/{{ this_campaign.slug }}.png">
+          <img style="margin-left:1.2%; width:98.2%"  src="https://commondatastorage.googleapis.com/site-images/images/slider/{{ this_campaign.slug }}.png" onerror="$(this).replaceWith('<h2>{{ this_campaign.name }}</h2>');">
+
       {% else %}
         <a href="/campaign/dia-de-la-madre" class="span9 col" style="margin-left:1.2%;">
           <img style="width:98.2%;" src="https://storage.googleapis.com/site-images/campaigns/banner-dia-madre.png?v2"/>
@@ -45,10 +46,10 @@
       {% endif %}
 
     {% else %}
-      <h2 style="font-weight:lighter; font.size:13px; margin-top:15px;"> 
+      <h2> 
         <span class="icon-search" style="color:#3498db;"></span> Búsqueda para <strong>{{ search_term }}</strong></h2>
       {% if not products %}
-        <div class="span9" style="border-top:1px dotted #ccc;margin-top:15px; padding-top:15px;">
+        <div class="span9">
           No hemos encontrado regalos para esta búsqueda intentalo nuevamente.
         </div>
       {% endif %}
