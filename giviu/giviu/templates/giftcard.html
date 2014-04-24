@@ -3,71 +3,61 @@
 {% block title %}{{ this_category }}{% if show_title %} | {% endif %}{% endblock %}
 {% block content %}
 <section class="container options">
-  <div class="span7 description">
+  <div class="span9 description">
     <span class="text">{% if not user.is_authenticated %}Busca, personaliza y regala giftcards a quien quieras{% endif %}</span>
   </div>
-  <form action="/" action="get" class="span2" id="search">
+<!--   <form action="/" action="get" class="span2" id="search">
     <input type="text" placeholder="mujer, bebe, providencia" name="q"/><submit class="btn secondary"><span class="icon-search"></span></submit>
-  </form>
+  </form> -->
 </section>
-
-{% if this_campaign %}
-<div class="container">
-  <img width="100%;" src="https://commondatastorage.googleapis.com/site-images%2Fimages%2Fslider%2F{{ this_campaign.slug }}.png">
-</div>
-{% endif %}
-
 <section class="container">
-<!--     <div class="span2">
+  <div class="span2">
     <aside class="span9">
-    <form class="span9 search" action="/giftcard/search" method="get">
-        <input type="text" class="span6" name="s" placeholder="¿Que estas buscando?"/>
+    <form class="span9 search" action="/" method="get">
+        <input type="text" class="span6" name="q" placeholder="¿Que estas buscando?"/>
         <input type="submit" class="span3 col btn inside" value="Buscar"/>
       </form>
-      <h3>Categorías</h3>
+      <h3>Regálos para: </h3>
       <ul class="span9">
         {% for campaign in campaigns %}
-        <li class="span9 category {% if this_campaign.name == campaign.name %}selected{% endif %}"><a data-id="{{ campaign.id }}"  href="/campaign/{{ campaign.slug }}">{{ campaign.name }} <span id="count{{ campaign.id }}" style="color: {{ campaign.color }}">{{ campaign.giftcards.all|length }}</span></a></li>
+        <li class="span9 category {% if this_campaign.name == campaign.name %}selected{% endif %}"><a data-id="{{ campaign.id }}"  href="/campaign/{{ campaign.slug }}">{{ campaign.name }} <span id="count{{ campaign.id }}" style="background-color: #{{ campaign.color }}">{{ campaign.giftcards.all|length }}</span></a></li>
         {% endfor %}
-
-        <li class="span9 {% if not this_category and not this_campaign %}selected{% endif %}"><a  href="/">Todos<span>{{ all_products_len }}</span></a></li>
-        {% for category in categories %}
-        {% if category.count > 0 %}
-        <li class="span9 category {% if this_category.name == category.name %}selected{% endif %}"><a data-id="{{ category.id }}"  href="/giftcard/category/{{ category.slug }}">{{ category.name }} <span id="count{{ category.id }}">{{ category.count }}</span></a></li>
-        {% endif %}
-        {% endfor %}
+        
       </ul>
     </aside>
 
-    <aside class="span9 promo">
+<!--     <aside class="span9 promo">
       <figure>
-        <a href="#">
-        <img src="/static/img/campaigns/small_banner_3_lucas.png"/>
+        <a href="/campaign/dia-de-la-madre">
+        <img src="http://storage.googleapis.com/site-images/campaigns/caluga-dia-de-la-madre.png"/>
         </a>
       </figure>
-    </aside>
+    </aside> -->
   </div>
 
   <section class="special span7" id="lucas">
     <span class="icon-close close"></span>
   </section>
-  -->
-    {% if not products %}
-      {% if search %}
-        <center>
-          <span class="icon-sad"></span> No se encontraron productos para la búsqueda <strong>"{{ search_term }}"</strong>, intentalo nuevamente.
-          </br>
-          <form action="/" method="GET" class="span9">
-            <input type="text" placeholder="Ingresa tu búsqueda" name="q" style="margin-top:30px;"/>
-            <input type="submit" value="Buscar" class="btn primary" style="padding:9px 5px;font-size:0.8em">
-          </form>
-        </center>
 
+  <section class="span7 col" id="giftCardList" >
+    {% if not search %}
+      {% if this_campaign %}
+          <img style="margin-left:1.2%; width:98.2%"  src="https://commondatastorage.googleapis.com/site-images/images/slider/{{ this_campaign.slug }}.png">
       {% else %}
-        <h1>Por otro motivo no hay productos.</h1>
+        <a href="/campaign/dia-de-la-madre" class="span9 col" style="margin-left:1.2%;">
+          <img style="width:98.2%;" src="http://storage.googleapis.com/site-images/campaigns/banner-dia-madre.png?v2"/>
+        </a>
+      {% endif %}
+
+    {% else %}
+      <h2 style="font-weight:lighter; font.size:13px; margin-top:15px;"> 
+        <span class="icon-search" style="color:#3498db;"></span> Búsqueda para <strong>{{ search_term }}</strong></h2>
+      {% if not products %}
+        <div class="span9" style="border-top:1px dotted #ccc;margin-top:15px; padding-top:15px;">
+          No hemos encontrado regalos para esta búsqueda intentalo nuevamente.
+        </div>
       {% endif %}
     {% endif %}
-  <section class="span9" id="giftCardList" >
 
     {% for product in products %}
     <article class="giftCardModule new" data-source-id="{{ product.id }}">

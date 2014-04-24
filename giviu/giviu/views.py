@@ -158,7 +158,8 @@ def home(request, slug=None, division=None):
     data.update({
         'products': products,
         #'all_products_len': all_product_len,
-        'show_title': show_title
+        'show_title': show_title,
+        'campaigns' : Campaign.objects.order_by('id')
     })
     data.update(get_data_for_header(request))
     return render_to_response('giftcard.html', data,
