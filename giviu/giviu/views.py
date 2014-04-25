@@ -23,7 +23,7 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 from django.conf import settings
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import logging
 logger = logging.getLogger('giviu')
@@ -144,7 +144,7 @@ def home(request, slug=None, division=None):
 
     if division == 'campaign':
         campaign = get_object_or_404(Campaign, slug=slug)
-        products = campaign.giftcards.all().order_by('-priority')
+        products = campaign.giftcards.filter(status=1).order_by('-priority')
         data.update({'this_campaign': campaign})
 
     #all_product_len = Giftcard.objects.filter(status=1).count()
@@ -158,7 +158,8 @@ def home(request, slug=None, division=None):
     data.update({
         'products': products,
         #'all_products_len': all_product_len,
-        'show_title': show_title
+        'show_title': show_title,
+        'campaigns' : Campaign.objects.order_by('id')
     })
     data.update(get_data_for_header(request))
     return render_to_response('giftcard.html', data,
@@ -258,6 +259,7 @@ def giftcard_confirmation(request):
         price = request.POST['giftcard-price']
         design = request.POST.get('giftcard-design', None)
         date = request.POST['send-when']
+        validated = 0
         try:
             validate_email(email_to)
         except ValidationError:
@@ -282,6 +284,7 @@ def giftcard_confirmation(request):
             credits = use_user_credits(request.user.fbid, credits_used)
 
     else:
+        validated = 1
         email_to = 'auto_validate@giviu.com'
         date = datetime.today()
         name_to = 'Auto Validate'
@@ -327,14 +330,19 @@ def giftcard_confirmation(request):
         customer = Users.objects.create_inactive_user(email_to, name_to)
         customer = Users.objects.get(email=email_to)
 
+    if isinstance(date, basestring):
+        date = datetime.strptime(date, '%Y-%m-%d')
+
     product = Product.new(giftcard_from=request.user,
                           giftcard_to=customer,
                           price=price + credits_used,
                           design=design,
                           send_date=date,
+                          expiration_date=date + timedelta(days=90),
                           comment=comment,
                           giftcard=giftcard,
-                          transaction=transaction)
+                          transaction=transaction,
+                          validated=validated)
     product_id = product.uuid
 
     data = {

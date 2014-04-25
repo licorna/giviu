@@ -1,6 +1,7 @@
 from django.http import (HttpResponse, HttpResponseBadRequest)
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
+from django.db.models import Q
 from django.conf import settings
 from giviu.models import Product, Users, Giftcard
 from api.models import ApiClientId
@@ -9,7 +10,9 @@ from social.models import Likes
 from marketing import (simple_giftcard_send_notification,
                        event_beta_registered_send_welcome,
                        marketing_send_marketing_monthly_birthday_nl,
-                       marketing_send_daily_birthday)
+                       marketing_send_daily_birthday,
+                       event_sent_giftcards_for_today,
+                       event_remember_user_forgotten_giftcard)
 
 from genderator.detector import Detector, MALE
 import locale
@@ -65,6 +68,7 @@ def send_giftcards_for_today(request):
         'actually_sent': not just_check,
     }
 
+    event_sent_giftcards_for_today(data)
     return HttpResponse(json.dumps(data), content_type='application/json',
                         status=200)
 
@@ -345,6 +349,35 @@ def validated_giftcards_for_period(request):
             'merchant_name': product.giftcard.merchant.name,
             'merchant_id': product.giftcard.merchant.id
         })
+
+    return HttpResponse(json.dumps(data), content_type='application/json',
+                        status=200)
+
+
+def send_forgotten_giftcards(request):
+    '''Will send notification to clients whose Giftcards need to
+    be validated before expiring. Will check for giftcards to
+    expire in 1 month and two weeks.'''
+    client_id = request.GET.get('client_id', None)
+    get_object_or_404(ApiClientId,
+                      client_id=client_id,
+                      merchant__slug='giviu')
+
+    days30 = datetime.now() + timedelta(days=30)
+    days15 = datetime.now() + timedelta(days=15)
+    products = Product.objects.filter(Q(expiration_date=days30) |
+                                      Q(expiration_date=days15),
+                                      state='RESPONSE_FROM_PP_SUCCESS',
+                                      validation_date__isnull=True)
+    data = []
+    for product in products:
+        exp_date = product.expiration_date.strftime('%Y-%m-%d')
+        data.append({
+            'title': product.giftcard.title,
+            'to': product.giftcard_to.email,
+            'expiration_date': exp_date,
+        })
+        event_remember_user_forgotten_giftcard(product)
 
     return HttpResponse(json.dumps(data), content_type='application/json',
                         status=200)
