@@ -81,8 +81,8 @@
               <a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a>
             </li>
             {% else %}
-            <li class="not-logged"><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
-            <li class="not-logged"><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+            <li class="not-logged"><a href="/register" class="btn primary">Ingresa</a></li>
+            <li class="not-logged"><a href="/register" class="normal">Registrate</a></li>
             {% endif %}
           </ul>
 
@@ -92,6 +92,30 @@
         </div>
       </div>
     </header>
+
+    <div id="login-box" class="span9">
+      <div class="container">
+        <div class="span1">
+          <span class="icon-key ico"></span>
+        </div>
+        <div class="span4 col facebookLogin">
+          Ingresa con tu cuenta de facebook 
+            <div class="facebook-botton">
+              <fb:login-button size="large" onlogin="require('./log').info('onlogin callback')" scope="email user_birthday user_location friends_birthday">
+                Iniciar sesión
+              </fb:login-button>
+            </div>
+        </div>
+        <div class="span4 col simplelogin">
+          Ingresa con tu usuario y password
+          <form>
+              <input type="text" placeholder="Correo electrónico" />
+              <input type="password" placeholder="Contraseña" />
+              <input type="submit" value="login" class="btn white" />
+          </form>
+        </div>
+      </div>
+    </div>
 <!--     {% if user.is_authenticated %}
     <div class="span9" id="referal">
       <center>
@@ -166,6 +190,7 @@
       </section>
 
     </footer>
+<script src="{% static "js/facebookconnect.js" %}"></script>
 
     <script>
       if (window.location.hostname == 'www.giviu.com'){

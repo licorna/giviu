@@ -346,12 +346,53 @@ header{
 }
 
 #giftCardList{
-  h2{
+  h2.title{
     font-weight:lighter; 
     margin-top:15px; 
     border-bottom:1px dotted #ccc;
     margin-bottom:15px; 
     padding-bottom:15px;
+  }
+}
+
+#login-box{
+  background-color: #3498db;
+  border-bottom:1px solid @greyBorder;
+  padding-bottom:20px;
+  .container{
+    position:relative;
+    text-align:center;
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 94.5%;
+      margin-left: -8px;
+      width: 0; height: 0;
+      border-bottom: 8px solid #3498db;
+      border-right: 8px solid transparent;
+      border-left: 8px solid transparent;
+    }
+    form{
+      .btn{
+        border:none;
+        font-size:0.8em;
+      }
+    }
+    .simplelogin{
+      color:#fff;
+      border-left:1px dotted #fff;
+    }
+    .facebookLogin{
+      color:#fff;
+      .facebook-botton{
+        margin-top:10px;
+      }
+    }
+    .ico{
+      font-size:4em;
+      color:#fff;
+    }
   }
 }
 
