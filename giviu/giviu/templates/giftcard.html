@@ -64,7 +64,7 @@
         </a>
       </figure>
       <div class="baseContent span9">
-        <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:7 }}</h2></a>
+        <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:9 }}</h2></a>
         <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
         <div class="newAction">
           {% if product.kind == '1' %}
