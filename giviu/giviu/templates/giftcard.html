@@ -37,7 +37,7 @@
   <section class="span7 col" id="giftCardList" >
     {% if not search %}
       {% if this_campaign %}
-          <img style="margin-left:1.2%; width:98.2%"  src="https://commondatastorage.googleapis.com/site-images/images/slider/{{ this_campaign.slug }}.png" onerror="$(this).replaceWith('<h2>{{ this_campaign.name }}</h2>');">
+          <img style="margin-left:1.2%; width:98.2%"  src="https://commondatastorage.googleapis.com/site-images/images/slider/{{ this_campaign.slug }}.png" onerror="$(this).replaceWith('<h2 class=title>{{ this_campaign.name }}</h2>');">
 
       {% else %}
         <a href="/campaign/dia-de-la-madre" class="span9 col" style="margin-left:1.2%;">
@@ -46,7 +46,7 @@
       {% endif %}
 
     {% else %}
-      <h2> 
+      <h2 class=title>
         <span class="icon-search" style="color:#3498db;"></span> Búsqueda para <strong>{{ search_term }}</strong></h2>
       {% if not products %}
         <div class="span9">
@@ -64,8 +64,10 @@
         </a>
       </figure>
       <div class="baseContent span9">
-        <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:7 }}</h2></a>
-        <h4>en <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+        <span class="giftcardTitle">
+          <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:9 }}</h2></a>
+        </span>
+        <h4><span class="in">en</span> <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
         <div class="newAction">
           {% if product.kind == '1' %}
             <select class="span5" name="webmenu"  onchange="showValue(this.value)">
@@ -77,7 +79,7 @@
           {% if product.kind == '0' %}
           <strong class="span5 price">{{ product.get_price|clp }}</strong>
           {% endif %}
-          <a href="/giftcard/detail/{{ product.slug }}" class="btn primary more-detail-buy">Regalar</a>
+          <a href="/giftcard/detail/{{ product.slug }}" class="{% if product.kind == '0' %} no-giftcard {% endif %}btn primary more-detail-buy">Regalar</a>
           <div class="validation-type span9">
             {% if product.get_friend_likes %}
             <span class="friend-count" data-source-id="{{ product.id }}">{{ product.get_friend_likes|length }} Amigos desean esto</span> |
