@@ -270,7 +270,7 @@ header{
     }
     .tagline{
       a{
-        padding:11px 0px;
+        padding:11px 10px;
       }
     }
     .showyourlove{
@@ -282,16 +282,21 @@ header{
     padding-top:5px;
   }
   .tagline{
-    font-family:'Coustard', helvetica;
+    font-family: 'Open Sans','helvetica',sans-serif;
     font-size:0.9em;
     margin-top:-5px;
+    font-weight: 500;
     a{ 
       text-align:center;
       padding: 24px 7px;
       color:#95a5a6;
       transition: all 0.3s linear;
-      font-weight:bolder;
+      font-weight:500;
       transition:0.3s linear all;
+      padding-top:20px;
+      display: inline-block;
+      padding-left: 10px;
+      text-transform: uppercase;
       &:hover{
         color:#8e44ad;
       }
@@ -304,7 +309,6 @@ header{
   .title{
     color:#fff;
     float: left;
-    margin-top: -3px;
     img{
       transition:0.3s linear all;
       width:130px;
@@ -873,6 +877,9 @@ header h1{
   padding-top: 20px;
   width:90%;
   max-width:1024px;
+  &.big{
+    max-width: 1280px;
+  }
 }
 
 .alt{
@@ -1121,74 +1128,76 @@ nav{
         height:auto;
       }
     }
-    &:nth-of-type(1),&:nth-of-type(2){
-      width:48%;
-      height:304px;
-      border-bottom: 3px solid #f1c40f;
-      figure{
-        height:200px;
-        img{
-          width:100%;
-          margin-left:0px;
-        }
-      }
-      .baseContent{
-        background-color:#ffffff;
-        .giftcardTitle{
-          .span9;
-          border-bottom:1px solid #EDEEEE;
-          border-top:1px solid #f5f7e9;
-          color:rgba(93,98,102,1);
-          padding-bottom: 10px;
-          font-size: 1.3em;
-        }
-        h2{
-          font-size:0.7em;
-          margin-top:15px;
-          text-align: left;
-        }
-        h4{
-          text-align: left;
-          margin-left:10px;
-          .span4;
-          margin-top:10px;
-          a{
-            color: @principalActions;
+    &.especial{
+      &:nth-of-type(1),&:nth-of-type(2){
+        width:48%;
+        height:304px;
+        border-bottom: 3px solid #f1c40f;
+        figure{
+          height:200px;
+          img{
+            width:100%;
+            margin-left:0px;
           }
         }
-        strong{
-          font-size:1.2em;
+        .baseContent{
+          background-color:#ffffff;
+          .giftcardTitle{
+            .span9;
+            border-bottom:1px solid #EDEEEE;
+            border-top:1px solid #f5f7e9;
+            color:rgba(93,98,102,1);
+            padding-bottom: 10px;
+            font-size: 1.3em;
+          }
+          h2{
+            font-size:0.7em;
+            margin-top:15px;
+            text-align: left;
+          }
+          h4{
+            text-align: left;
+            margin-left:10px;
+            .span4;
+            margin-top:10px;
+            a{
+              color: @principalActions;
+            }
+          }
+          strong{
+            font-size:1.2em;
+          }
+          select{
+            padding:8px 8px 7px;
+            margin-top:0px;
+            margin-left:15px;
+            border-radius:3px 0px 0px 3px;
+          }
         }
-        select{
-          padding:8px 8px 7px;
-          margin-top:0px;
-          margin-left:15px;
-          border-radius:3px 0px 0px 3px;
+        .newAction{ 
+          .span5;
+          .col;
+          margin-top:10px;
+          margin-left: -5px;
+          strong{
+            margin-top:5px!important;
+            color: @grayDarkText;
+            font-size: 1.4em;
+          }
+          .price{
+            border:none;
+            padding:0px;
+            margin:0px;
+          }
+          .no-giftcard{
+            border-radius:4px;
+          }
         }
-      }
-      .newAction{ 
-        .span5;
-        .col;
-        margin-top:10px;
-        margin-left: -5px;
-        strong{
-          margin-top:5px!important;
-          color: @grayDarkText;
-          font-size: 1.4em;
+        .validation-type,.in{
+          display:none;
         }
-        .price{
-          border:none;
-          padding:0px;
-          margin:0px;
-        }
-        .no-giftcard{
-          border-radius:4px;
-        }
-      }
-      .validation-type,.in{
-        display:none;
-      }
 
+      }
     }
 
     .baseContent{
