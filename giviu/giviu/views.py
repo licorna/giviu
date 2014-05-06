@@ -260,6 +260,7 @@ def giftcard_confirmation(request):
         design = request.POST.get('giftcard-design', None)
         date = request.POST['send-when']
         validated = 0
+        already_sent = 0
         try:
             validate_email(email_to)
         except ValidationError:
@@ -285,6 +286,7 @@ def giftcard_confirmation(request):
 
     else:
         validated = 1
+        already_sent = 1
         email_to = 'auto_validate@giviu.com'
         date = datetime.today()
         name_to = 'Auto Validate'
@@ -342,7 +344,8 @@ def giftcard_confirmation(request):
                           comment=comment,
                           giftcard=giftcard,
                           transaction=transaction,
-                          validated=validated)
+                          validated=validated,
+                          already_sent=already_sent)
     product_id = product.uuid
 
     data = {
