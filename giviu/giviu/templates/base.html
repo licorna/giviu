@@ -96,29 +96,6 @@
       </div>
     </header>
 
-    <div id="login-box" class="span9">
-      <div class="container">
-        <div class="span1">
-          <span class="icon-key ico"></span>
-        </div>
-        <div class="span4 col facebookLogin">
-          Ingresa con tu cuenta de facebook 
-            <div class="facebook-botton">
-              <fb:login-button size="large" onlogin="require('./log').info('onlogin callback')" scope="email user_birthday user_location friends_birthday">
-                Iniciar sesión
-              </fb:login-button>
-            </div>
-        </div>
-        <div class="span4 col simplelogin">
-          Ingresa con tu usuario y password
-          <form>
-              <input type="text" placeholder="Correo electrónico" />
-              <input type="password" placeholder="Contraseña" />
-              <input type="submit" value="login" class="btn white" />
-          </form>
-        </div>
-      </div>
-    </div>
 <!--     {% if user.is_authenticated %}
     <div class="span9" id="referal">
       <center>

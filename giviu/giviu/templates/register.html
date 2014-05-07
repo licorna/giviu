@@ -10,89 +10,64 @@
 {% block content %}
 
 <section class="register">
-  <section id="registercontent">
-    <section class="span9 image" id="selecttype">
-      <center>
-        <h1 class="margin-title "><span class="icon-key"></span> Registrate en giviu</h1>
-        <p class="slide-toggle">Registrate con facebook y recibe $2.000 en créditos.</p>
-        <div class="register-option">
-          <a href="#" class="facebook fb-login-button" id="btn-login">
-            <span class="msg">
-              <fb:login-button size="large" onlogin="require('./log').info('onlogin callback')" scope="email user_birthday user_location friends_birthday">
-                Con tu cuenta de facebook
-              </fb:login-button>
-            </span>
-            <img style="display:none;" class="loader" src="/static/img/loaderfacebook.gif">
-          </a>
-          o <span class="manual-register">ingresa tus datos manualmente</span>
+  <section class="container">
+    <h2> Ingresa a Giviu</h2>
+    <div class=" userInteraccionContent span9">
+      <div class="span5 social col">
+        <div class="headerType span9">
+          <span class="iconContainer span1">
+            <span class="icon-cloud"></span>          
+          </span>
+          <h3 class="form-type span7 col">Ingresa con tus redes sociales</h3>
+        </div>
+<!--         <h4><span class="icon-heart"></span> Ingresa con tus redes sociales y gana 2.000 en tu primera compra</h4> -->
+
+        <div class="span7 social-buttons">
+        <a href="#" class="button sign-up facebook span9"> <span class="icon-facebook"></span>Ingresa con Facebook </a>
+          <a href="#" class="button sign-up google span9"><span class="icon-google-plus"></span> Ingresa con Google +</a>
+          <a href="#" class="button sign-up twitter span9"> <span class="icon-twitter"></span>Ingresa con Twitter</a>
         </div>
 
-        <div class="loader">
-          <center>
-            <img src="/static/img/loaderBackGreen.gif"/>
-          </center>
+      </div>
+      <div class="span4 manual col">
+        <div class="headerType span9">
+          <span class="iconContainer span1">
+            <span class="icon-pencil"></span>          
+          </span>
+          <h3 class="form-type span7 col">Ingresa manualmente</h3>
         </div>
-        <div class="confirm">
-          <div class="span3">
-            <figure class="span8">
-              <img class="span9" id="facebook-avatar" src="">
-            </figure>
+        <form method="post" id="login-single" action="/register" class="span9">
+          <label class="span9">Correo electrónico</label>
+          <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
+          <label class="span9">Contraseña</label>
+          <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+          <a class="btn span4 neutral secondaryOption" href="#" onClick="">Crear una cuenta</a>
+          <submit class="btn span5 primary col" onClick="$('#login-single').submit()">Ingresar</submit>
+          <div class="span9 adicionalActions">
+            <center>
+              <a href="#">¿Olvidaste tu contraseña?</a>
+            </center>
           </div>
-          <div class="span6">
-              <form method="post" id="register" action="/register">
-                {% csrf_token %}
-                {% if referer %}
-                <input type="hidden" name="referer" value="{{ referer }}" />
-                {% endif %}
-                <ul>
-                  <li id="facebook-name"></li>
-                  <li id="facebook-birth"></li>
-                  <li id="facebook-emails"></li>
-                </ul>
-            </form>
-            <a href="#" class="btn confirmBtn">ingresar</a>
-          </div>
-        </div>
+        </form>
+        <form method="post" id="register-single" style="display:none;" action="/register" class="span9">
+          <label class="span9">Nombre</label>
+          <input type="text" name="name" class="span9 required"  placeholder="Juan"/>                
+          <label class="span9">Correo electrónico</label>
+          <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
+          <label class="span9">Contraseña</label>
+          <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+          <label class="span9">Reingresa tu contraseña</label>
+          <input type="password" name="pass2" class="span9 required" placeholder="Password"/>
+          <a class="btn span4 neutral secondaryOption" href="#">Ya tengo cuenta</a>
+          <submit class="btn span5 col primary" href="#" onClick="$('#register-single').submit()">Registrarse</submit>
+        </form>
+      </div>
+    </div>
 
-        <div class="box-without">
-          <div class="span9">
-              <form method="post" id="register-single" action="/register">
-                <label class="span9">Nombre</label>
-                <input type="text" name="name" class="span9 required"  placeholder="Juan"/>                
-                <label class="span9">Correo electrónico</label>
-                <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
-                <label class="span9">Contraseña</label>
-                <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
-                <label class="span9">Reingresa tu contraseña</label>
-                <input type="password" name="pass2" class="span9 required" placeholder="Password"/>
-                <a class="btn span9 white" href="#" onClick="$('#register-single').submit()"><center>Registrarse</center></a>
-              </form>
-              <small class="second-oportunity span9">Registrate con facebook y gana $2.000 para comprar.</small>
-          </div>
-        </div>
-
-        {% if referer %}
-        <div class="referer">
-          <div class="span9 content">
-            <div class="span1">
-              <figure >
-                <img src="https://graph.facebook.com/{{ referer_fbid }}/picture?width=30&amp;amp;height=30">
-              </figure>
-            </div>
-            <div class="span8">
-              {{ referer_name }}, te ha invitado a Giviu
-            </div>
-          </div>
-          <small class="tinytext span9">Te prometemos que no publicaremos nada en tu nombre</small>
-        </div>
-        {% endif %}
-
-      </center>
-    </section>
   </section>
 
-</section>
-    <span id="inviteFriends" style="display:none;">
+<!--</section>
+    <span id="inviteFriends" >
       <div class="span9" id="likeLogin">
         <div class="span4">
           <strong>
@@ -107,7 +82,24 @@
 
         </div>
       </div>
-    </span>
-<script src="{% static "js/facebookconnect.js" %}"></script>
+    </span>-->
+<style>
+  header,footer{
+    display:none;
+  }
+</style>
+<script>
+$(document).ready(function(){
+  $('#register-single').validate();
+  $('#login-single').validate();
+  $('.secondaryOption').on('click',function(e){
+    e.preventDefault();
+    $('#login-single').slideToggle();
+    $('#register-single').slideToggle();
+  });
+
+});
+</script>
+
 
 {% endblock %}
