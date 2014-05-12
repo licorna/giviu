@@ -41,15 +41,18 @@
   </head>
   <body class="cf">
     <header class="span9 {% if products %}header{% endif %}">
-      <div class="container">
-        <div class="span2">
+      <div class="container big">
+        <div class="span1">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
         </div>
-        <div class="span3 tagline col">
+        <div class="span4 tagline col">
+            <a href="/" class="">
+              Todos
+            </a>
           {% for category in categories %}
           {% if category.count > 0 %}
-            <a href="/giftcard/category/{{ category.slug }}" class="span3 {% if this_category.name == category.name %}selected{% endif %}">
-            {{ category.name }}
+            <a href="/giftcard/category/{{ category.slug }}" class="{% if this_category.name == category.name %}selected{% endif %}">
+              {{ category.name }}
             </a>
           {% endif %}
           {% endfor %}
