@@ -115,9 +115,9 @@
           </ul>
         </nav>
     {% if messages %}
-    <div class="msg error span9">
+    <div class="msg {{ message.tags }} span9">
       {% for message in messages %}
-      <span>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</span>
+        {{ message }}
       {% endfor %}
     </div>    
     {% endif %}        
