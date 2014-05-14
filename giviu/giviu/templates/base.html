@@ -105,6 +105,13 @@
             {% endif %}
           </ul>
         </nav>
+    {% if messages %}
+    <div class="msg {{ message.tags }} span9">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>    
+    {% endif %}        
 {% block content %}<h1> CONTENIDO </h1>{% endblock %}
 
     <div id="alertMessage" style="display:none;">
