@@ -19,6 +19,7 @@ from merchant.models import Merchants
 from hashlib import sha224
 from social.models import Likes
 from datetime import datetime
+from hashlib import md5
 from external_codes import get_external_codes_for_giftcard
 import logging
 logger = logging.getLogger('giviu')
@@ -396,7 +397,7 @@ class Users(AbstractBaseUser):
 
     objects = GiviuUserManager()
     USERNAME_FIELD = 'fbid'
-    REQUIRED_FIELDS = ['birthday']
+    REQUIRED_FIELDS = []
 
     def get_full_name(self):
         if self.first_name != '' and self.last_name != '':
@@ -429,13 +430,19 @@ class Users(AbstractBaseUser):
         if self.is_merchant:
             return self.admin_of
 
-    def get_fb_image_url(self):
+    def get_user_image(self, size=40):
+        result = ''
         try:
             fbid = int(self.fbid)
+            result = 'https://graph.facebook.com/%d/picture' % (fbid, )
         except ValueError:
-            fbid = 1232131
+            result = 'https://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&size=' + str(size)
+        print result
+        return result
 
-        return 'https://graph.facebook.com/%d/picture' % (fbid, )
+
+    def get_user_image_big(self):
+        return self.get_user_image(200)
 
     def get_friend_likes_for_giftcard(self, giftcard_id):
         likes = Likes.get_likes_from_friends(self.fbid, giftcard_id)
@@ -452,14 +459,20 @@ class Users(AbstractBaseUser):
 
 class GiviuAuthenticationBackend(object):
     def authenticate(self, username=None, password=None):
+        print 'authenticando'
         try:
             if '@' in username:
-                user = Users.objects.get(email__exact=username)
+                print 'obteniendo por email'
+                user = Users.objects.get(email=username)
+                print 'si existe el email'
             else:
-                user = Users.objects.get(fbid__exact=username)
+                user = Users.objects.get(fbid=username)
             if user.check_password(password):
+                print 'usuario chequeado'
                 return user
-        except Users.DoesNotExist:
+            print 'na que ver el password tiii'
+        except users.doesNotExist:
+            print 'usuario no existe'
             return None
 
     def get_user(self, user_id):

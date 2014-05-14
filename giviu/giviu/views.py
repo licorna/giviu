@@ -73,7 +73,6 @@ def do_register(request):
                 user.location = location
                 user.is_receiving = 0
                 user.is_active = 1
-                user.is_receiving = 0
                 user.save()
 
             except Users.DoesNotExist:

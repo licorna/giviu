@@ -2,78 +2,50 @@
 {% load locale_price %}
 {% block content %}
 <section class="container profile">
-	<div class="span2">
-		<div class="userSide span9 arrow">
-			<figure class="avatar">
-				<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-				<!--<a class="btn secondary changeImage"><span class="icon-camera"></span> Cambiar imagen</a>-->
-			</figure>
-			<ul class="userInfo">
-				<li><span class="icon-user"></span> {{ user.first_name }} </li>
-				<li>{{ user.birthday }} </li>
-				<li>{{ user.email }} </li>
-			</ul>		
-		</div>		
-<!-- 		<div class="userSide span9">
-			<center>
-				<strong>Cumpleaños de este mes</strong>
-			</center>
-			<ul class="userInfo friendList">
-				<li>
-					<a href="#">
-						<figure class="avatar friends">
-							<img class="span9" src="https://graph.facebook.com/{{ user.fbid }}/picture?width=500&height=500"/>
-						</figure> 
-						<span class="name">{{ user.first_name }} </span>
-					</a>
-				</li>
-			</ul>		
-		</div> -->
-	</div>
-	<div class="span7 col userContent">
-		<!--<div class="span9 col">
-			<div class="msg success span9 col">
-				</span> ¿Quieres Ganar dinero para comprar en Giviu?
-			</div>
-			<div class="inviteFriends span9 col">
-				<ul class="span9">
-					<li class="facebook span5" onclick="FB.ui({method: 'apprequests',message: 'Invita a tus amigos a Giviu.com'}, sendInviteFriends);"><span class="icon-facebook ico"></span> Invita a 50 amigos de facebook <span class="win">$1000</span></li>
-					<li class="edit span4 col"><span class="icon-pencil ico"></span> Completa tu perfíl <span class="win">$500</span></li>
-				</ul>
-			</div>
-		</div>-->
+  <div class="span2">
+    <div class="userSide span9 arrow">
+      <figure class="avatar">
+        <img class="span9" src="{{ user.get_user_image_big }}"/>
+      </figure>
+      <ul class="userInfo">
+        <li><span class="icon-user"></span> {{ user.first_name }} </li>
+        <li>{{ user.birthday }} </li>
+        <li>{{ user.email }} </li>
+      </ul>
+    </div>
+  </div>
+  <div class="span7 col userContent">
+    <div class="span9">
+      <section class="giftcardsProfile span9">
+        <section class="span9">
+          <ul class="tabs span9">
+            <li class="tab selected"><a href="/user">Giftcards recibidas</a></li>
+            <li clasS="tab"><a href="/user/sent">Giftcards regaladas</a></li>
+          </ul>
 
-		<div class="span9">
-			<section class="giftcardsProfile span9">
-				<section class="span9">
-					<ul class="tabs span9">
-						<li class="tab selected"><a href="/user">Giftcards recibidas</a></li>
-						<li clasS="tab"><a href="/user/sent">Giftcards regaladas</a></li>
-					</ul>
+          <div class="span9">
+            {% for product in products %}
+            <div class="span9 giftcardList">
+              <figure class="span2">
+                <img class="span9" src="{{ product.design }}">
+              </figure>
+              <div class="span6 col">
+                <h3>{{ product.giftcard }}</h3>
+                <strong class="price">{{ product.price|clp }}</strong>
+                <ul>
+                  <li><strong>Enviado por: </strong> {{ product.giftcard_from.get_full_name }}</li>
+                  <li><strong>Recibida el: </strong> {{ product.send_date }}</li>
+                </ul>
+              </div>
+              <a href="/product/show/{{ product.uuid }}" target="_blank" class="btn primary verGift">Ver giftcard</a>
+            </div>
+            {% endfor %}
 
-					<div class="span9">
-						{% for product in products %}
-						<div class="span9 giftcardList">
-							<figure class="span2">
-								<img class="span9" src="{{ product.design }}">
-							</figure>
-							<div class="span6 col">
-								<h3>{{ product.giftcard }}</h3>
-								<strong class="price">{{ product.price|clp }}</strong>
-								<ul>
-									<li><strong>Enviado por: </strong> {{ product.giftcard_from.get_full_name }}</li>
-									<li><strong>Recibida el: </strong> {{ product.send_date }}</li>
-								</ul>
-							</div>
-							<a href="/product/show/{{ product.uuid }}" target="_blank" class="btn primary verGift">Ver giftcard</a>
-						</div>
-						{% endfor %}
-
-					</div>
-				</section>
-			</section> 
-		</div>
-	</div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </div>
 </section>
 
 {% endblock %}

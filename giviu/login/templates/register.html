@@ -16,7 +16,7 @@
       <div class="span5 social col">
         <div class="headerType span9">
           <span class="iconContainer span1">
-            <span class="icon-cloud"></span>          
+            <span class="icon-cloud"></span>
           </span>
           <h3 class="form-type span7 col">Ingresa con tus redes sociales</h3>
         </div>
@@ -32,15 +32,16 @@
       <div class="span4 manual col">
         <div class="headerType span9">
           <span class="iconContainer span1">
-            <span class="icon-pencil"></span>          
+            <span class="icon-pencil"></span>
           </span>
           <h3 class="form-type span7 col">Ingresa manualmente</h3>
         </div>
-        <form method="post" id="login-single" action="/register" class="span9">
+        <form method="post" id="login-single" action="/login/" class="span9">
+          {% csrf_token %}
           <label class="span9">Correo electrónico</label>
           <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
           <label class="span9">Contraseña</label>
-          <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+          <input type="password" name="password" class="span9 required" placeholder="Password"/>
           <a class="btn span4 neutral secondaryOption" href="#" onClick="">Crear una cuenta</a>
           <submit class="btn span5 primary col" onClick="$('#login-single').submit()">Ingresar</submit>
           <div class="span9 adicionalActions">
@@ -49,15 +50,16 @@
             </center>
           </div>
         </form>
-        <form method="post" id="register-single" style="display:none;" action="/register" class="span9">
-          <label class="span9">Nombre</label>
-          <input type="text" name="name" class="span9 required"  placeholder="Juan"/>                
+        <form method="post" id="register-single" style="display:none;" action="/login/register/" class="span9">
+          {% csrf_token %}
+<label class="span9">Nombre</label>
+          <input type="text" name="name" class="span9 required"  placeholder="Juan"/>
           <label class="span9">Correo electrónico</label>
           <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
           <label class="span9">Contraseña</label>
-          <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+          <input type="password" name="passwd1" class="span9 required" placeholder="Password"/>
           <label class="span9">Reingresa tu contraseña</label>
-          <input type="password" name="pass2" class="span9 required" placeholder="Password"/>
+          <input type="password" name="passwd2" class="span9 required" placeholder="Password"/>
           <a class="btn span4 neutral secondaryOption" href="#">Ya tengo cuenta</a>
           <submit class="btn span5 col primary" href="#" onClick="$('#register-single').submit()">Registrarse</submit>
         </form>

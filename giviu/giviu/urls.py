@@ -42,8 +42,10 @@ urlpatterns = patterns('',
                            'django.contrib.sitemaps.views.sitemap',
                            {'sitemaps': sitemaps}),
 
+                       url(r'^login/',
+                           include('login.urls')),
+
     url(r'^logout$', 'giviu.views.do_logout', name='logout'),
-    url(r'^register', 'giviu.views.do_register', name='register'),
     url(r'^giftcard/checkout$', 'giviu.views.giftcard_confirmation', name='giftcard_confirmation'),
     url(r'^product/show/(?P<uuid>\S+)$', 'giviu.views.product_show', name='product_show'),
 
