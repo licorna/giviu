@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Ingresa a Giviu | {% endblock %}
+{% block meta %}
+    <meta property="og:image" content="https://commondatastorage.googleapis.com/site-images/images/referer.png"/>
+    <meta property="og:title" content="Invita a tus amigos y gana dinero" />
+    <meta property="og:description" content="Por cada 5 amigos que invites, Giviu te regala 1.000 para comprar en Giviu." />
+    <meta property="og:url" content="https://www.giviu.com/referer/{{ referer }}" />
+{% endblock %}
+{% block content %}
+
+<section class="register">
+  <section class="container">
+    <h2> Ingresa a Giviu</h2>
+    <div class=" userInteraccionContent span9">
+      <div class="span5 social col">
+        <div class="headerType span9">
+          <span class="iconContainer span1">
+            <span class="icon-cloud"></span>          
+          </span>
+          <h3 class="form-type span7 col">Ingresa con tus redes sociales</h3>
+        </div>
+<!--         <h4><span class="icon-heart"></span> Ingresa con tus redes sociales y gana 2.000 en tu primera compra</h4> -->
+
+        <div class="span7 social-buttons">
+        <a href="#" class="button sign-up facebook span9"> <span class="icon-facebook"></span>Ingresa con Facebook </a>
+          <a href="#" class="button sign-up google span9"><span class="icon-google-plus"></span> Ingresa con Google +</a>
+          <a href="#" class="button sign-up twitter span9"> <span class="icon-twitter"></span>Ingresa con Twitter</a>
+        </div>
+
+      </div>
+      <div class="span4 manual col">
+        <div class="headerType span9">
+          <span class="iconContainer span1">
+            <span class="icon-pencil"></span>          
+          </span>
+          <h3 class="form-type span7 col">Ingresa manualmente</h3>
+        </div>
+        <form method="post" id="login-single" action="/register" class="span9">
+          <label class="span9">Correo electrónico</label>
+          <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
+          <label class="span9">Contraseña</label>
+          <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+          <a class="btn span4 neutral secondaryOption" href="#" onClick="">Crear una cuenta</a>
+          <submit class="btn span5 primary col" onClick="$('#login-single').submit()">Ingresar</submit>
+          <div class="span9 adicionalActions">
+            <center>
+              <a href="#">¿Olvidaste tu contraseña?</a>
+            </center>
+          </div>
+        </form>
+        <form method="post" id="register-single" style="display:none;" action="/register" class="span9">
+          <label class="span9">Nombre</label>
+          <input type="text" name="name" class="span9 required"  placeholder="Juan"/>                
+          <label class="span9">Correo electrónico</label>
+          <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
+          <label class="span9">Contraseña</label>
+          <input type="password" name="pass" class="span9 required" placeholder="Password"/>                
+          <label class="span9">Reingresa tu contraseña</label>
+          <input type="password" name="pass2" class="span9 required" placeholder="Password"/>
+          <a class="btn span4 neutral secondaryOption" href="#">Ya tengo cuenta</a>
+          <submit class="btn span5 col primary" href="#" onClick="$('#register-single').submit()">Registrarse</submit>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+<!--</section>
+    <span id="inviteFriends" >
+      <div class="span9" id="likeLogin">
+        <div class="span4">
+          <strong>
+            <span class="icon-facebook ico blue"></span>
+          </strong>
+        </div>
+        <div class="span5">
+          Invita a tus amigos de Facebook a disfrutar de <strong>Giviu</strong>
+        </div>
+        <div class="span9" id="likeLoginAction">
+          <a onClick="FB.ui({method: 'apprequests',message: 'Invita a tus amigos a Giviu.com'}, sendInviteFriends);" href="javascript:;" class="login">Invitar</a>
+
+        </div>
+      </div>
+    </span>-->
+<style>
+  header,footer{
+    display:none;
+  }
+</style>
+<script>
+$(document).ready(function(){
+  $('#register-single').validate();
+  $('#login-single').validate();
+  $('.secondaryOption').on('click',function(e){
+    e.preventDefault();
+    $('#login-single').slideToggle();
+    $('#register-single').slideToggle();
+  });
+
+});
+</script>
+
+
+{% endblock %}

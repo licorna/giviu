@@ -63,6 +63,8 @@ urlpatterns = patterns('',
     url(r'^page/terminos-y-condiciones$', 'giviu.views.page_terms', name='page_terms'),
     url(r'^page/prensa$', 'giviu.views.interviews', name='interviews'),
 
+    url(r'^page/new-custom-gift$', 'giviu.views.new_custom_gift', name='new-custom-gift'),
+
     url(r'^404$', 'giviu.views.response_not_found', name='response_not_found'),
 
     url(r'^api/', include('api.urls')),

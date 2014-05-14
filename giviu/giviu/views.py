@@ -443,7 +443,6 @@ def page_enterprise(request):
     return render_to_response('page_enterprise.html', data,
                               context_instance=RequestContext(request))
 
-
 def page_contact(request):
     data = {}
     data.update(get_data_for_header(request))
@@ -461,3 +460,9 @@ def page_terms(request):
     data.update(get_data_for_header(request))
     return render_to_response('page_terms.html', data,
                               context_instance=RequestContext(request))
+
+def new_custom_gift(request):
+    data = {}
+    data.update(get_data_for_header(request))
+    return render_to_response('new_custom_gift.html', data,
+                              context_instance=RequestContext(request))    

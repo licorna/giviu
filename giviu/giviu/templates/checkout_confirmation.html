@@ -1,45 +1,250 @@
 {% extends "base.html" %}
 {% load locale_price %}
 {% block content %}
-<section class="container steps">
+<!-- <section class="container steps">
   <span class="stepIndicator">
     3
   </span>
   <span class="actualStep">Seleccionar giftcard / personalizar giftcard / pagar</span>
-</section>
+</section> -->
 
 <section class="container pay">
   <h2>Confirmación de compra</h2>
-  <div class="span9 paymentInfo">
-    <div class="span3">
-      {% if not giftcard.auto_validate %}
-      <figure class="span9">
-        <img src="{{ design.image }}">
-      </figure>
-      {% endif %}
-
+  <aside class="span2 confirmation-steps">
+    <div class="userSide span9 arrow">
+    <ul>
+      <li class="current" data-indicator="giftcard-confirmation"><span class="icon-checkmark"></span> Detalles de producto</li>
+      <li data-indicator="delivery-options"><span class="icon-checkmark"></span> Opciones de despacho</li>
+      <li data-indicator="confirmation">Confirmación de compra</li>
+    </ul>
     </div>
-    <div class="span6 col">
-      <h3>{{ giftcard.merchant.name }}</h3>
-      {% if original_price != price %}
-      <strong class="price no-price">{{ original_price|clp }}</strong>
-      <strong class="price new-price">{{ price|clp }}</strong>
-      {% else %}
-      <strong class="price">{{ original_price|clp }}</strong>
-      {% endif %}
+  </aside>
 
-      <ul>
-        {% if giftcard.auto_validate %}
-        <li><strong>Estás ayudando a: </strong> {{ giftcard.title }}</li>
-        {% else %}
-        <li><strong>Se le enviara a: </strong> {{ name_to }}</li>
-        <li><strong>Al correo: </strong> {{ email_to }}</li>
-        <li><strong>El día: </strong> {{ send_date }}</li>
-        <li><strong>Mensaje: </strong> {{ comment }}</li>
-        {% endif %}
-      </ul>
+  <div class="paymentProcess span7 col">
+    
+    <div id="giftcard-confirmation" class="span9 process">
+      <div class="header-process">
+        <span class="indicator">
+          <span class="icon-menu"></span>
+        </span>
+        <h2>Detalle de compra</h2>
+      </div>
+
+      <div class="process-container">
+
+        <div class="span9" id="giftcard-info">
+
+          <figure class="span4">
+            <img class="span9" src="https://s3.amazonaws.com/kore/production/attachments/assets/478833/featured/MANTIS-03.jpg?1382966369">
+          </figure>
+          
+          <div class="span5 col">
+            <h3>{{ giftcard.merchant.name }}</h3>
+            {% if original_price != price %}
+            <strong class="price no-price">{{ original_price|clp }}</strong>
+            <strong class="price new-price">{{ price|clp }}</strong>
+            {% else %}
+            <strong class="price">{{ original_price|clp }}</strong>
+            {% endif %}
+            <ul class="details">
+              {% if giftcard.auto_validate %}
+              <li><strong>Estás ayudando a: </strong> {{ giftcard.title }}</li>
+              {% else %}
+              <li><strong>Se le enviara a: </strong> {{ name_to }}</li>
+              <li><strong>Al correo: </strong> {{ email_to }}</li>
+              <li><strong>El día: </strong> {{ send_date }}</li>
+              <li><strong>Mensaje: </strong> {{ comment }}</li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <div class="span9 actions">
+            <a href="#" class="btn primary next" data-next-step="delivery-options" data-current="giftcard-confirmation">Continuar</a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div> 
+
+    <div id="delivery-options" class="span9 process disabled">
+      <div class="header-process">
+        <span class="indicator">
+          <span class="icon-truck"></span>
+        </span>
+        <h2>Opciones de despacho</h2>
+      </div>
+      <div class="process-container">
+        <div class="span6">
+          <h4 class="subtitles"><span class="icon-location"></span> Selecciona una dirección de despacho</h4>
+          
+          <div class="address span9">
+            <figure class="span1">
+              <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
+            </figure>
+            <div class="span8 col">
+              <strong>Casa Cristy</strong>
+              <p>Pedro de valdivia, 2585 depto 601A, Ñuñoa, Santiago</p>
+            </div>
+          </div>
+
+          <div class="address span9">
+            <figure class="span1">
+              <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
+            </figure>
+            <div class="span8 col">
+              <strong>Casa Cristy</strong>
+              <p>Pedro de valdivia, 2585 depto 601A, Ñuñoa, Santiago</p>
+            </div>
+          </div>
+
+          <div class="address span9">
+            <figure class="span1">
+              <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
+            </figure>
+            <div class="span8 col">
+              <strong>Casa Cristy</strong>
+              <p>Pedro de valdivia, 2585 depto 601A, Ñuñoa, Santiago</p>
+            </div>
+          </div>
+
+          <center class="span9">
+            <a href="#" class="newAddress btn secondary"><span class="icon-location"></span> Agregar nueva direccion</a>
+          </center>
+
+        </div>
+        <div class="span3 col">
+          <h4 class="subtitles"><span class="icon-cogs"></span> Personaliza el envoltorio</h4>
+          <div class="span9 custom">
+            <strong>Color del papel</strong>
+            <div class="colors span9">
+              <span class="color white selected"></span>
+              <span class="color pink"></span>
+              <span class="color blue"></span>
+              <span class="color yellow"></span>
+              <span class="color green"></span>
+            </div>
+          </div>         
+          <div class="span9 custom">
+            <strong>Color de la cinta</strong>
+            <div class="colors span9">
+              <span class="color white"></span>
+              <span class="color pink"></span>
+              <span class="color blue"></span>
+              <span class="color yellow"></span>
+              <span class="color green selected"></span>
+            </div>
+
+          </div>         
+
+        </div>
+        
+        <div class="span9 actions">
+            <a href="#" class="btn primary next" data-next-step="confirmation" data-current="delivery-options">Continuar</a>
+        </div>
+     
+      </div>
+    </div>  
+    
+    <div id="confirmation" class="span9 process disabled">
+      <div class="header-process">
+        <span class="indicator">
+          <span class="icon-credit"></span>        
+        </span>
+        <h2>Confirmación de compra</h2>
+      </div>
+      <div class="process-container">      
+        <div class="span9">
+          <!-- producto -->
+          <div class="item span9">
+
+            <div class="title span7">
+                {% if not giftcard.auto_validate %}
+                <figure class="span1">
+                  <img class="span9" src="{{ design.image }}">
+                </figure>
+                {% endif %}
+                <div class="span8 col">
+                  {{ giftcard.merchant.name }}
+                </div>
+            </div>
+
+            <div class="price span2 col">
+              {% if original_price != price %}
+                {{ original_price|clp }}
+                {{ price|clp }}
+              {% else %}
+                {{ original_price|clp }}
+              {% endif %}
+            </div>
+
+          </div>
+          <!-- info producto -->
+
+          <!-- info despacho -->
+          <div class="item delivery span9">
+            
+            <div class="title span7">
+              <figure class="span1">
+                <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
+              </figure>
+              <div class="span8 col">
+                <strong>Casa Cristy</strong>
+                <p>Pedro de valdivia, 2585 depto 601A, Ñuñoa, Santiago</p>
+              </div>
+            </div>
+            
+            <div class="span2 price col">
+            $ 2.500
+            </div>
+
+          </div>
+          <!-- fin info despacho -->
+
+          <!-- descuentos -->
+          <div class="item total discount span9">
+            
+            <div class="title span7">
+              <div class="span9">
+              Descuentos
+              </div>
+            </div>
+            
+            <div class="span2 price col">
+            - $ 5.500
+            </div>
+
+          </div>
+          <!-- fin descuentos -->
+
+          <!-- precio -->
+          <div class="item total span9">
+            
+            <div class="title span7">
+              <div class="span9 col">
+                Total
+              </div>
+            </div>
+            
+            <div class="span2 price col">
+            $ 12.500
+            </div>
+
+          </div>
+          <!-- fin precio -->
+
+        </div>
+
+        <div class="span9 actions">
+            <a href="#" class="btn primary">Pagar</a>
+        </div>
+
+      </div>
     </div>
+
   </div>
+
   <div class="span9 stepAction">
     <form method="post" action="/psp/pay">
       {% csrf_token %}
@@ -65,7 +270,22 @@
 </section>
 <script>
   $(document).ready(function(){
-  localStorage.setItem('product_id', $('[name="product_id"]').val());
+    localStorage.setItem('product_id', $('[name="product_id"]').val());
+    $('.next').on('click',function(){
+      var open = $(this).attr('data-next-step');
+      var current = $(this).attr('data-current');
+
+      var positionTop = "#"+open;
+      var positionTop = $(positionTop).offset();
+      var positionTop = positionTop.top;
+      $("html:not(:animated),body:not(:animated)").animate({ scrollTop: positionTop}, 500 )
+      
+      $('#'+open).removeClass('disabled');
+      $(this).remove();
+
+      $('[data-indicator="'+current+'"]').addClass('ok').removeClass('current')
+      $('[data-indicator="'+open+'"]').addClass('current')
+    });
   });
 </script>
 {% endblock %}
