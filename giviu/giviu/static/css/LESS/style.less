@@ -1616,9 +1616,11 @@ nav{
   }
   .paymentProcess{
     background-color: #fff;
-    padding:15px;
     .process{
       padding-bottom: 15px;
+      .process-container{
+        padding:15px;
+      }
       .price{
         font-weight: 100;
         font-size: 1.5em;
@@ -1650,7 +1652,8 @@ nav{
         border-bottom: 1px dotted #ccc;
         padding-bottom: 15px;
         margin-bottom: 10px;
-        padding-top: 10px;
+        padding: 10px;
+        background-color: #fbfbfb;
         .indicator{
           border-radius:50%;
           width:30px;
@@ -1672,6 +1675,10 @@ nav{
       .actions{
         text-align: right;
         margin-top: 25px;
+        .small{
+          padding:5px;
+          font-size: 0.8em;
+        }
       }
       h4.subtitles{
         margin:10px 0px;
@@ -1681,11 +1688,9 @@ nav{
         }
       }
       .address{
-        padding:5px;
-        background-color: #f6f6f6;
         margin-bottom: 5px;
         figure{
-          border:1px solid #ccc;
+          border:1px solid @principalActions;
         }
         strong{
           font-weight: 100;
@@ -1708,6 +1713,7 @@ nav{
       .custom{
         margin-left: 10px;
         margin-bottom: 15px;
+        border-left: 1px dotted @greyBorder;
         strong{
           font-weight: 100;
           color: #ccc;

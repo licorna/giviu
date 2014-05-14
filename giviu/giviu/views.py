@@ -354,6 +354,7 @@ def giftcard_confirmation(request):
         'original_price': original_price,
         'giftcard_design': design.id,
         'giftcard': giftcard,
+        'giftcard_image': giftcard.image,
         'product_id': product_id,
         'token': response['token'],
         'trx_id': trx_id,
