@@ -79,13 +79,6 @@
         </div>
       </div>
     </header>
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
 
 <!--     {% if user.is_authenticated %}
     <div class="span9" id="referal">
@@ -110,8 +103,8 @@
       {% for message in messages %}
         {{ message }}
       {% endfor %}
-    </div>    
-    {% endif %}        
+    </div>
+    {% endif %}
 {% block content %}<h1> CONTENIDO </h1>{% endblock %}
 
     <div id="alertMessage" style="display:none;">
@@ -168,7 +161,6 @@
       </section>
 
     </footer>
-<script src="{% static "js/facebookconnect.js" %}"></script>
 
     <script>
       if (window.location.hostname == 'www.giviu.com'){

@@ -332,7 +332,6 @@ class GiviuUserManager(BaseUserManager):
         user.is_active = 0
         user.is_receiving = 1
         user.save()
-        print 'user id', user.id
         return user
 
     def create_user(self, fbid, password, birthday, **kwargs):
@@ -437,7 +436,6 @@ class Users(AbstractBaseUser):
             result = 'https://graph.facebook.com/%d/picture' % (fbid, )
         except ValueError:
             result = 'https://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&size=' + str(size)
-        print result
         return result
 
 
@@ -459,20 +457,14 @@ class Users(AbstractBaseUser):
 
 class GiviuAuthenticationBackend(object):
     def authenticate(self, username=None, password=None):
-        print 'authenticando'
         try:
             if '@' in username:
-                print 'obteniendo por email'
                 user = Users.objects.get(email=username)
-                print 'si existe el email'
             else:
                 user = Users.objects.get(fbid=username)
             if user.check_password(password):
-                print 'usuario chequeado'
                 return user
-            print 'na que ver el password tiii'
         except Users.DoesNotExist:
-            print 'usuario no existe'
             return None
 
     def get_user(self, user_id):
