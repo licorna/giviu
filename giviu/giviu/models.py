@@ -471,7 +471,7 @@ class GiviuAuthenticationBackend(object):
                 print 'usuario chequeado'
                 return user
             print 'na que ver el password tiii'
-        except users.doesNotExist:
+        except Users.DoesNotExist:
             print 'usuario no existe'
             return None
 

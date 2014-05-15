@@ -13,4 +13,6 @@ urlpatterns = patterns('',
                            'login.views.email_validate',
                            name='email_validate'),
 
+                       url(r'^fbregister$',
+                           'login.views.fbregister'),
 )
