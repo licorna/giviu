@@ -15,6 +15,9 @@ from giviu.models import Users
 from utils import (connect, create_token_for_email_registration,
                    send_mail_with_registration_token)
 
+FBAPP_ID='259478790867380'
+FBAPP_SECRET='97d9c0d89b213dcf75d35e33ef003113'
+
 def login(request):
     print 'login'
     if request.method == 'POST':
@@ -29,8 +32,9 @@ def login(request):
             login_auth(request, user)
             return redirect('/')
 
-    args = dict(client_id='880085325341796',
-                redirect_uri='http://dev.giviu.com:8000/login/fbregister')
+    args = dict(client_id=FBAPP_ID,
+                redirect_uri='http://dev.giviu.com:8000/login/fbregister',
+                scope='email,user_friends,friends_birthday,user_birthday,friends_location,user_interests')
     facebook_login_url = 'https://graph.facebook.com/oauth/authorize?'
     facebook_login_url += urllib.urlencode(args)
     print facebook_login_url
@@ -52,16 +56,16 @@ def generate_random_string():
 def fbregister(request):
     if request.GET.get('code'):
         print 'got response from facebook'
-        args = dict(client_secret='24dbfca03a8137df6ddd8e6725d4e2e5',
+        args = dict(client_secret=FBAPP_SECRET,
                     code=request.GET.get('code'),
                     redirect_uri='http://dev.giviu.com:8000/login/fbregister',
-                    client_id='880085325341796',
-                    facebook_scope='email')
+                    client_id=FBAPP_ID)
         r = requests.get('https://graph.facebook.com/oauth/access_token',
                          params=args)
 
         access_token = cgi.parse_qs(r.text)['access_token'][0]
-        args = dict(access_token=access_token)
+        args = dict(access_token=access_token,
+                    scope='email,user_friends,friends_birthday,user_birthday,user_location,friends_location,user_interests,user_photos')
         profile = requests.get('https://graph.facebook.com/me', params=args)
         profile = json.loads(profile.text)
         print profile
