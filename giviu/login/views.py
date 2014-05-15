@@ -47,19 +47,19 @@ def login(request):
             user = Users.objects.get(email=email)
         except Users.DoesNotExist:
             messages.add_message(request, messages.INFO,
-                                 'Email o password incorrecto.')
+                                 'Usuario o contraseña incorrectos.')
             return redirect('base_login')
         if user and user.is_active:
             user = authenticate(username=email, password=password)
             if not user:
                 messages.add_message(request, messages.INFO,
-                                     'Email o password incorrecto.')
+                                     'Usuario o contraseña incorrectos.')
                 return redirect('base_login')
             login_auth(request, user)
             return redirect('/')
         else:
             messages.add_message(request, messages.INFO,
-                                 'Email o password incorrecto.')
+                                 'Usuario o contraseña incorrectos.')
             return redirect('base_login')
 
     data = {'facebook_login_url': build_facebook_login_url(request)}
@@ -80,8 +80,8 @@ def fbregister(request):
 
         access_token = cgi.parse_qs(r.text)
         if 'access_token' not in access_token:
-            messages.add_message(request, messages.INFO,
-                                 'Error procesando solicitud de Facebook, por favor, intenta nuevamente.')
+            messages.add_message(request, messages.ERROR,
+                                 'Ha ocurrido un error al intentar ingresar con tu cuenta de Facebook, inténtalo nuevamente.')
             return redirect('base_login')
         access_token = access_token['access_token'][0]
         args = dict(access_token=access_token,
@@ -108,13 +108,14 @@ def fbregister(request):
                                              last_name=last_name)
         user = authenticate(username=fbid, password=fbid)
         if not user:
-            messages.add_message(request, messages.INFO, 'No se pudo crear el usuario desde Facebook, por favor, intenta nuevamente.')
+            messages.add_message(request, messages.ERROR, 'Ha ocurrido un error al intentar ingresar con tu cuenta de Facebook, inténtalo nuevamente.')
             return redirect('base_login')
         login_auth(request, user)
         return redirect('/')
 
     else:
-        messages.add_message(request, messages.INFO, 'No se pudo crear el usuario desde Facebook, por favor, intenta nuevamente.')
+        messages.add_message(request, messages.ERROR, 'Ha ocurrido un error al intentar ingresar con tu cuenta de Facebook, inténtalo nuevamente.')
+        return redirect('base_login')
 
     return redirect('/')
 
@@ -138,7 +139,7 @@ def email_register(request):
                 user.is_active = 0
                 user.save()
                 send_mail_with_registration_token(email, token)
-                messages.add_message(request, messages.INFO, 'Por favor, revisa tu Inbox y valida tu email con Giviu.')
+                messages.add_message(request, messages.INFO, 'Recuerda que aun debes validar tu dirección de e-mail.')
                 return redirect('/')
 
     return redirect('/')
