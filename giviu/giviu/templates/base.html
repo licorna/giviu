@@ -58,34 +58,18 @@
           {% endfor %}
         </div>
         <nav class="span4 col showyourlove">
-<!--           <ul>
-            {% if user.is_authenticated %}
-            <li><a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a></li>
-            <li id="userInfo">
-              <a href="/user">
-                <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
-                <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong>{% if credits %} | creditos: {{ credits|clp }} {% endif %}</span>
-              </a>
-            </li>
-            {% else %}
-            <li><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
-            <li><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
-            {% endif %}
-          </ul> -->
-
           <ul>
             {% if user.is_authenticated %}
             <li id="userInfo">
               <a href="/user">
                 <span class="name">Hola <strong id="session-name">{{ user.first_name }}</strong>
                 {% if credits %} | creditos: <strong>{{ credits|clp }}</strong> {% endif %}</span>
-                 <figure class="avatarHeader"><img src="https://graph.facebook.com/{{ user.fbid }}/picture?width=40&amp;height=40"/></figure>
+                 <figure class="avatarHeader"><img src="{{ user.get_user_image }}"/></figure>
               </a>
               <a href="/logout" class="btn secondary logout" id="logout"><span class="icon-close"></span></a>
             </li>
             {% else %}
-            <li class="not-logged"><a href="/register" class="btn primary"><span class="icon-user"></span> Ingresa</a></li>
-            <li class="not-logged"><a href="/page/giviu" class="normal">¿Cómo funciona <strong>Giviu</strong>?</a></li>
+            <li class="not-logged"><a href="/login" class="btn primary">Ingresar</a></li>
             {% endif %}
           </ul>
 
@@ -95,6 +79,7 @@
         </div>
       </div>
     </header>
+
 <!--     {% if user.is_authenticated %}
     <div class="span9" id="referal">
       <center>
@@ -113,6 +98,14 @@
             {% endif %}
           </ul>
         </nav>
+    {% if messages %}
+      {% for message in messages %}
+      <div class="msg {{ message.tags }} span9">
+        {{ message }}
+      </div>
+      {% endfor %}
+    {% endif %}
+
 {% block content %}<h1> CONTENIDO </h1>{% endblock %}
 
     <div id="alertMessage" style="display:none;">

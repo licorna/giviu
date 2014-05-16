@@ -98,6 +98,21 @@ $(document).ready(function(e){
         next: $('#next')
     });
 
+    //registro//
+    $('.manual-register').click(function(){
+        $('.box-without').slideDown();
+        $('.register-option').slideUp();
+        $('.register h1').toggleClass('margin-title');
+        $('.slide-toggle').slideToggle();
+        $('#register-single').validate();
+    });
+    $('.second-oportunity').click(function(){
+        $('.box-without').slideUp();
+        $('.register-option').slideDown();
+        $('.register h1').toggleClass('margin-title');
+        $('.slide-toggle').slideToggle();
+    });
+
 
 });
 

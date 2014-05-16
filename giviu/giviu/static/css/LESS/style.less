@@ -153,6 +153,11 @@ input:-moz-placeholder {
     color:#fff;
     background-color:@insideAction;
     border:1px solid @insideAction;
+  }    
+  &.white{
+    color:#fff;
+    background-color:rgba(255,255,255,0.2);
+    border:1px solid transparent;
   }  
   &.neutral{
     color:#999;
@@ -181,10 +186,12 @@ input:-moz-placeholder {
 
 .msg{
   padding:10px 0px;
+  border-radius: 4px;
+  margin-bottom:10px;
   span{
     font-size:1.2em;
   }
-  &.alert{
+  &.warning{
     color:#fff;
     background-color:#f1c40f;
     text-align:center;
@@ -351,6 +358,47 @@ header{
     border-bottom:1px dotted #ccc;
     margin-bottom:15px; 
     padding-bottom:15px;
+  }
+}
+
+#login-box{
+  background-color: #3498db;
+  border-bottom:1px solid @greyBorder;
+  padding-bottom:20px;
+  .container{
+    position:relative;
+    text-align:center;
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 94.5%;
+      margin-left: -8px;
+      width: 0; height: 0;
+      border-bottom: 8px solid #3498db;
+      border-right: 8px solid transparent;
+      border-left: 8px solid transparent;
+    }
+    form{
+      .btn{
+        border:none;
+        font-size:0.8em;
+      }
+    }
+    .simplelogin{
+      color:#fff;
+      border-left:1px dotted #fff;
+    }
+    .facebookLogin{
+      color:#fff;
+      .facebook-botton{
+        margin-top:10px;
+      }
+    }
+    .ico{
+      font-size:4em;
+      color:#fff;
+    }
   }
 }
 
@@ -1687,6 +1735,7 @@ nav{
           color:@principalActions;
         }
       }
+<<<<<<< HEAD
       .address{
         margin-bottom: 5px;
         figure{
@@ -1772,6 +1821,11 @@ nav{
             }
           }
         }
+=======
+      &.new-price{
+        line-height:inline-block;
+        font-size:1.8em;
+>>>>>>> 15fff3ace1fc79cd1abbc4321d5b2f53379f1f5b
       }
     }
   }
@@ -2438,155 +2492,137 @@ nav{
 }
 
 .register{
-  position:absolute;
-  background-color:@principalActions;
-  width:100%;
-  height:100%;
-  top:0px;
-  left:0px;
-  color:#fff;
-  h1{
-    font-size:1.3em;
-    span{
-      font-size:0.8em;
-    }
-  }
-  p{
-    border-bottom:1px dotted #fff;
-    width:30%;
-    padding-bottom:10px;
-    max-width:340px;
-  }
-  .loader{
-    display:none;
-  }
-  .confirm{
-    display:none;
-    width:30%;
-    max-width:340px;
-    text-align:left;
-    figure{
-      border-radius:50%;
-      width:90px;
-      height:90px;
-      overflow:hidden;
-      border:3px solid #fff;
-      img{ 
-        width:100%;
-        height:100%;
-      }
-    }
-    .confirmBtn{
-      color:#fff;
-      margin-top:5px;
-      background-color:#1a8145;
-      display:inline-block;
-      padding: 5px 20px;
-      font-size:0.9em;
-    }
-  }
-  .referer{
-    width:30%;
-    max-width:340px;
-    display:block;
-    font-size:0.8em;
-    .content{
-      margin-top:20px;
-      border-top:1px dotted #1a8145;
-      border-bottom:1px dotted #1a8145;
-      padding:5px;
-      border-radius:4px;
-      line-height:35px;
-    }
-    figure{
-      border-radius:50%;
-      width:30px;
-      height:30px;
-      overflow:hidden;
-      border:3px solid #fff;
-      float:left;
-      img{ 
-        width:100%;
-        height:100%;
-      }
-    }
-  }
-  #registercontent{
-    overflow:hidden;
-    flot:left:
-    width:100%;
-    transition:all 0.3s linear;
-    &.big{
-      height:500px;
-    }
-    #selecttype{
-      margin-bottom:50px;
-      transition:all 0.3s linear;
-      &.up{
-        margin-top:-300px;
-      }
-    }
+  .container{
+    max-width: 960px;
   }
   h2{
-    font-size:1em;
-    margin-bottom:10px;
-    font-weight:lighter;
-    padding-bottom:10px; 
-    border-bottom:1px dotted @greyBorder;
-    overflow:hidden;
+    font-weight: 100;
+    margin-bottom: 15px;
   }
-  #continue{
-    color:#999;
-  }
-  .facebook{
-    margin: 10px auto;
-    background-color:transparent;
-    color:#3b5998;
-    font-size:1em;
-  }
-  .tinytext{
-    font-size:0.7em;
-    margin-top:20px;
-  }
-  form{
-    label{
-      &.error{
-        display:none!important;
-      }
-    }
-    input[type="text"], .dd,input[type="password"]{
-      margin:10px 0px;
-      transition: 0.3s linear background;
-    }
-    select{
-      padding:10px;
-      height:50px;
-      margin-bottom:10px;
-    }
-  }
-  .login{
-    width:360px;
-    margin:0 auto;
-    padding:10px;
-    min-width:300px;
+  .userInteraccionContent{
     background-color:#fff;
-    border:1px dotted @greyBorder;
-    min-height:340px;
-    .facebook{
-      margin-top:10px;
-      width:100%;
-    }
-    form{
-      padding-top:20px;
-      margin-top:10px;
-      border-top:1px dotted @greyBorder;
-      .rememberPass{
-        margin-top:10px;
-        font-size:0.9em;
-        color:@insideAction;
+    border-radius:5px;
+    border: 1px solid @greyBorder;
+    overflow: hidden;
+    .headerType{
+        border-bottom:1px dotted #ccc;
+        margin-bottom:15px;
+        padding-bottom:10px;      
+        h3{
+          font-size: 1.2em;
+          font-weight: 100;
+          margin-top:5px;
+        }
+      .iconContainer{
+        border-radius:50%;
+        display: inline-block;
+        background-color:#3699dc;
+        color:#fff;
+        height: 38px;
+        text-align: center;
+        span{
+          margin-top: 10px;
+          display: inline-block;
+          text-shadow: 1px 1px 1px #1F5F8A;        
+        }
       }
     }
+    .social{
+      padding:20px;
+      .iconContainer{
+        width: 40px!important;
+      }
+      h4{
+        color:#666;
+        font-weight: 100;
+        margin-left:10px;
+      }
+      .social-buttons{
+        margin-top:30px;
+        margin-left: 12%;
+        .button{
+          border-radius: 3px;
+          text-align: left;
+          padding:10px;
+          color:#fff;
+          font-size: 1.1em;
+          font-weight: 100;
+          margin-bottom: 15px;
+          vertical-align:top;
+          transition:0.3s linear all;
+          span{
+            border-right:1px dotted #fff;
+            margin:10px;
+            padding: 5px 10px 5px 0px;
+            font-size: 1.5em;
+            transition: 0.1s linear all;
+          }
+          &.facebook{
+            background-color: #2980b9;
+          }          
+          &.twitter{
+            background-color: #2fa6f2;
+          }         
+          &.google{
+            background-color: #d72b2f;
+          }
+          &:hover{
+            text-shadow: 0px 0px 10px rgba(0,0,0,0.2);        
+            box-shadow:inset 0 0 10px 1px rgba(0,0,0,0.2);
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+    .manual{
+      background-color:#f8f8f7;
+      padding:20px;
+      border-left: 1px dotted #ccc;
+      min-height: 440px;
+      input.error{
+        .span8;
+        background-color: #fff;
+        color:#999;
+      }
+      label.error{
+        .span1;
+        .col;
+        font-size: 0.1px;
+        background-color: #c0392b;
+        margin-top: 2px;
+        border-radius: 4px;
+        height:39px;
+        transition:all 0.3s linear;
+        position: relative;
+        &:after{
+          content:"x";
+          font-size:20px;
+          color:#fff;
+          text-align: center;
+          width:100%;
+          height: 100%;
+          position: absolute;
+          top:7px;
+          font-weight: 150;
+        }
+      }      
 
+      .adicionalActions{
+        margin-top:20px;
+        border-top:1px dotted #ccc;
+        padding-top: 10px;
+        margin-bottom:20px;
+        font-size:0.8em;
+      }
+      .btn{
+        margin-top:20px;
+        text-align: center;
+        font-size: 1em; 
+        &.secondaryOption{
+          font-size: 14px;
+        }
+      }
+    }
   }
 }
 
@@ -2669,17 +2705,16 @@ span.tooltip {
     padding: 10px 5% 0 5%;
   }
   .register{
-    p,.confirm{
-      width:90%;
+    .manual{
+      .span9;
+      border-left:1px solid transparent!important;
+      border-top:1px dotted #ccc;
     }
-    .confirm{
-      text-align:center;
-      figure{
-        margin-left:34%;
-      }
-      .confirmBtn{
-        width:78%;
-      }
+    .social{
+      .span9;
+      .social-buttons{
+        font-size: 14px!important;
+      }      
     }
   }
   #giftCardList{ 
