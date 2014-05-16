@@ -433,7 +433,7 @@ class Users(AbstractBaseUser):
         result = ''
         try:
             fbid = int(self.fbid)
-            result = 'https://graph.facebook.com/%d/picture' % (fbid, )
+            result = 'https://graph.facebook.com/%d/picture?width=%d&height=%d' % (fbid, size, size)
         except ValueError:
             result = 'https://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&size=' + str(size)
         return result
