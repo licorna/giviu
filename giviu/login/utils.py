@@ -37,7 +37,7 @@ def send_mail_with_registration_token(name, email, activation_url):
 
     if settings.DEBUG:
         email = settings.DEBUG_EMAIL_RECEIVER
-    msg = EmailMultiAlternatives('Validate Email',
+    msg = EmailMultiAlternatives('Valida tu Email para Giviu.',
                                  html_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])

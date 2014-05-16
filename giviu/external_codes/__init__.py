@@ -34,6 +34,10 @@ def get_external_codes_for_giftcard(giftcard):
 
     ecode = client.external_codes.find_one({'giftcard_id': giftcard.id,
                                             'status': 'available'})
+    if not ecode:
+        logger.warning('No external codes for giftcard id: ' + giftcard.id)
+        return None
+
     client.external_codes.update({'_id': ecode['_id']},
                                  {'$set': {'status': 'used'}})
     return ecode['code']
