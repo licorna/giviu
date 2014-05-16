@@ -38,11 +38,6 @@
     {% if not search %}
       {% if this_campaign %}
           <img style="margin-left:1.2%; width:98.2%"  src="https://commondatastorage.googleapis.com/site-images/images/slider/{{ this_campaign.slug }}.png" onerror="$(this).replaceWith('<h2 class=title>{{ this_campaign.name }}</h2>');">
-
-      {% else %}
-        <a href="/campaign/dia-de-la-madre" class="span9 col" style="margin-left:1.2%;">
-          <img style="width:98.2%;" src="https://storage.googleapis.com/site-images/campaigns/banner-dia-madre.png?v2"/>
-        </a>
       {% endif %}
 
     {% else %}
