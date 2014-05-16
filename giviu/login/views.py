@@ -22,11 +22,12 @@ import logging
 logger = logging.getLogger('giviu')
 
 
-def build_redirect_uri(request, current):
-    redirect_uri = 'https://' if request.is_secure() else 'http://'
-    redirect_uri += request.get_host() + reverse(current)
-    return redirect_uri
+def build_hostname(request):
+    return 'http' + ('s' if request.is_secure() else '') + '://' + request.get_host()
 
+
+def build_redirect_uri(request, current):
+    return build_hostname(request) + reverse(current)
 
 def build_facebook_login_url(request):
     args = dict(client_id=settings.FBAPP_ID,
@@ -46,19 +47,19 @@ def login(request):
         try:
             user = Users.objects.get(email=email)
         except Users.DoesNotExist:
-            messages.add_message(request, messages.INFO,
+            messages.add_message(request, messages.ERROR,
                                  'Usuario o contraseña incorrectos.')
             return redirect('base_login')
         if user and user.is_active:
             user = authenticate(username=email, password=password)
             if not user:
-                messages.add_message(request, messages.INFO,
+                messages.add_message(request, messages.ERROR,
                                      'Usuario o contraseña incorrectos.')
                 return redirect('base_login')
             login_auth(request, user)
             return redirect('/')
         else:
-            messages.add_message(request, messages.INFO,
+            messages.add_message(request, messages.ERROR,
                                  'Usuario o contraseña incorrectos.')
             return redirect('base_login')
 
@@ -138,8 +139,13 @@ def email_register(request):
                                                  first_name=name)
                 user.is_active = 0
                 user.save()
-                send_mail_with_registration_token(email, token)
-                messages.add_message(request, messages.INFO, 'Recuerda que aun debes validar tu dirección de e-mail.')
+                reverse_args = 'email_validate/'+token
+                #activation_url = build_redirect_uri(request, reverse_args)
+                activation_url = reverse('email_validate', args=(token,))
+                activation_url = build_hostname(request) + activation_url
+                print 'activation_url', activation_url
+                send_mail_with_registration_token(name, email, activation_url)
+                messages.add_message(request, messages.SUCCESS, 'Recuerda que aun debes validar tu dirección de e-mail.')
                 return redirect('/')
 
     return redirect('/')
@@ -149,7 +155,7 @@ def email_register(request):
 def email_validate(request, token):
     cnx = connect()
     if not cnx:
-        messages.add_message(request, messages.INFO, 'Error validando email. Por favor, intenta nuevamente.')
+        messages.add_message(request, messages.ERROR, 'Error validando email. Por favor, intenta nuevamente.')
         logger.critical('Unable to connect to Mongo Engine.')
         return redirect('/')
     reg = cnx.reg_token.find_one({'token': token, 'used': False})
@@ -160,7 +166,7 @@ def email_validate(request, token):
         user = Users.objects.get(email=email)
         user.is_active = 1
         user.save()
-        messages.add_message(request, messages.INFO, 'Email validado. ¡Ahora puedes ingresar a Giviu!')
+        messages.add_message(request, messages.SUCCESS, 'Email validado. ¡Ahora puedes ingresar a Giviu!')
         return redirect('base_login')
 
     messages.add_message(request, messages.WARNING, 'Solicitud No Válida.')

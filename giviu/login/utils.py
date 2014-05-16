@@ -3,6 +3,8 @@ from django.conf import settings
 from datetime import datetime, timedelta
 from hashlib import sha224
 from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import get_template
 
 
 def connect():
@@ -27,14 +29,17 @@ def create_token_for_email_registration(email):
     return token
 
 
-def send_mail_with_registration_token(email, token):
-    content = '''Welcome to Giviu:<br/>
-Validation URL: http://dev.giviu.com:8000/login/validate/%s
-''' % (token, )
+def send_mail_with_registration_token(name, email, activation_url):
+    c = Context({'name': name,
+                 'activation_url': activation_url})
+
+    html_content = get_template('marketing_welcome_activation.html').render(c)
+
     if settings.DEBUG:
         email = settings.DEBUG_EMAIL_RECEIVER
     msg = EmailMultiAlternatives('Validate Email',
-                                 content,
+                                 html_content,
                                  settings.EMAIL_DEFAULT_FROM,
                                  [email])
+    msg.attach_alternative(html_content, 'text/html')
     msg.send()
