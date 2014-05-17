@@ -52,14 +52,22 @@
         </form>
         <form method="post" id="register-single" style="display:none;" action="/login/register/" class="span9">
           {% csrf_token %}
-<label class="span9">Nombre</label>
-          <input type="text" name="name" class="span9 required"  placeholder="Juan"/>
-          <label class="span9">Correo electrónico</label>
-          <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
-          <label class="span9">Contraseña</label>
-          <input type="password" name="passwd1" class="span9 required" placeholder="Password"/>
-          <label class="span9">Reingresa tu contraseña</label>
-          <input type="password" name="passwd2" class="span9 required" placeholder="Password"/>
+          <div class="span9">
+            <label class="span9">Nombre</label>
+            <input type="text" name="name" class="span9 required"  placeholder="Juan"/>
+          </div>
+          <div class="span9">
+            <label class="span9">Correo electrónico</label>
+            <input type="text" name="email" class="span9 required" placeholder="mail@dominio.com"/>
+          </div>
+          <div class="span9">
+            <label class="span9">Contraseña</label>
+            <input type="password" name="passwd1" id="passwd1" class="span9 required" placeholder="Password"/>
+          </div>
+          <div class="span9">
+            <label class="span9">Reingresa tu contraseña</label>
+            <input type="password" name="passwd2" id="passwd2" class="span9 required" placeholder="Password"/>
+          </div>
           <a class="btn span4 neutral secondaryOption" href="#">Ya tengo cuenta</a>
           <submit class="btn span5 col primary" href="#" onClick="$('#register-single').submit()">Registrarse</submit>
         </form>
@@ -93,7 +101,44 @@
 </style>
 <script>
 $(document).ready(function(){
-  $('#register-single').validate();
+  $('#register-single').validate({
+    rules: {
+      name: "required",
+      username: {
+        required: true      
+      },
+      passwd1: {
+        required: true,
+        minlength: 5
+      },
+      passwd2: {
+        required: true,
+        equalTo: "#passwd1",
+        minlength: 5
+      },
+      email: {
+        required: true,
+        email: true
+      }
+    },
+    messages: {
+      name: "<span class='icon-close ico'></span>",
+      username: {
+        required: "<span class='icon-close ico'></span>"
+      },
+      passwd1: {
+        required: "<span class='icon-close ico'></span>",
+        minlength: "<span class='icon-close ico'></span> <small class='span9'>Debe tener al menos 5 caracteres.</small>"      
+      },
+      passwd2: {
+        required: "<span class='icon-close ico'></span>",
+        minlength: "<span class='icon-close ico'></span> <small class='span9'>Debe tener al menos 5 caracteres.</small>",
+        equalTo: "<span class='icon-close ico'></span> <small class='span9'>Tus passwords no coiciden.</small>"
+      },
+      email: "<span class='icon-close ico'></span>"    
+    }
+  });
+
   $('#login-single').validate();
   $('.secondaryOption').on('click',function(e){
     e.preventDefault();
