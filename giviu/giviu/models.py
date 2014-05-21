@@ -460,9 +460,10 @@ class GiviuAuthenticationBackend(object):
         try:
             if '@' in username:
                 user = Users.objects.get(email=username)
+                if user.check_password(password):
+                    return user
             else:
                 user = Users.objects.get(fbid=username)
-            if user.check_password(password):
                 return user
         except Users.DoesNotExist:
             return None
