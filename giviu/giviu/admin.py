@@ -6,11 +6,6 @@ from models import (
     GiftcardMedia,
     Giftcard,
     Product,
-    Service,
-    Comuna,
-    Provincia,
-    Region,
-    Friend,
     Campaign,
 )
 
@@ -28,9 +23,4 @@ admin.site.register(GiftcardDesign)
 admin.site.register(GiftcardMedia)
 admin.site.register(Giftcard)
 admin.site.register(Product)
-admin.site.register(Service)
-admin.site.register(Comuna)
-admin.site.register(Provincia)
-admin.site.register(Region)
-admin.site.register(Friend)
 admin.site.register(Campaign)
