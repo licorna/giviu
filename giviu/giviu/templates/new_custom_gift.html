@@ -23,16 +23,25 @@
     <form class="span9" method="post" action="/giftcard/checkout" id="customForm">
       {% csrf_token %}
       <label class="span9">
+       	<span class="ico">
+       		<span class="icon-user"></span> 
+       	</span>
        	¿Quien recibirá este regalo?
       </label>
       <input type="text" class="span9 nameTo required" name="name-to">
  	  <label class="span9">
-        ¿Quieres agregarle un mensaje?
+ 	    <span class="ico">
+	        <span class="icon-bubbles"></span> 
+	    </span>
+	    ¿Quieres agregarle un mensaje?
       </label>
       <textarea class="span9 required" name="comment" placeholder="Ej: Te deseo un muy feliz cumpleaños!"></textarea>
 
       <label class="span9">
-        Dirección de envío
+       	<span class="ico">
+	        <span class="icon-location"></span> 
+	    </span>
+	    Dirección de envío
       </label>
       <input type="text" class="span9 required" placeholder="Calle, numero" id="address" name="">
       <div class="span9 morefields" style="display:none;">
@@ -52,7 +61,9 @@
       </div>
 
 	 <label class="span9">
-        Fecha de envío
+	    <span class="ico">
+	        <span class="icon-calendar"></span> 
+	    </span> Fecha de envío
       </label>
       <input type="text" class="span9 required" id="datepicker" value="">
       <input type="hidden" name="send-when" id="hidden-date" value="" >
