@@ -173,6 +173,16 @@ class Giftcard(models.Model):
         db_table = 'giftcard'
 
 
+class PackagingColor(models.Model):
+    id = models.IntegerField(primary_key=True)
+    color = models.CharField(max_length=20, blank=True)
+    avaliable = models.BooleanField(default=True)
+    kind = models.CharField(max_length=1, default='R')
+
+    class Meta:
+        db_table = 'packaging_color'
+
+
 class Campaign(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40)
@@ -189,6 +199,8 @@ class ProductDeliveryInformation(models.Model):
     product = models.ForeignKey('Product', db_column='product_id',
                                 related_name='address_to_deliver')
     address = models.CharField(max_length=600, blank=False)
+    ribbon_color = models.CharField(max_length=20, blank=True)
+    package_color = models.CharField(max_length=20, blank=True)
 
     class Meta:
         db_table = 'product_delivery_information'
