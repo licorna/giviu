@@ -99,7 +99,7 @@
 	            </span>
         	</div>
 
-        	<div class="span5">
+        	<div class="span4">
 	            <span class="title">Cinta</span>
 	            <span class="color tape" data-name="azul" data-dark="#2c3e50" data-light="#34495e">    
 	            </span>
@@ -119,6 +119,10 @@
 	            <span class="color tape" data-name="rojo" data-dark="#9E2F15" data-light="#CE6A52">
 	            </span>
 	        </div>
+	        <div class="span1 btn primary small" style="padding: 1px; font-size: 11px;" id="random">
+	        Random
+	        </div>
+
             
 
         </div>
@@ -349,26 +353,31 @@
         <script>
             $(document).ready(function(){
             	$('#address').on('keyup',showMoreFields);
+            	$('#random').on('click',randomPackage);
                 $('.color.paper').on('click',function(){
-                    console.log('a')
                     var dark = $(this).attr('data-dark');
                     var light = $(this).attr('data-light');
                     $('.paper.dark').attr("style","stop-color:"+dark);
                     $('.paper.light').attr("style","stop-color:"+light);
                 });
-                function showMoreFields(){
-                	if($(this).val()!=""){
-                		$('.morefields').slideDown();
-                	}
-                }  
-
                 $('.color.tape').on('click',function(){
                     var dark = $(this).attr('data-dark');
                     var light = $(this).attr('data-light');
                     $('.tape.dark').attr("style","stop-color:"+dark);
                     $('.tape.light').attr("style","stop-color:"+light);
-                })                
-
+                })  
+            	randomPackage();
+                function randomPackage(){
+                	tape  = $('.color.tape').length;
+                	paper = $('.color.paper').length;
+                	$('.color.tape').eq(Math.floor((Math.random() * tape))).trigger('click')
+                	$('.color.paper').eq(Math.floor((Math.random() * paper))).trigger('click')
+                }
+                function showMoreFields(){
+                	if($(this).val()!=""){
+                		$('.morefields').slideDown();
+                	}
+                }                
             });
         </script>
 {% endblock %}
