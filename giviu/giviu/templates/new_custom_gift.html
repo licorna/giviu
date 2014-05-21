@@ -26,21 +26,49 @@
        	¿Quien recibirá este regalo?
       </label>
       <input type="text" class="span9 nameTo required" name="name-to">
-      <label class="span9">
-        ¿Cual es la dirección <span class="name_to"></span>?
+ 	  <label class="span9">
+        ¿Quieres agregarle un mensaje?
       </label>
-      <input type="text" class="span9 required email" name="email-to">
-<!--       <label class="span9">
-        ¿En que fecha quieres enviarla?
+      <textarea class="span9 required" name="comment" placeholder="Ej: Te deseo un muy feliz cumpleaños!"></textarea>
+
+      <label class="span9">
+        Dirección de envío
+      </label>
+      <input type="text" class="span9 required" placeholder="Calle, numero" id="address" name="">
+      <div class="span9 morefields" style="display:none;">
+	      <span class="span3 title">
+	      Oficina, depto: 
+	      </span>
+	      <input type="text" class="span6 col required" placeholder="Depto, oficina" name="email-to"> 
+      </div>     
+
+      <div class="span9 morefields" style="display:none; border-botom:1px dotted #ccc;">
+	      <span class="span3 title">
+	      Comuna: 
+	      </span>
+	      <select class="span6 col required">
+	      	<option>providencia</option>
+	      </select>
+      </div>
+
+	 <label class="span9">
+        Fecha de envío
       </label>
       <input type="text" class="span9 required" id="datepicker" value="">
-      <input type="hidden" name="send-when" id="hidden-date" value="" > -->
-      <label class="span9">
-        Personaliza el envoltorio
-      </label>
+      <input type="hidden" name="send-when" id="hidden-date" value="" >
+      <input type="hidden" value="{{ giftcard.id }}" name="giftcard-id">
+      <input type="hidden" value="{{ giftcard.merchant.id }}" name="product-merchant-id">
+      <input type="hidden" value="1" name="giftcard-design">
+      <input type="hidden" value="" name="giftcard-price"/>
+    </form>
+  </div>
+  <div class="span5 col">
+
+
+    <div class="selectGiftcardDesign span9">
         <div class="colorpicker span9">
-        	<div class="span9">
-	            <strong>papel</strong>
+        	<div class="span4">
+	            <span class="title">Papel</span>
 	           	<span class="color paper" data-name="azul" data-dark="#2A2F93" data-light="#474B93">
 	            </span>   
 
@@ -60,8 +88,8 @@
 	            </span>
         	</div>
 
-        	<div class="span9">
-	            <strong>cinta</strong>
+        	<div class="span5">
+	            <span class="title">Cinta</span>
 	            <span class="color tape" data-name="azul" data-dark="#2c3e50" data-light="#34495e">    
 	            </span>
 
@@ -84,19 +112,7 @@
 
         </div>
 
-      <label class="span9">
-        ¿Quieres agregarle un mensaje?
-      </label>
-      <textarea class="span9 required" name="comment" placeholder="Ej: Te deseo un muy feliz cumpleaños!"></textarea>
-      <input type="hidden" value="{{ giftcard.id }}" name="giftcard-id">
-      <input type="hidden" value="{{ giftcard.merchant.id }}" name="product-merchant-id">
-      <input type="hidden" value="1" name="giftcard-design">
-      <input type="hidden" value="" name="giftcard-price"/>
-    </form>
-  </div>
-  <div class="span5 col">
-    <div class="selectGiftcardDesign span9">
-		<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 198.43 208.43" enable-background="new 0 0 198.43 198.43" xml:space="preserve">
+		<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 32 208.43 177.43" enable-background="new 0 0 198.43 198.43" xml:space="preserve">
 			<radialGradient id="SVGID_1_" cx="1326.5254" cy="12339.0391" r="57.0835" gradientTransform="	matrix(1.2576 0 0 0.0556 -1569.0146 -531.6425)" gradientUnits="userSpaceOnUse">
 				<stop  offset="0" style="stop-color:#373636"/>
 				<stop  offset="0.0742" style="stop-color:#3E3E3D"/>
@@ -321,15 +337,21 @@
 </style>
         <script>
             $(document).ready(function(){
+            	$('#address').on('keyup',showMoreFields);
                 $('.color.paper').on('click',function(){
                     console.log('a')
                     var dark = $(this).attr('data-dark');
                     var light = $(this).attr('data-light');
                     $('.paper.dark').attr("style","stop-color:"+dark);
                     $('.paper.light').attr("style","stop-color:"+light);
-                })                   
+                });
+                function showMoreFields(){
+                	if($(this).val()!=""){
+                		$('.morefields').slideDown();
+                	}
+                }  
+
                 $('.color.tape').on('click',function(){
-                    console.log('a')
                     var dark = $(this).attr('data-dark');
                     var light = $(this).attr('data-light');
                     $('.tape.dark').attr("style","stop-color:"+dark);
