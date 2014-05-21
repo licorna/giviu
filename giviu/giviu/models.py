@@ -25,45 +25,6 @@ import logging
 logger = logging.getLogger('giviu')
 
 
-class Calendar(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user = models.ForeignKey('Users')
-    friend_fbid = models.CharField(max_length=255, blank=True)
-    when = models.DateField(blank=True, null=True)
-    title = models.CharField(max_length=255, blank=True)
-    friend_gender = models.CharField(max_length=50, blank=True)
-
-    class Meta:
-        db_table = 'calendar'
-
-
-class Provincia(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=64)
-    region = models.ForeignKey('Region')
-
-    class Meta:
-        db_table = 'provincia'
-
-
-class Region(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=64)
-    ordinal = models.IntegerField()
-
-    class Meta:
-        db_table = 'region'
-
-
-class Comuna(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=64)
-    provincia = models.ForeignKey('Provincia')
-
-    class Meta:
-        db_table = 'comuna'
-
-
 class CustomerInfo(models.Model):
     id = models.IntegerField(primary_key=True)
     merchant = models.ForeignKey(Merchants, db_column='merchant_id', related_name='+')
@@ -73,19 +34,6 @@ class CustomerInfo(models.Model):
 
     class Meta:
         db_table = 'customer_info'
-
-
-class Discount(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user = models.ForeignKey('Users')
-    quantity = models.IntegerField()
-    start_date = models.DateField()
-    end_date = models.DateField()
-    status = models.CharField(max_length=255)
-    reason = models.TextField()
-
-    class Meta:
-        db_table = 'discount'
 
 
 class GiftcardCategory(models.Model):
@@ -297,30 +245,6 @@ class Product(models.Model):
         db_table = 'product'
 
 
-class Service(models.Model):
-    id = models.IntegerField(primary_key=True)
-    assigned = models.CharField(max_length=11)
-    token = models.CharField(max_length=255)
-    expiration_date = models.DateField()
-
-    class Meta:
-        db_table = 'service'
-
-
-class Friend(models.Model):
-    id = models.IntegerField(primary_key=True)
-    me_fbid = models.CharField(max_length=25)
-    fbid = models.CharField(max_length=25)
-    name = models.CharField(max_length=255)
-    month = models.CharField(max_length=40)
-    day = models.CharField(max_length=40)
-    birthday = models.DateField()
-    gender = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = 'friend'
-
-
 class GiviuUserManager(BaseUserManager):
     def create_inactive_user(self, email, name):
         user = self.model(
@@ -460,9 +384,10 @@ class GiviuAuthenticationBackend(object):
         try:
             if '@' in username:
                 user = Users.objects.get(email=username)
+                if user.check_password(password):
+                    return user
             else:
                 user = Users.objects.get(fbid=username)
-            if user.check_password(password):
                 return user
         except Users.DoesNotExist:
             return None

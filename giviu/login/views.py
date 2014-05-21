@@ -99,14 +99,22 @@ def fbregister(request):
         gender = profile['gender']
         birthday = profile['birthday']
         try:
-            user = Users.objects.get(fbid=fbid)
+            user = Users.objects.get(fbid=fbid) # The user exists as a facebook registrered user
         except Users.DoesNotExist:
-            user = Users.objects.create_user(fbid,
-                                             fbid,
-                                             birthday,
-                                             email=email,
-                                             first_name=first_name,
-                                             last_name=last_name)
+            try:
+                user = Users.objects.get(email=email) # The user exists as a email/password registered user
+            except Users.DoesNotExist:
+                user = Users.objects.create_user(fbid, # Create new user (no fbid nor email)
+                                                 fbid,
+                                                 birthday,
+                                                 email=email,
+                                                 first_name=first_name,
+                                                 last_name=last_name)
+            else: # I have an email with no fbid, update it and 'merge' accounts
+                user.fbid = fbid
+                user.birthday = birthday
+                user.gender = gender
+                user.save()
         user = authenticate(username=fbid, password=fbid)
         if not user:
             messages.add_message(request, messages.ERROR, 'Ha ocurrido un error al intentar ingresar con tu cuenta de Facebook, inténtalo nuevamente.')
