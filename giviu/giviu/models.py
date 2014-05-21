@@ -91,6 +91,20 @@ class GiftcardMedia(models.Model):
         db_table = 'giftcard_media'
 
 
+class GiftcardDeliveryInformation(models.Model):
+    id = models.AutoField(primary_key=True)
+    size_x = models.IntegerField(blank=True)
+    size_y = models.IntegerField(blank=True)
+    size_z = models.IntegerField(blank=True)
+    weight = models.IntegerField(blank=True)
+    data = models.CharField(max_length=512)
+    giftcard = models.ForeignKey('Giftcard', db_column='giftcard_id',
+                                 related_name='delivery_information')
+
+    class Meta:
+        db_table = 'giftcard_delivery_information'
+
+
 class Giftcard(models.Model):
     id = models.AutoField(primary_key=True)
     merchant = models.ForeignKey(Merchants, db_column='merchant_id')
@@ -114,6 +128,7 @@ class Giftcard(models.Model):
     fine_print = models.TextField()
     auto_validate = models.BooleanField(default=False)
     validation_info = models.TextField()
+    is_product = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.title
@@ -167,6 +182,16 @@ class Campaign(models.Model):
 
     class Meta:
         db_table = 'campaign'
+
+
+class ProductDeliveryInformation(models.Model):
+    id = models.AutoField(primary_key=True)
+    product = models.ForeignKey('Product', db_column='product_id',
+                                related_name='address_to_deliver')
+    address = models.CharField(max_length=600, blank=False)
+
+    class Meta:
+        db_table = 'product_delivery_information'
 
 
 class Product(models.Model):
@@ -291,6 +316,26 @@ class GiviuUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+
+class UserAddresses(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey('Users', db_column='user_id',
+                             related_name='addresses')
+    address1 = models.CharField(max_length=200, blank=False)
+    address2 = models.CharField(max_length=200, blank=True)
+    address3 = models.CharField(max_length=200, blank=True)
+
+    def get_printable_address(self):
+        '''Returns a printable string of addresses, separated by "," as
+        the courier would use it.'''
+        addresses = filter(lambda x: x is not None, [self.address1,
+                                                     self.address2,
+                                                     self.address3])
+        return ', '.join(addresses)
+
+    class Meta:
+        db_table = 'user_address'
 
 
 class Users(AbstractBaseUser):
