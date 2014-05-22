@@ -359,6 +359,7 @@
 
   				$('#customForm').validate();
             	$('#address').on('keyup',showMoreFields);
+            	$('#address').on('focusout',autoComplete);
             	$('.address').on('focusout',searchLocation);
             	$('#random').on('click',randomPackage);
             	$('#comunas').on('change',searchLocation);
@@ -440,11 +441,6 @@
 				    }
 				});
 
-
-
-
-
-
             	function searchLocation(){
 					$.getJSON( "/static/js/provincias.json", function( data ) {
 						$.each( data, function( key, val ) {
@@ -473,9 +469,9 @@
             		}
             		var division	= $('#comunas option:selected').val()+',';
             		var provincia 	= provincia+',';
-
             		var complete_address = first_line+second_line+division+provincia+region;
             		$('[name="address"]').val(complete_address);
+
             	}
 
                 function randomPackage(){
@@ -490,6 +486,28 @@
                 		$('.morefields').slideDown();
                 	}
                 } 
+
+                function autoComplete(){
+                	var key = $(this).val()+',chile';
+            		var endpoint = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=cl&key=AIzaSyBq7j3YJ9ObY8GqhE0pweyeBmt7D7TmqXc&address=";
+
+					$.getJSON(endpoint+key+"", function( data ) {
+						if(data.status=="OK"){
+							comuna = data.results[0].formatted_address.split(',');
+							$('#comunas option').each(function(){
+								response = comuna[1].toLowerCase().trim();
+								value = $(this).html().toLowerCase().trim();
+								if(response == value){
+									$(this).attr('selected','selected');
+								}else{
+									$(this).removeAttr('selected');
+								}
+							});
+						}
+
+					});
+
+                }
 
             });
         </script>
