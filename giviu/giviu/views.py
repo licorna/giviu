@@ -188,6 +188,9 @@ def giftcard_detail(request, slug):
 @user_passes_test(user_is_normal_user, login_url='/logout')
 def giftcard_custom(request, slug):
     giftcard = get_object_or_404(Giftcard, slug=slug)
+    if giftcard.is_product:
+        return render_to_response('new_custom_gift.html', {},
+                                  context_instance=RequestContext(request))
     style = GiftcardDesign.objects.filter(status='publish')
     data = {
         'giftcard': giftcard,
@@ -468,4 +471,4 @@ def new_custom_gift(request):
     data = {}
     data.update(get_data_for_header(request))
     return render_to_response('new_custom_gift.html', data,
-                              context_instance=RequestContext(request))    
+                              context_instance=RequestContext(request))
