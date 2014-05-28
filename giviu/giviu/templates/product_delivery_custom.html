@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="container steps">
+  <span class="stepIndicator">
+    2
+  </span>
+  <span class="actualStep">Seleccionar giftcard / personalizar regalo</span> / pagar
+</section>
+
+
+<section class="container custom">
+  <div class="span4">
+    <div class="giftcardSelected span9">
+      <figure class="span3">
+        <img class="span9" src="{{ giftcard.image }}">
+      </figure>
+      <div class="span6 col">
+        <h3>{{ giftcard.title }}</h3>
+        <strong id="price"></strong>
+      </div>
+    </div>
+    <form class="span9" method="post" action="/giftcard/checkout" id="customForm">
+      {% csrf_token %}
+      <label class="span9">
+        <span class="ico">
+          <span class="icon-user"></span>
+        </span>
+        ¿Quien recibirá este regalo?
+      </label>
+      <input type="text" class="span9 nameTo required" name="name-to">
+      <label class="span9">
+        <span class="ico">
+          <span class="icon-bubbles"></span>
+        </span>
+        ¿Quieres agregarle un mensaje?
+      </label>
+      <textarea class="span9 required" name="comment" placeholder="Ej: Te deseo un muy feliz cumpleaños!"></textarea>
+
+      <label class="span9">
+        <span class="ico">
+          <span class="icon-location"></span>
+        </span>
+        Dirección de envío
+      </label>
+      <input type="text" class="span9 required address address_first_line" placeholder="Calle, numero" id="address" name="address_1">
+      <div class="span9 morefields" style="display:none;">
+        <span class="span3 title">
+          Oficina, depto:
+        </span>
+        <input type="text" class="span6 col address address_second_line" placeholder="Depto, oficina" name="address_2">
+      </div>
+
+      <div class="span9 morefields" style="display:none; border-botom:1px dotted #ccc;">
+        <span class="span3 title">
+          Comuna:
+        </span>
+        <select name="comunas" id="comunas" class="span6 col required address address_third_line">
+          <option value="">Selecciona una comuna</option>
+        </select>
+
+      </div>
+
+      <label class="span9">
+        <span class="ico">
+          <span class="icon-calendar"></span>
+        </span> Fecha de envío
+      </label>
+      <input type="text" class="span9 required" id="datepicker" value="">
+      <small style="font-size:12px;">La fecha de envío debe ser al menos 48 horas a partir de hoy.</small>
+      <input type="hidden" name="send-when" id="hidden-date" value="" >
+      <input type="hidden" value="{{ giftcard.id }}" name="giftcard-id">
+      <input type="hidden" value="{{ giftcard.merchant.id }}" name="product-merchant-id">
+      <input type="hidden" value="" name="ribbon-color"/>
+      <input type="hidden" value="" name="paper-color"/>
+      <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price"/>
+    </form>
+  </div>
+  <div class="span5 col">
+
+
+    <div class="selectGiftcardDesign span9" style="overflow:hidden;">
+      <div class="colorpicker span9">
+        <div class="span4">
+          <span class="title">Papel</span>
+          <span class="color paper" data-name="azul" data-dark="#2A2F93" data-light="#474B93">
+          </span>
+
+          <span class="color paper" data-name="cian" data-dark="#0B9EF9" data-light="#7AC9F9">
+          </span>
+
+          <span class="color paper" data-name="blanco" data-dark="#ecf0f1" data-light="#f9f9f9">
+          </span>
+
+          <span class="color paper" data-name="verde" data-dark="#2E9312" data-light="#5CAF45">
+          </span>
+
+          <span class="color paper" data-name="violeta" data-dark="#A027A0" data-light="#B254B2">
+          </span>
+
+          <span class="color paper" data-name="amarillo" data-dark="#F9F208" data-light="#F7F374">
+          </span>
+        </div>
+
+        <div class="span4">
+          <span class="title">Cinta</span>
+          <span class="color tape" data-name="azul" data-dark="#2c3e50" data-light="#34495e">
+          </span>
+
+          <span class="color tape" data-name="cian" data-dark="#2980b9" data-light="#3498db">
+          </span>
+
+          <span class="color tape" data-name="blanco" data-dark="#f9f9f9 " data-light="#fdfcfc ">
+          </span>
+
+          <span class="color tape" data-name="verde" data-dark="#2E9312" data-light="#5CAF45">
+          </span>
+
+          <span class="color tape" data-name="violeta" data-dark="#A027A0" data-light="#B254B2">
+          </span>
+
+          <span class="color tape" data-name="rojo" data-dark="#9E2F15" data-light="#CE6A52">
+          </span>
+        </div>
+        <div class="span1 btn primary small" style="padding: 1px; font-size: 11px;" id="random">
+          Random
+        </div>
+
+
+
+      </div>
+
+      <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 32 208.43 177.43" enable-background="new 0 0 198.43 198.43" xml:space="preserve">
+        <radialGradient id="SVGID_1_" cx="1326.5254" cy="12339.0391" r="57.0835" gradientTransform="    matrix(1.2576 0 0 0.0556 -1569.0146 -531.6425)" gradientUnits="userSpaceOnUse">
+          <stop  offset="0" style="stop-color:#373636"/>
+          <stop  offset="0.0742" style="stop-color:#3E3E3D"/>
+          <stop  offset="0.1777" style="stop-color:#515150"/>
+          <stop  offset="0.2987" style="stop-color:#6E6E6D"/>
+          <stop  offset="0.4317" style="stop-color:#939393"/>
+          <stop  offset="0.4581" style="stop-color:#9B9B9A"/>
+          <stop  offset="0.5564" style="stop-color:#B9B8B8"/>
+          <stop  offset="0.6658" style="stop-color:#D2D2D2"/>
+          <stop  offset="0.7569" style="stop-color:#E2E2E2"/>
+          <stop  offset="0.8177" style="stop-color:#E7E7E7"/>
+          <stop  offset="1" style="stop-color:#FFFFFF"/>
+        </radialGradient>
+        <path fill="url(#SVGID_1_)" d="M171.02,154.409c0,1.751-32.146,3.173-71.797,3.173c-39.652,0-71.795-1.422-71.795-3.173
+                                       s32.143-3.175,71.795-3.175C138.873,151.234,171.02,152.658,171.02,154.409"/>
+        <g>
+
+          <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="182.0469" y1="118.2256" x2="182.0469" y2="100.4365" gradientTransform="matrix(0.9983 0.0581 -0.0581 0.9983 -107.5332 -54.2422)">
+            <stop  offset="0" class="tape dark" style="stop-color:#9A1006"/>
+            <stop  offset="0.1232" class="tape light" style="stop-color:#B50E0B"/>
+            <stop  offset="0.6158" class="tape dark" style="stop-color:#E15323"/>
+          </linearGradient>
+          <path fill="url(#SVGID_2_)" d="M95.679,68.28c0,0-9.564-9.415-18.385-8.621c-8.82,0.793-7.784,5.976-14.221,4.294
+                                         c-6.436-1.681-17.119-8.658-17.119-8.658l1.146,7.46l-7.315,4.016c0,0,20.406,5.705,25.354,7.3
+                                         c4.948,1.595,9.807-5.31,14.064-4.689c4.258,0.622,11.981,6.078,11.981,6.078L95.679,68.28z"/>
+          <linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="70.8169" y1="75.4595" x2="70.8169" y2="55.2944">
+            <stop  offset="0"  class="tape dark"  style="stop-color:#B50E0B"/>
+            <stop  offset="0.4384"  class="tape light"  style="stop-color:#E15323"/>
+            <stop  offset="0.8424"  class="tape light"  style="stop-color:#EE7158"/>
+          </linearGradient>
+          <path fill="url(#SVGID_3_)" d="M77.294,59.659c-8.82,0.793-7.784,5.976-14.221,4.294c-6.436-1.681-17.119-8.658-17.119-8.658
+                                         l0.286,1.864c3.128,1.945,10.686,6.445,15.686,7.75c6.436,1.682,5.4-3.501,14.22-4.293c8.821-0.793,18.385,8.62,18.385,8.62
+                                         l-3.729,5.959c0.246,0.168,0.383,0.265,0.383,0.265l4.494-7.18C95.679,68.28,86.115,58.865,77.294,59.659z"/>
+          <g>
+            <linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="80.5737" y1="69.7188" x2="80.5737" y2="42.7446">
+              <stop  offset="0.0985" class="tape light" style="stop-color:#B50E0B"/>
+              <stop  offset="0.1478" class="tape dark"  style="stop-color:#C00D0D"/>
+              <stop  offset="0.6995" class="tape dark" style="stop-color:#7B0F00"/>
+            </linearGradient>
+            <path fill="url(#SVGID_4_)" d="M77.366,43.239c-5.682-2.086-7.969,2.96-8.784,5.182c-1.532,4.53-3.057,10.585-3.672,13.318
+                                           c-0.565,2.75,0.093,7.449,5.39,7.482c5.262,0.02,19.544,0.497,19.544,0.497l6.559-12.57
+                                           C96.403,57.149,82.894,45.269,77.366,43.239z M87.541,67.435c0,0-9.742-2.354-13.45-2.931c-3.73-0.587-4.004-2.697-3.327-4.479
+                                           c0.71-1.764,2.401-5.656,3.941-8.527c0.8-1.401,2.925-4.536,6.719-2.532c3.69,1.95,12.005,11.352,12.005,11.352L87.541,67.435z"/>
+            <linearGradient id="SVGID_5_" gradientUnits="userSpaceOnUse" x1="64.8076" y1="63.2622" x2="96.4033" y2="63.2622">
+              <stop  offset="0" class="tape light"  style="stop-color:#B50E0B"/>
+              <stop  offset="0.2512" class="tape dark"  style="stop-color:#800F00"/>
+            </linearGradient>
+            <path fill="url(#SVGID_5_)" d="M96.009,56.806l-6.661,12.404c0,0-14.18-1.076-19.438-1.291c-2.76-0.12-4.44-1.84-5.103-3.483
+                                           c0.3,2.37,1.717,4.763,5.492,4.786c5.262,0.02,19.544,0.497,19.544,0.497l6.559-12.57C96.403,57.149,96.263,57.026,96.009,56.806z
+                                           "/>
+            <linearGradient id="SVGID_6_" gradientUnits="userSpaceOnUse" x1="80.5806" y1="64.8804" x2="80.5806" y2="42.7446">
+              <stop  offset="0.1182" class="tape dark"  style="stop-color:#B50E0B"/>
+              <stop  offset="0.2808" class="tape dark" style="stop-color:#C00D0D"/>
+              <stop  offset="0.8424" class="tape light"  style="stop-color:#E15323"/>
+            </linearGradient>
+            <path fill="url(#SVGID_6_)" d="M68.665,55.387c1.216-3.229,2.411-5.929,7.673-3.611c4.279,1.774,13.915,8.649,16.944,10.844
+                                           l3.122-5.472c0,0-13.51-11.88-19.038-13.91c-5.682-2.086-7.969,2.96-8.784,5.182c-1.532,4.53-3.057,10.585-3.672,13.318
+                                           c-0.22,1.071-0.23,2.182,0.153,3.141C66.036,61.939,67.753,57.805,68.665,55.387z"/>
+            <linearGradient id="SVGID_7_" gradientUnits="userSpaceOnUse" x1="80.1035" y1="54.2236" x2="80.1035" y2="42.7446">
+              <stop  offset="0.5369" class="tape light" style="stop-color:#E15323"/>
+              <stop  offset="0.8473" class="tape light" style="stop-color:#E77F97"/>
+            </linearGradient>
+            <path fill="url(#SVGID_7_)" d="M68.141,50.123c0.917-2.327,3.486-7.609,9.871-5.426c3.558,1.217,10.056,5.818,14.96,9.527
+                                           c-4.38-3.656-11.842-9.604-15.606-10.984c-5.682-2.086-7.969,2.96-8.784,5.182c-0.459,1.354-0.916,2.844-1.347,4.342
+                                           C67.531,51.852,67.837,50.962,68.141,50.123z"/>
+          </g>
+        </g>
+        <linearGradient id="SVGID_8_" gradientUnits="userSpaceOnUse" x1="1697.3906" y1="30.0337" x2="1697.3906" y2="12.2446" gradientTransform="matrix(-0.9983 0.0581 0.0581 0.9983 1823.8726 -54.2422)">
+          <stop  offset="0" class="tape light" style="stop-color:#9A1006"/>
+          <stop  offset="0.1232" class="tape light" style="stop-color:#B50E0B"/>
+          <stop  offset="0.6158"  class="tape dark" style="stop-color:#E15323"/>
+        </linearGradient>
+        <path fill="url(#SVGID_8_)" d="M158.66,66.771c0,0-20.406,5.705-25.354,7.3c-4.947,1.595-9.807-5.31-14.064-4.689
+                                       c-4.258,0.622-11.98,6.078-11.98,6.078l-4.494-7.18c0,0,9.564-9.415,18.385-8.621c8.82,0.793,7.783,5.976,14.221,4.294
+                                       c6.436-1.681,17.119-8.658,17.119-8.658l-1.146,7.46L158.66,66.771"/>
+        <linearGradient id="SVGID_9_" gradientUnits="userSpaceOnUse" x1="1588.71" y1="75.4595" x2="1588.71" y2="        55.2944" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
+          <stop  offset="0" class="tape dark" style="stop-color:#B50E0B"/>
+          <stop  offset="0.4384" class="tape light" style="stop-color:#E15323"/>
+          <stop  offset="0.8424" class="tape light" style="stop-color:#EE7158"/>
+        </linearGradient>
+        <path fill="url(#SVGID_9_)" d="M102.768,68.28l4.494,7.18c0,0,0.137-0.097,0.383-0.265l-3.73-5.959c0,0,9.564-9.414,18.386-8.62
+                                       c8.819,0.792,7.784,5.975,14.22,4.293c4.998-1.306,12.558-5.805,15.686-7.75l0.287-1.864c0,0-10.684,6.977-17.119,8.658
+                                       c-6.438,1.682-5.4-3.5-14.221-4.294C112.332,58.865,102.768,68.28,102.768,68.28z"/>
+        <g>
+          <linearGradient id="SVGID_10_" gradientUnits="userSpaceOnUse" x1="1598.4668" y1="69.7188" x2="1598.4668" y2="42.7446" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
+            <stop  offset="0.0985" class="tape light" style="stop-color:#B50E0B"/>
+            <stop  offset="0.1478"class="tape dark"  style="stop-color:#C00D0D"/>
+            <stop  offset="0.6995" class="tape dark"  style="stop-color:#7B0F00"/>
+          </linearGradient>
+          <path fill="url(#SVGID_10_)" d="M102.043,57.149l6.559,12.57c0,0,14.283-0.477,19.546-0.497c5.296-0.034,5.954-4.732,5.389-7.482
+                                          c-0.614-2.733-2.14-8.788-3.672-13.318c-0.815-2.221-3.102-7.268-8.784-5.182C115.553,45.269,102.043,57.149,102.043,57.149z
+                                          M105.017,60.318c0,0,8.315-9.401,12.005-11.352c3.793-2.004,5.918,1.131,6.719,2.532c1.539,2.871,3.229,6.763,3.941,8.527
+                                          c0.678,1.782,0.404,3.892-3.326,4.479c-3.708,0.577-13.451,2.931-13.451,2.931L105.017,60.318z"/>
+
+          <linearGradient id="SVGID_11_" gradientUnits="userSpaceOnUse" x1="1582.7012" y1="63.2622" x2="1614.2969" y2="63.2622" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
+            <stop  offset="0" class="tape dark"  style="stop-color:#B50E0B"/>
+            <stop  offset="0.2512" class="tape dark"  style="stop-color:#800F00"/>
+          </linearGradient>
+          <path fill="url(#SVGID_11_)" d="M102.043,57.149l6.559,12.57c0,0,14.283-0.477,19.546-0.497c3.773-0.023,5.191-2.417,5.491-4.786
+                                          c-0.662,1.643-2.343,3.363-5.103,3.483c-5.259,0.215-19.438,1.291-19.438,1.291l-6.66-12.404
+                                          C102.184,57.026,102.043,57.149,102.043,57.149z"/>
+
+          <linearGradient id="SVGID_12_" gradientUnits="userSpaceOnUse" x1="1598.4746" y1="64.8804" x2="  1598.4746" y2="42.7446" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
+            <stop  offset="0.1182" class="tape dark"  style="stop-color:#B50E0B"/>
+            <stop  offset="0.2808" class="tape light" style="stop-color:#C00D0D"/>
+            <stop  offset="0.8424" class="tape light" style="stop-color:#E15323"/>
+          </linearGradient>
+          <path fill="url(#SVGID_12_)" d="M129.783,55.387c-1.219-3.229-2.412-5.929-7.674-3.611c-4.279,1.774-13.916,8.649-16.944,10.844
+                                          l-3.122-5.472c0,0,13.51-11.88,19.037-13.91c5.683-2.086,7.969,2.96,8.784,5.182c1.532,4.53,3.058,10.585,3.672,13.318
+                                          c0.22,1.071,0.229,2.182-0.153,3.141C132.41,61.939,130.693,57.805,129.783,55.387z"/>
+
+          <linearGradient id="SVGID_13_" gradientUnits="userSpaceOnUse" x1="1597.9971" y1="54.2236" x2="  1597.9971" y2="42.7446" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
+            <stop  offset="0.5369" class="tape light"  style="stop-color:#E15323"/>
+            <stop  offset="0.8473" class="tape light"  style="stop-color:#E77F97"/>
+          </linearGradient>
+          <path fill="url(#SVGID_13_)" d="M130.305,50.123c-0.916-2.327-3.484-7.609-9.869-5.426c-3.559,1.217-10.057,5.818-14.961,9.527
+                                          c4.381-3.656,11.842-9.604,15.605-10.984c5.683-2.086,7.969,2.96,8.784,5.182c0.458,1.354,0.915,2.844,1.347,4.342
+                                          C130.913,51.852,130.609,50.962,130.305,50.123z"/>
+        </g>
+        <g>
+          <g>
+            <linearGradient id="SVGID_14_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="71.4385" x2="99.2231" y2="53.8169">
+              <stop  offset="0" style="stop-color:#7B0F00"/>
+              <stop  offset="0.0296" class="tape dark"  style="stop-color:#B50E0B"/>
+              <stop  offset="0.2808" class="tape dark"  style="stop-color:#C00D0D"/>
+              <stop  offset="0.8424" class="tape light"  style="stop-color:#E15323"/>
+            </linearGradient>
+            <path fill="url(#SVGID_14_)" d="M108.769,53.817H89.677c-1.72,0-3.045,1.396-2.958,3.115l0.575,11.391
+                                            c0.086,1.721,1.502,3.115,3.162,3.115h17.535c1.659,0,3.074-1.395,3.162-3.115l0.574-11.391
+                                            C111.814,55.212,110.489,53.817,108.769,53.817z"/>
+            <linearGradient id="SVGID_15_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="54.7861" x2="99.2231" y2="53.8169">
+              <stop  offset="0" class="tape dark"  style="stop-color:#E15323"/>
+              <stop  offset="0.8966" class="tape dark"  style="stop-color:#F6B8D0"/>
+            </linearGradient>
+            <path fill="url(#SVGID_15_)" d="M89.359,54.18h19.727c0.721,0,1.372,0.227,1.889,0.606c-0.537-0.596-1.318-0.969-2.206-0.969
+                                            H89.677c-0.887,0-1.667,0.374-2.205,0.969C87.989,54.407,88.638,54.18,89.359,54.18z"/>
+            <linearGradient id="SVGID_16_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="71.4385" x2="99.2231" y2="54.0957">
+              <stop  offset="0" class="tape dark" style="stop-color:#6E0E00"/>
+              <stop  offset="0.3251" class="tape dark"  style="stop-color:#A51008"/>
+              <stop  offset="1" class="tape light"  style="stop-color:#E15323"/>
+            </linearGradient>
+            <path fill="url(#SVGID_16_)" d="M110.039,54.097c0.626,0.537,1.002,1.352,0.955,2.265l-0.541,9.901
+                                            c-0.082,1.621-1.414,2.934-2.977,2.934H90.97c-1.562,0-2.894-1.313-2.976-2.934l-0.542-9.901c-0.046-0.913,0.33-1.728,0.956-2.266
+                                            c-1.055,0.49-1.752,1.575-1.689,2.836l0.575,11.391c0.086,1.721,1.502,3.115,3.162,3.115h17.535c1.659,0,3.074-1.395,3.162-3.115
+                                            l0.574-11.391C111.791,55.671,111.094,54.585,110.039,54.097z"/>
+          </g>
+          <!-- caja -->
+          <g>
+            <linearGradient id="SVGID_17_" gradientUnits="userSpaceOnUse" x1="99.2222" y1="87.6362" x2="99.2222" y2="154.3384">
+              <stop  offset="0" class="paper dark" style="stop-color:#27ae60"/> <!-- oscuro -->
+              <stop  offset="0.3295" class="paper light" style="stop-color:#2ecc71 "/><!-- claro -->
+              <stop  offset="0.6108" class="paper dark" style="stop-color:#27ae60"/><!-- oscuro -->
+              <stop  offset="0.936" class="paper dark"style="stop-color:#27ae60"/><!-- oscuro -->
+              <stop  offset="1" class="paper dark" style="stop-color:#2ecc71"/><!-- oscuro -->
+            </linearGradient>
+            <path fill="url(#SVGID_17_)" d="M50.595,87.636v64.262c0,1.348,1.093,2.439,2.44,2.439h92.375c1.348,0,2.439-1.092,2.439-2.439
+                                            V87.636H50.595z"/>
+            <linearGradient id="SVGID_18_" gradientUnits="userSpaceOnUse" x1="99.2222" y1="151.6162" x2="99.2222" y2="154.3379">
+              <stop  offset="0.4434" class="paper dark" style="stop-color:#27ae60"/><!-- oscuro -->
+              <stop  offset="1" class="paper dark" style="stop-color:#27ae60"/><!-- oscuro -->
+            </linearGradient>
+            <path fill="url(#SVGID_18_)" d="M145.863,152.616H52.581c-0.816,0-1.537-0.395-1.985-1v0.282c0,1.348,1.093,2.439,2.44,2.439
+                                            h92.375c1.348,0,2.439-1.092,2.439-2.439v-0.282C147.402,152.222,146.682,152.616,145.863,152.616z"/>
+            <linearGradient id="SVGID_19_" gradientUnits="userSpaceOnUse" x1="99.2227" y1="96.1562" x2="99.2227" y2="87.9248">
+              <stop  offset="0" class="paper dark" style="stop-color:#27ae60"/><!-- oscuro -->
+              <stop  offset="1" class="paper dark" style="stop-color:#27ae60"/><!-- oscuro -->
+            </linearGradient>
+            <rect x="50.595" y="87.925" fill="url(#SVGID_19_)" width="97.254" height="8.231"/>
+            <linearGradient id="SVGID_20_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="91.4512" x2="99.2231" y2="92.7354">
+              <stop  offset="0" class="paper dark" style="stop-color:#8e44ad"/>
+              <stop  offset="0.7734" class="paper dark" style="stop-color:#8e44ad"/>
+            </linearGradient>
+            <rect x="49.09" y="91.451" fill="url(#SVGID_20_)" width="100.268" height="1.284"/>
+            <linearGradient id="SVGID_21_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="68.6357" x2="99.2231" y2="91.8745">
+              <stop  offset="0" class="paper light" style="stop-color:#F4F6F8"/>
+              <stop  offset="0.6923" class="paper light"style="stop-color:#EBEEF0"/>
+              <stop  offset="0.956" class="paper light" style="stop-color:#C1C6CA"/>
+            </linearGradient>
+            <path fill="url(#SVGID_21_)" d="M149.357,91.875V71.076c0-1.348-1.092-2.44-2.441-2.44H51.529c-1.348,0-2.439,1.092-2.439,2.44
+                                            v20.798H149.357z"/>
+          </g>
+          <linearGradient id="SVGID_22_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="154.3379" x2="99.2231" y2="92.7358">
+            <stop  offset="0" class="tape dark"  style="stop-color:#400400"/>
+            <stop  offset="0.0246"class="tape dark"  style="stop-color:#770F00"/>
+            <stop  offset="0.0301" class="tape dark" style="stop-color:#810F00"/>
+            <stop  offset="0.0478" class="tape dark" style="stop-color:#9D1006"/>
+            <stop  offset="0.064" class="tape light" style="stop-color:#B10F0A"/>
+            <stop  offset="0.0782" class="tape light" style="stop-color:#BE0D0D"/>
+            <stop  offset="0.0887"class="tape light"  style="stop-color:#C20D0E"/>
+            <stop  offset="0.2808" class="tape light" style="stop-color:#C00D0D"/>
+            <stop  offset="1" class="tape light" style="stop-color:#DB0812"/>
+          </linearGradient>
+          <polygon fill="url(#SVGID_22_)" points="109.84,96.156 109.84,154.338 88.607,154.338 88.607,96.156 88.321,92.735 110.125,92.735
+                                                  "/>
+          <linearGradient id="SVGID_23_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="92.7354" x2="99.2231" y2="68.6357">
+            <stop  offset="0" class="tape dark"  style="stop-color:#7B0F00"/>
+            <stop  offset="0.0296" class="tape dark" style="stop-color:#B50E0B"/>
+            <stop  offset="0.2808" class="tape light" style="stop-color:#C00D0D"/>
+            <stop  offset="1"class="tape light"  style="stop-color:#DF3F22"/>
+          </linearGradient>
+          <rect x="88.321" y="68.636" fill="url(#SVGID_23_)" width="21.804" height="24.1"/>
+          <linearGradient id="SVGID_24_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="96.1562" x2="99.2231" y2="92.7354">
+            <stop  offset="0.1182" class="tape dark"  style="stop-color:#9A1006"/>
+            <stop  offset="1" class="tape dark"  style="stop-color:#7B0F00"/>
+          </linearGradient>
+          <polygon fill="url(#SVGID_24_)" points="88.321,92.735 88.607,96.156 109.84,96.156 110.125,92.735        "/>
+        </g>
+      </svg>
+
+    </div>
+    <div class="span9 stepAction">
+      <span href="/giftcard/checkout" onclick="$('#customForm').submit();" id="custom" class="span3 btn primary">
+        Continuar
+      </span>
+    </div>
+  </div>
+</section>
+<style>
+  .paper,.tape{
+  transition:all 0.3s linear;
+  }
+</style>
+<script>
+  $(document).ready(function(){
+
+  $('#customForm').validate();
+  $('#address').on('keyup',showMoreFields);
+  $('#address').on('focusout',autoComplete);
+  $('.address').on('focusout',searchLocation);
+  $('#random').on('click',randomPackage);
+  $('#comunas').on('change',searchLocation);
+
+  $.getJSON( "/static/js/comunas.json", function( data ) {
+  $.each( data, function( key, val ) {
+  $('#comunas').append('<option data-provincia="'+val.provincia_id+'" value="'+val.name+'">'+val.name+'</option>');
+  });
+  });
+
+  $('.color.paper').on('click',function(){
+  var dark = $(this).attr('data-dark');
+  var light = $(this).attr('data-light');
+  $('.paper.dark').attr("style","stop-color:"+dark);
+  $('.paper.light').attr("style","stop-color:"+light);
+  $('[name="paper"]').val($(this).attr('data-name'))
+  });
+
+  $('.color.tape').on('click',function(){
+  var dark = $(this).attr('data-dark');
+  var light = $(this).attr('data-light');
+  $('.tape.dark').attr("style","stop-color:"+dark);
+  $('.tape.light').attr("style","stop-color:"+light);
+  $('[name="rebone"]').val($(this).attr('data-name'))
+  })
+
+  randomPackage();
+
+  $( "#datepicker" ).datepicker({
+  showOtherMonths: true,
+  selectOtherMonths: true,
+  monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+  dayNamesMin:["Do","Lu","Ma","Mi","Ju","Vi","Sa"],
+  monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+  dateFormat: "yy-m-d",
+  defaultDate: +4,
+  autoSize: true,
+  maxDate: "+1m",
+  minDate: "2",
+  onSelect: function(e) {
+
+  var month = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+  var terms = ['Hoy','Mañana','Pasado mañana']
+  var special_dates = ['2014-2-14','Mañana','Pasado mañana']
+  var special_msg = ['El día de los enamorados','Mañana','Pasado mañana']
+  var picker_date = e;
+  var new_format_date = e.split('-');
+  var new_format_date =new_format_date[2]+' de '+month[new_format_date[1]-1]
+  var d = new Date();
+  var fechaInicio= new Date(picker_date);
+  var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());
+  var fechaResta= fechaInicio-hoy;
+  fechaResta=(((fechaResta/1000)/60)/60)/24;
+  fechaResta = parseInt(fechaResta);
+
+  if(fechaResta<=2) {
+                    $('#datepicker').val(terms[fechaResta]);
+                    }else if(fechaResta<=5){
+                                          $('#datepicker').val('En '+fechaResta+' días');
+                                          }else{
+                                          $('#datepicker').val(new_format_date);
+                                          }
+                                          var special_date_review = $.inArray(e,special_dates)
+                                          if(special_date_review!=-1){
+                                          $('#datepicker').val(special_msg[special_date_review]);
+                                          }
+
+                                          var re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1})))(?![\\d])';
+
+                                          var p = new RegExp(re1,["i"]);
+                                          var m = p.exec(e);
+                                          if (m != null){
+                                          var yyyymmdd1=m[1];
+                                          $('#hidden-date').val(e);
+                                          }else{
+                                          $('#datepicker').val('');
+                                          }
+
+                                          }
+                                          });
+
+                                          function searchLocation(){
+                                          $.getJSON( "/static/js/provincias.json", function( data ) {
+                                          $.each( data, function( key, val ) {
+                                          if($('#comunas option:selected').attr('data-provincia')==val.id){
+                                          var provincia = val.name; //provincia
+                                          var region_id = val.region_id;
+                                          $.getJSON( "/static/js/region.json", function( data ) {
+                                          $.each( data, function( key, val ) {
+                                          if(region_id==val.id){
+                                          var region = val.name;
+                                          createAddress(provincia,region);
+                                          }
+                                          });
+                                          });
+                                          }
+                                          });
+                                          });
+                                          }
+
+                                          function createAddress(provincia,region){
+                                          var first_line  = $('.address_first_line').val()+',';
+                                          if($('.address_second_line').val()!=""){
+                                          var second_line = $('.address_second_line').val()+',';
+                                          }else{
+                                          var second_line = "";
+                                          }
+                                          var division    = $('#comunas option:selected').val()+',';
+                                          var provincia   = provincia+',';
+                                          var complete_address = first_line+second_line+division+provincia+region;
+                                          $('[name="address"]').val(complete_address);
+
+                                          }
+
+                                          function randomPackage(){
+                                          tape  = $('.color.tape').length;
+                                          paper = $('.color.paper').length;
+                                          $('.color.tape').eq(Math.floor((Math.random() * tape))).trigger('click')
+                                          $('.color.paper').eq(Math.floor((Math.random() * paper))).trigger('click')
+                                          }
+
+                                          function showMoreFields(){
+                                          if($(this).val()!=""){
+                                          $('.morefields').slideDown();
+                                          }
+                                          }
+
+                                          function autoComplete(){
+                                          var key = $(this).val()+',chile';
+                                          var endpoint = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=cl&key=AIzaSyBq7j3YJ9ObY8GqhE0pweyeBmt7D7TmqXc&address=";
+
+                                          $.getJSON(endpoint+key+"", function( data ) {
+                                          if(data.status=="OK"){
+                                          comuna = data.results[0].formatted_address.split(',');
+                                          $('#comunas option').each(function(){
+                                          response = comuna[1].toLowerCase().trim();
+                                          value = $(this).html().toLowerCase().trim();
+                                          if(response == value){
+                                          $(this).attr('selected','selected');
+                                          }else{
+                                          $(this).removeAttr('selected');
+                                          }
+                                          });
+                                          }
+
+                                          });
+
+                                          }
+
+                                          });
+                                          </script>
+{% endblock %}
