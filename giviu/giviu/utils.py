@@ -63,3 +63,6 @@ def get_three_month():
 
 def get_now():
     return datetime.now().strftime(MYSQL_DATETIME_FORMAT)
+
+def calculate_delivery_price(address):
+    return 2500

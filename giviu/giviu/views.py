@@ -9,14 +9,14 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
     GiftcardCategory, Giftcard, GiftcardDesign, Campaign,
-    Users, Product
+    Users, Product, ProductDeliveryInformation
 )
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
 from marketing import event_user_registered
 from credits import (user_credits, use_user_credits, add_user_credits,
                      add_user_referer)
-from utils import get_data_for_header
+from utils import get_data_for_header, calculate_delivery_price
 
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -189,7 +189,8 @@ def giftcard_detail(request, slug):
 def giftcard_custom(request, slug):
     giftcard = get_object_or_404(Giftcard, slug=slug)
     if giftcard.is_product:
-        return render_to_response('new_custom_gift.html', {},
+        data = dict(giftcard=giftcard)
+        return render_to_response('product_delivery_custom.html', data,
                                   context_instance=RequestContext(request))
     style = GiftcardDesign.objects.filter(status='publish')
     data = {
@@ -251,10 +252,56 @@ def giftcard_confirmation(request):
         if datum not in request.POST:
             return HttpResponseBadRequest()
 
-    if 'email-to' not in request.POST and 'auto-validate' not in request.POST:
+    print request.POST['giftcard-id']
+
+    giftcard = Giftcard.objects.get(pk=request.POST.get('giftcard-id'))
+    print 'found ', giftcard
+
+    if 'email-to' not in request.POST and 'auto-validate' not in request.POST and\
+       not giftcard.is_product:
         return HttpResponseBadRequest()
 
-    if 'auto-validate' not in request.POST:
+    ribbon = ''
+    paper = ''
+    delivery_information = ''
+
+    if giftcard.is_product:
+        '''Fetch necessary information to create the product with delivery
+        information.
+        '''
+        name_to = request.POST['name-to']
+        email_to = 'auto_validate@giviu.com'
+        comment = request.POST['comment']
+        price = request.POST['giftcard-price']
+        print 'precio gf:', price
+        date = request.POST['send-when']
+        address1 = request.POST['address_1']
+        address2 = request.POST['address_2']
+        address3 = request.POST['comunas']
+        print address3
+        design = request.POST.get('giftcard-design', 1)
+        ribbon = request.POST.get('ribbon-color', 0)
+        paper = request.POST.get('paper-color', 0)
+        validated = 0
+        already_sent = 0
+        trx_credit = user_credits(request.user.fbid)
+        try:
+            price = int(price)
+        except ValueError:
+            return HttpResponseBadRequest()
+
+        credits = {'uuid': 'none'}
+        credits_used = 0
+        original_price = price
+        if trx_credit['amount'] > 0:
+            if trx_credit['amount'] >= price:
+                credits_used = price
+                price = 0
+            else:
+                credits_used = trx_credit['amount']
+                price = price - credits_used
+                credits = use_user_credits(request.user.fbid, credits_used)
+    elif 'auto-validate' not in request.POST:
         email_to = request.POST['email-to']
         name_to = request.POST['name-to']
         comment = request.POST['comment']
@@ -348,6 +395,13 @@ def giftcard_confirmation(request):
                           transaction=transaction,
                           validated=validated,
                           already_sent=already_sent)
+    if giftcard.is_product:
+        delivery_information = ProductDeliveryInformation(
+            product=product,
+            address=' '.join([address1, address2, address3]),
+            ribbon_color=ribbon,
+            package_color=paper
+        )
     product_id = product.uuid
 
     data = {
@@ -363,7 +417,11 @@ def giftcard_confirmation(request):
         'product_id': product_id,
         'token': response['token'],
         'trx_id': trx_id,
-        'design': product.design
+        'design': product.design,
+        'ribbon': ribbon,
+        'paper': paper,
+        'delivery_address': delivery_information.address,
+        'delivery_price': calculate_delivery_price(delivery_information.address),
     }
     data.update(csrf(request))
     return render_to_response('checkout_confirmation.html',

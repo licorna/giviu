@@ -21,7 +21,8 @@
   </aside>
 
   <div class="paymentProcess span7 col">
-    
+
+    {% if giftcard.is_product %}
     <div id="giftcard-confirmation" class="span9 process">
       <div class="header-process">
         <span class="indicator">
@@ -37,7 +38,7 @@
           <figure class="span4">
             <img class="span9" src="{{ giftcard_image }}">
           </figure>
-          
+
           <div class="span5 col">
             <h3>{{ giftcard.merchant.name }}</h3>
             {% if original_price != price %}
@@ -57,9 +58,10 @@
 
       </div>
 
-    </div> 
+    </div>
+    {% endif %}
 
-
+    {% if not giftcard.is_product %}
     <div id="delivery-options" class="span9 process">
       <div class="header-process">
         <span class="indicator">
@@ -68,7 +70,7 @@
         <h2>Detalles la giftcard</h2>
       </div>
       <div class="process-container">
-        <div class="span9">          
+        <div class="span9">
           <div class="address span9">
             <figure class="span4">
               <img class="span9" src="{{ design }}">
@@ -77,7 +79,7 @@
               <strong><span class="icon-user"></span> Enviar a</strong>
               <p>{{ name_to }} ({{ email_to }})</p>
               <strong><span class="icon-calendar"></span> Fecha de envío</strong>
-              <p>{{ send_date }}</p>              
+              <p>{{ send_date }}</p>
               <strong><span class="icon-quotes-left"></span> Mensaje</strong>
               <p>{{ comment }}</p>
             </div>
@@ -86,9 +88,11 @@
         </div>
 
       </div>
-    </div>  
+    </div>
+    {% endif %}
 
 
+    {% if giftcard.is_product %}
     <div id="delivery-options" class="span9 process">
       <div class="header-process">
         <span class="indicator">
@@ -99,16 +103,16 @@
       <div class="process-container">
         <div class="span6">
           <h4 class="subtitles"><span class="icon-location"></span> Dirección de despacho</h4>
-          
+
           <div class="address span9">
             <figure class="span3">
               <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=19&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
             </figure>
             <div class="span6 col">
               <strong><span class="icon-location"></span> Dirección despacho</strong>
-              <p>Pedro de valdivia, 2585 depto 601A, Ñuñoa, Santiago</p>
+              <p>{{ delivery_address }}</p>
               <strong><span class="icon-calendar"></span> Fecha de envío</strong>
-              <p>21/06/2014</p>
+              <p>{{ send_date }}</p>
             </div>
           </div>
 
@@ -134,7 +138,7 @@
             <path fill="url(#SVGID_1_)" d="M171.02,154.409c0,1.751-32.146,3.173-71.797,3.173c-39.652,0-71.795-1.422-71.795-3.173
             s32.143-3.175,71.795-3.175C138.873,151.234,171.02,152.658,171.02,154.409"/>
             <g>
-            
+
               <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="182.0469" y1="118.2256" x2="182.0469" y2="100.4365" gradientTransform="matrix(0.9983 0.0581 -0.0581 0.9983 -107.5332 -54.2422)">
                 <stop  offset="0" class="tape dark" style="stop-color:#9A1006"/>
                 <stop  offset="0.1232" class="tape light" style="stop-color:#B50E0B"/>
@@ -211,7 +215,7 @@
               c-0.614-2.733-2.14-8.788-3.672-13.318c-0.815-2.221-3.102-7.268-8.784-5.182C115.553,45.269,102.043,57.149,102.043,57.149z
                M105.017,60.318c0,0,8.315-9.401,12.005-11.352c3.793-2.004,5.918,1.131,6.719,2.532c1.539,2.871,3.229,6.763,3.941,8.527
               c0.678,1.782,0.404,3.892-3.326,4.479c-3.708,0.577-13.451,2.931-13.451,2.931L105.017,60.318z"/>
-            
+
               <linearGradient id="SVGID_11_" gradientUnits="userSpaceOnUse" x1="1582.7012" y1="63.2622" x2="1614.2969" y2="63.2622" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
                 <stop  offset="0" class="tape dark"  style="stop-color:#B50E0B"/>
                 <stop  offset="0.2512" class="tape dark"  style="stop-color:#800F00"/>
@@ -219,7 +223,7 @@
               <path fill="url(#SVGID_11_)" d="M102.043,57.149l6.559,12.57c0,0,14.283-0.477,19.546-0.497c3.773-0.023,5.191-2.417,5.491-4.786
               c-0.662,1.643-2.343,3.363-5.103,3.483c-5.259,0.215-19.438,1.291-19.438,1.291l-6.66-12.404
               C102.184,57.026,102.043,57.149,102.043,57.149z"/>
-            
+
               <linearGradient id="SVGID_12_" gradientUnits="userSpaceOnUse" x1="1598.4746" y1="64.8804" x2="  1598.4746" y2="42.7446" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
                 <stop  offset="0.1182" class="tape dark"  style="stop-color:#B50E0B"/>
                 <stop  offset="0.2808" class="tape light" style="stop-color:#C00D0D"/>
@@ -228,7 +232,7 @@
               <path fill="url(#SVGID_12_)" d="M129.783,55.387c-1.219-3.229-2.412-5.929-7.674-3.611c-4.279,1.774-13.916,8.649-16.944,10.844
               l-3.122-5.472c0,0,13.51-11.88,19.037-13.91c5.683-2.086,7.969,2.96,8.784,5.182c1.532,4.53,3.058,10.585,3.672,13.318
               c0.22,1.071,0.229,2.182-0.153,3.141C132.41,61.939,130.693,57.805,129.783,55.387z"/>
-            
+
                 <linearGradient id="SVGID_13_" gradientUnits="userSpaceOnUse" x1="1597.9971" y1="54.2236" x2="  1597.9971" y2="42.7446" gradientTransform="matrix(-1 0 0 1 1716.3398 0)">
                 <stop  offset="0.5369" class="tape light"  style="stop-color:#E15323"/>
                 <stop  offset="0.8473" class="tape light"  style="stop-color:#E77F97"/>
@@ -310,7 +314,7 @@
                 <stop  offset="0.2808" class="tape light" style="stop-color:#C00D0D"/>
                 <stop  offset="1" class="tape light" style="stop-color:#DB0812"/>
               </linearGradient>
-              <polygon fill="url(#SVGID_22_)" points="109.84,96.156 109.84,154.338 88.607,154.338 88.607,96.156 88.321,92.735 110.125,92.735 
+              <polygon fill="url(#SVGID_22_)" points="109.84,96.156 109.84,154.338 88.607,154.338 88.607,96.156 88.321,92.735 110.125,92.735
                 "/>
               <linearGradient id="SVGID_23_" gradientUnits="userSpaceOnUse" x1="99.2231" y1="92.7354" x2="99.2231" y2="68.6357">
                 <stop  offset="0" class="tape dark"  style="stop-color:#7B0F00"/>
@@ -333,16 +337,17 @@
               <a href="#" class="btn primary small" id="edit-delivery">Editar opciones</a>
             </div>
       </div>
-    </div>  
-    
+    </div>
+    {% endif %}
+
     <div id="confirmation" class="span9 process">
       <div class="header-process">
         <span class="indicator">
-          <span class="icon-credit"></span>        
+          <span class="icon-credit"></span>
         </span>
         <h2>Confirmación de compra</h2>
       </div>
-      <div class="process-container">      
+      <div class="process-container">
         <div class="span9">
           <!-- producto -->
           <div class="item span9">
@@ -372,34 +377,34 @@
 
           <!-- info despacho -->
           <div class="item span9">
-            
+
             <div class="title span7">
               <figure class="span1">
                 <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
               </figure>
               <div class="span8 col">
                 <strong>Casa Cristy</strong>
-                <p>Pedro de valdivia, 2585 depto 601A, Ñuñoa, Santiago</p>
+                <p>{{ delivery_address }}</p>
               </div>
             </div>
-            
+
             <div class="span2 price col">
-            $ 2.500
+            {{ delivery_price|clp }}
             </div>
 
           </div>
-          <!-- fin info despacho -->          
+          <!-- fin info despacho -->
 
           <!-- info envoltorio -->
           <div class="item delivery span9">
-            
+
             <div class="title span7">
               <div class="span9 col">
                 <strong>Envoltorio</strong>
                 <p>Cinta verde - papel rojo</p>
               </div>
             </div>
-            
+
             <div class="span2 price col">
             $ 200
             </div>
@@ -409,13 +414,13 @@
 
           <!-- descuentos -->
           <div class="item total discount span9">
-            
+
             <div class="title span7">
               <div class="span9">
               Descuentos
               </div>
             </div>
-            
+
             <div class="span2 price col">
             - $ 5.500
             </div>
@@ -425,13 +430,13 @@
 
           <!-- precio -->
           <div class="item total span9">
-            
+
             <div class="title span7">
               <div class="span9 col">
                 Total
               </div>
             </div>
-            
+
             <div class="span2 price col">
             $ 12.500
             </div>
