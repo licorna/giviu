@@ -443,10 +443,12 @@
 
             	function searchLocation(){
 					$.getJSON( "/static/js/provincias.json", function( data ) {
+						console.log(data[1])
 						$.each( data, function( key, val ) {
 							if($('#comunas option:selected').attr('data-provincia')==val.id){
 								var provincia = val.name; //provincia
 								var region_id = val.region_id;
+
 								$.getJSON( "/static/js/region.json", function( data ) {
 									$.each( data, function( key, val ) {
 										if(region_id==val.id){
@@ -471,7 +473,6 @@
             		var provincia 	= provincia+',';
             		var complete_address = first_line+second_line+division+provincia+region;
             		$('[name="address"]').val(complete_address);
-
             	}
 
                 function randomPackage(){
