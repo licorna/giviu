@@ -11,18 +11,12 @@
 <section class="container pay">
   <h2>Confirmación de compra</h2>
   <aside class="span2 confirmation-steps">
-    <div class="userSide span9 arrow">
-    <ul>
-      <li class="current" data-indicator="giftcard-confirmation"><span class="icon-checkmark"></span> Detalles de producto</li>
-      <li data-indicator="delivery-options"><span class="icon-checkmark"></span> Opciones de despacho</li>
-      <li data-indicator="confirmation">Confirmación de compra</li>
-    </ul>
-    </div>
+    <small class="span9" style="font-size: 12px;text-align: center;line-height: 19px;padding: 10px 0px;">Si tienes alguna duda acerca de tu compra no dudes en contactarnos a <a href="mailto:soporte@giviu.com">soporte@giviu.com</a></small>
+    <small class="span9" style="font-size: 12px;text-align: center;line-height: 19px;padding: 10px 0px;">Giviu es un sitio seguro es por esto que tus compras se realizán bajo un protocolo de seguridad SSL</small>
   </aside>
 
   <div class="paymentProcess span7 col">
 
-    {% if giftcard.is_product %}
     <div id="giftcard-confirmation" class="span9 process">
       <div class="header-process">
         <span class="indicator">
@@ -59,7 +53,6 @@
       </div>
 
     </div>
-    {% endif %}
 
     {% if not giftcard.is_product %}
     <div id="delivery-options" class="span9 process">
@@ -106,7 +99,7 @@
 
           <div class="address span9">
             <figure class="span3">
-              <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=19&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
+              <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center={{ delivery_address }}&zoom=18&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C{{ delivery_address }}&sensor=false">
             </figure>
             <div class="span6 col">
               <strong><span class="icon-location"></span> Dirección despacho</strong>
@@ -333,9 +326,9 @@
 
           </div>
         </div>
-            <div class="actions">
+<!--             <div class="actions">
               <a href="#" class="btn primary small" id="edit-delivery">Editar opciones</a>
-            </div>
+            </div> -->
       </div>
     </div>
     {% endif %}
@@ -355,7 +348,7 @@
             <div class="title span7">
                 {% if not giftcard.auto_validate %}
                 <figure class="span1">
-                  <img class="span9" src="{{ design.image }}">
+                  <img class="span9" src="{{ giftcard_image }}">
                 </figure>
                 {% endif %}
                 <div class="span8 col">
@@ -374,16 +367,17 @@
 
           </div>
           <!-- info producto -->
+        {% if giftcard.is_product %}
 
           <!-- info despacho -->
           <div class="item span9">
 
             <div class="title span7">
               <figure class="span1">
-                <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center=Santiago,%20Chile&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7CSantiago,chile&sensor=false">
+                <img class="span9" src="https://maps.googleapis.com/maps/api/staticmap?center={{ delivery_address }}&zoom=17&size=150x150&maptype=roadmap&markers=color:blue%7Clabel:S%7C{{ delivery_address }}&sensor=false">
               </figure>
               <div class="span8 col">
-                <strong>Casa Cristy</strong>
+                <strong>{{ name_to }}</strong>
                 <p>{{ delivery_address }}</p>
               </div>
             </div>
@@ -401,18 +395,20 @@
             <div class="title span7">
               <div class="span9 col">
                 <strong>Envoltorio</strong>
-                <p>Cinta verde - papel rojo</p>
+                <p>Cinta {{ ribbon }} - Papel {{ paper }} (gratis por tiempo limitado)</p>
               </div>
             </div>
 
             <div class="span2 price col">
-            $ 200
+            $ 0
             </div>
 
           </div>
+
+          {% endif %}
           <!-- fin info envoltorio -->
 
-          <!-- descuentos -->
+          <!-- descuentos
           <div class="item total discount span9">
 
             <div class="title span7">
@@ -426,7 +422,7 @@
             </div>
 
           </div>
-          <!-- fin descuentos -->
+         fin descuentos -->
 
           <!-- precio -->
           <div class="item total span9">
@@ -438,7 +434,7 @@
             </div>
 
             <div class="span2 price col">
-            $ 12.500
+            {{ checkout_price|clp }}
             </div>
 
           </div>
@@ -447,16 +443,15 @@
         </div>
 
         <div class="span9 actions">
-            <a href="#" class="btn primary">Pagar</a>
+            <a href="javascript:;" onclick="$('#payForm').submit()" class="btn primary">Pagar</a>
         </div>
 
       </div>
     </div>
-
   </div>
 
   <div class="span9 stepAction">
-    <form method="post" action="/psp/pay">
+    <form method="post" id="payForm" action="/psp/pay">
       {% csrf_token %}
       <input type="hidden" name="parentId" value="{{ giftcard.merchant.id }}">
       <input type="hidden" name="sendDate" value="{{ send_date }}">
@@ -469,7 +464,6 @@
       <input type="hidden" name="token" value="{{ token }}">
       <input type="hidden" name="trx_id" value="{{ trx_id }}">
       <input type="hidden" name="product_id" value="{{ product_id }}">
-      <input type="submit" value="Pagar"  class="span2 btn primary">
     </form>
 
     <!--<a href="/giftcard/custom" class="span1 btn secondary">
@@ -477,10 +471,16 @@
         </a>-->
   </div>
 
+
 </section>
 <script>
   $(document).ready(function(){
     localStorage.setItem('product_id', $('[name="product_id"]').val());
+      $('.paper.dark').attr("style","stop-color: {{ paper_dark }} ");
+      $('.paper.light').attr("style","stop-color:  {{ paper_light }} ");
+
+      $('.tape.dark').attr("style","stop-color:{{ ribbon_dark }}");
+      $('.tape.light').attr("style","stop-color:{{ ribbon_light }}");
 
   });
 </script>

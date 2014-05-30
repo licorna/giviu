@@ -1165,6 +1165,35 @@ nav{
     border-radius:5px 5px 0px 0px;
     transition:0.3s all linear;
     position:relative;
+    .deliveryProduct{
+      position: absolute;
+      top:10px;
+      left:0px;
+      background-color: #3498db;
+      font-size: 10px;
+      color:#fff;
+      padding: 5px 5px 5px 10px;
+      border-radius: 0pc 5px 5px 0px;
+      box-shadow: 0 0 5px 1px rgba(0,0,0,0.3);
+      width: 25px;
+      transition:all linear 0.2s;
+      text-align: left;
+      overflow: hidden;
+      height: 23px;
+      .text{
+        display: none;
+      }
+      &:hover{
+        width: 130px;
+        .text{
+          display:inline-block;
+        }
+      }
+      .ico{
+        font-size: 1.4em;
+      }
+
+    }
     figure.giftcard{
       border-bottom:0px;
       margin-bottom:0px;

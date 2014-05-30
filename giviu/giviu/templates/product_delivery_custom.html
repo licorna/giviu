@@ -85,6 +85,10 @@
       <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price"/>
       <input type="hidden" name="delivery-price"/>
       <input type="hidden" name="address" val="">
+      <input type="hidden" name="paper-light" val="">
+      <input type="hidden" name="paper-dark" val="">
+      <input type="hidden" name="ribbon-light" val="">
+      <input type="hidden" name="ribbon-dark" val="">
     </form>
   </div>
   <div class="span5 col">
@@ -96,19 +100,14 @@
           <span class="title">Papel</span>
           <span class="color paper" data-name="azul" data-dark="#2A2F93" data-light="#474B93">
           </span>
-
           <span class="color paper" data-name="cian" data-dark="#0B9EF9" data-light="#7AC9F9">
           </span>
-
           <span class="color paper" data-name="blanco" data-dark="#ecf0f1" data-light="#f9f9f9">
           </span>
-
           <span class="color paper" data-name="verde" data-dark="#2E9312" data-light="#5CAF45">
           </span>
-
           <span class="color paper" data-name="violeta" data-dark="#A027A0" data-light="#B254B2">
           </span>
-
           <span class="color paper" data-name="amarillo" data-dark="#F9F208" data-light="#F7F374">
           </span>
         </div>
@@ -117,19 +116,14 @@
           <span class="title">Cinta</span>
           <span class="color tape" data-name="azul" data-dark="#2c3e50" data-light="#34495e">
           </span>
-
           <span class="color tape" data-name="cian" data-dark="#2980b9" data-light="#3498db">
           </span>
-
           <span class="color tape" data-name="blanco" data-dark="#f9f9f9 " data-light="#fdfcfc ">
           </span>
-
           <span class="color tape" data-name="verde" data-dark="#2E9312" data-light="#5CAF45">
           </span>
-
           <span class="color tape" data-name="violeta" data-dark="#A027A0" data-light="#B254B2">
           </span>
-
           <span class="color tape" data-name="rojo" data-dark="#9E2F15" data-light="#CE6A52">
           </span>
         </div>
@@ -386,6 +380,8 @@
                     $('.paper.dark').attr("style","stop-color:"+dark);
                     $('.paper.light').attr("style","stop-color:"+light);
                     $('[name="paper-color"]').val($(this).attr('data-name'))
+                    $('[name="paper-light"]').val(light);
+                    $('[name="paper-dark"]').val(dark);
                 });
                 
                 $('.color.tape').on('click',function(){
@@ -393,7 +389,9 @@
                     var light = $(this).attr('data-light');
                     $('.tape.dark').attr("style","stop-color:"+dark);
                     $('.tape.light').attr("style","stop-color:"+light);
-                    $('[name="ribbon-color"]').val($(this).attr('data-name'))
+                    $('[name="ribbon-color"]').val($(this).attr('data-name'));
+                    $('[name="ribbon-light"]').val(light);
+                    $('[name="ribbon-dark"]').val(dark);
                 })  
               
               randomPackage();
