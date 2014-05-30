@@ -53,7 +53,11 @@
     {% for product in products %}
     <article class="giftCardModule new especial" data-source-id="{{ product.id }}">
       <figure class="giftcard">
-        <span class="like {% if not user.is_authenticated %}disabled{% endif %} {% if product.get_own_like %} active {% endif %}" original-title="Agregar a favoritos" data-source-id="{{ product.id }}" data-source-type="1"><span class="icon-heart"></span></span>
+        {% if product.is_product %}
+        <span class="deliveryProduct" original-title="Agregar a favoritos">
+          <span class="icon-truck ico"></span> <span class="text">Regalo con despacho</span>
+        </span>
+        {% endif %}
         <a href="/giftcard/detail/{{ product.slug }}">
           <img src="{{ product.image }}">
         </a>
