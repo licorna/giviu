@@ -278,6 +278,7 @@ def giftcard_confirmation(request):
         address1 = request.POST['address_1']
         address2 = request.POST['address_2']
         address3 = request.POST['comunas']
+        address_complete = request.POST['address']
         design = request.POST.get('giftcard-design', 1)
         ribbon = request.POST.get('ribbon-color', 0)
         paper = request.POST.get('paper-color', 0)

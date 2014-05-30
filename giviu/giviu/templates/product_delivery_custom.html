@@ -45,14 +45,14 @@
         Dirección de envío
       </label>
       <input type="text" class="span9 required address address_first_line" placeholder="Calle, numero" id="address" name="address_1">
-      <div class="span9 morefields" style="display:none;">
+      <div class="span9">
         <span class="span3 title">
           Oficina, depto:
         </span>
         <input type="text" class="span6 col address address_second_line" placeholder="Depto, oficina" name="address_2">
       </div>
 
-      <div class="span9 morefields" style="display:none; border-botom:1px dotted #ccc;">
+      <div class="span9 " style="border-botom:1px dotted #ccc;">
         <span class="span3 title">
           Comuna:
         </span>
@@ -84,6 +84,7 @@
       <input type="hidden" value="" name="paper-color"/>
       <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price"/>
       <input type="hidden" name="delivery-price"/>
+      <input type="hidden" name="address" val="">
     </form>
   </div>
   <div class="span5 col">
@@ -384,7 +385,7 @@
                     var light = $(this).attr('data-light');
                     $('.paper.dark').attr("style","stop-color:"+dark);
                     $('.paper.light').attr("style","stop-color:"+light);
-                    $('[name="ribbon-color"]').val($(this).attr('data-name'))
+                    $('[name="paper-color"]').val($(this).attr('data-name'))
                 });
                 
                 $('.color.tape').on('click',function(){
