@@ -356,15 +356,19 @@ def giftcard_confirmation(request):
 
     design = GiftcardDesign.objects.get(pk=int(design))
 
-    if price > 0:
+    checkout_price = price
+    if giftcard.is_product:
+        checkout_price += delivery_price
+
+    if checkout_price > 0:
         #TODO: Comprobar que la transaccion fue creada exitosamente
-        response, transaction = transaction_create(str(price))
+        response, transaction = transaction_create(str(checkout_price))
         try:
             trx_id = response['trx_id']
         except KeyError:
             logger.critical('Transaction was not created')
     else:
-        response, transaction = transaction_create_no_psp(str(price))
+        response, transaction = transaction_create_no_psp(str(checkout_price))
         trx_id = response['trx_id']
 
     if 'auto-validate' not in request.POST:
