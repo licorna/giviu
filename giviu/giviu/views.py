@@ -281,7 +281,11 @@ def giftcard_confirmation(request):
         address_complete = request.POST['address']
         design = request.POST.get('giftcard-design', 1)
         ribbon = request.POST.get('ribbon-color', 0)
+        ribbon_dark = request.POST.get('ribbon-dark', 0)
+        ribbon_light = request.POST.get('ribbon-light', 0)
         paper = request.POST.get('paper-color', 0)
+        paper_dark = request.POST.get('paper-dark', 0)
+        paper_light = request.POST.get('paper-dark', 0)        
         validated = 1
         already_sent = 0
         trx_credit = user_credits(request.user.fbid)
@@ -425,9 +429,14 @@ def giftcard_confirmation(request):
         'trx_id': trx_id,
         'design': product.design,
         'ribbon': ribbon,
+        'ribbon_dark': ribbon_dark,
+        'ribbon_light': ribbon_light,
         'paper': paper,
+        'paper_dark': paper_dark,
+        'paper_light': paper_light,
         'delivery_address': delivery_information.address,
         'delivery_price': delivery_price,
+        'checkout_price': original_price+delivery_price
     }
     data.update(csrf(request))
     return render_to_response('checkout_confirmation.html',
