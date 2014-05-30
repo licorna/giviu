@@ -5,6 +5,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q
+from django.db import transaction as db_transaction
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
@@ -186,6 +187,7 @@ def giftcard_detail(request, slug):
 
 
 @user_passes_test(user_is_normal_user, login_url='/logout')
+@login_required
 def giftcard_custom(request, slug):
     giftcard = get_object_or_404(Giftcard, slug=slug)
     if giftcard.is_product:
@@ -252,10 +254,8 @@ def giftcard_confirmation(request):
         if datum not in request.POST:
             return HttpResponseBadRequest()
 
-    print request.POST['giftcard-id']
 
     giftcard = Giftcard.objects.get(pk=request.POST.get('giftcard-id'))
-    print 'found ', giftcard
 
     if 'email-to' not in request.POST and 'auto-validate' not in request.POST and\
        not giftcard.is_product:
@@ -273,20 +273,20 @@ def giftcard_confirmation(request):
         email_to = 'auto_validate@giviu.com'
         comment = request.POST['comment']
         price = request.POST['giftcard-price']
-        print 'precio gf:', price
+        delivery_price = request.POST.get('delivery-price', 0)
         date = request.POST['send-when']
         address1 = request.POST['address_1']
         address2 = request.POST['address_2']
         address3 = request.POST['comunas']
-        print address3
         design = request.POST.get('giftcard-design', 1)
         ribbon = request.POST.get('ribbon-color', 0)
         paper = request.POST.get('paper-color', 0)
-        validated = 0
+        validated = 1
         already_sent = 0
         trx_credit = user_credits(request.user.fbid)
         try:
             price = int(price)
+            delivery_price = int(delivery_price)
         except ValueError:
             return HttpResponseBadRequest()
 
@@ -386,7 +386,7 @@ def giftcard_confirmation(request):
 
     product = Product.new(giftcard_from=request.user,
                           giftcard_to=customer,
-                          price=price + credits_used,
+                          price=price + credits_used + delivery_price,
                           design=design,
                           send_date=date,
                           expiration_date=date + timedelta(days=90),
@@ -395,6 +395,10 @@ def giftcard_confirmation(request):
                           transaction=transaction,
                           validated=validated,
                           already_sent=already_sent)
+
+    # TODO: why is this?
+    product = Product.objects.get(uuid=product.uuid)
+
     if giftcard.is_product:
         delivery_information = ProductDeliveryInformation(
             product=product,
@@ -402,6 +406,7 @@ def giftcard_confirmation(request):
             ribbon_color=ribbon,
             package_color=paper
         )
+        delivery_information.save()
     product_id = product.uuid
 
     data = {
@@ -421,7 +426,7 @@ def giftcard_confirmation(request):
         'ribbon': ribbon,
         'paper': paper,
         'delivery_address': delivery_information.address,
-        'delivery_price': calculate_delivery_price(delivery_information.address),
+        'delivery_price': delivery_price,
     }
     data.update(csrf(request))
     return render_to_response('checkout_confirmation.html',
