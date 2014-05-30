@@ -264,6 +264,12 @@ def giftcard_confirmation(request):
     ribbon = ''
     paper = ''
     delivery_information = ''
+    delivery_price  = 0
+    ribbon_dark = ''
+    ribbon_light = ''
+    paper_light = ''
+    paper_dark = ''
+    address = ''
 
     if giftcard.is_product:
         '''Fetch necessary information to create the product with delivery
@@ -416,8 +422,10 @@ def giftcard_confirmation(request):
             package_color=paper
         )
         delivery_information.save()
+    else:
+        delivery_information = None
     product_id = product.uuid
-
+    print date 
     data = {
         'name_to': name_to,
         'email_to': email_to,
@@ -438,7 +446,7 @@ def giftcard_confirmation(request):
         'paper': paper,
         'paper_dark': paper_dark,
         'paper_light': paper_light,
-        'delivery_address': delivery_information.address,
+        'delivery_address': delivery_information.address if delivery_information else '',
         'delivery_price': delivery_price,
         'checkout_price': original_price+delivery_price
     }

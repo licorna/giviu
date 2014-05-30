@@ -10,19 +10,13 @@
 
 <section class="container pay">
   <h2>Confirmación de compra</h2>
-<!--   <aside class="span2 confirmation-steps">
-    <div class="userSide span9 arrow">
-    <ul>
-      <li class="current" data-indicator="giftcard-confirmation"><span class="icon-checkmark"></span> Detalles de producto</li>
-      <li data-indicator="delivery-options"><span class="icon-checkmark"></span> Opciones de despacho</li>
-      <li data-indicator="confirmation">Confirmación de compra</li>
-    </ul>
-    </div>
-  </aside> -->
+  <aside class="span2 confirmation-steps">
+    <small class="span9" style="font-size: 12px;text-align: center;line-height: 19px;padding: 10px 0px;">Si tienes alguna duda acerca de tu compra no dudes en contactarnos a <a href="mailto:soporte@giviu.com">soporte@giviu.com</a></small>
+    <small class="span9" style="font-size: 12px;text-align: center;line-height: 19px;padding: 10px 0px;">Giviu es un sitio seguro es por esto que tus compras se realizán bajo un protocolo de seguridad SSL</small>
+  </aside>
 
-  <div class="paymentProcess span9 col">
+  <div class="paymentProcess span7 col">
 
-    {% if giftcard.is_product %}
     <div id="giftcard-confirmation" class="span9 process">
       <div class="header-process">
         <span class="indicator">
@@ -59,7 +53,6 @@
       </div>
 
     </div>
-    {% endif %}
 
     {% if not giftcard.is_product %}
     <div id="delivery-options" class="span9 process">
@@ -374,6 +367,7 @@
 
           </div>
           <!-- info producto -->
+        {% if giftcard.is_product %}
 
           <!-- info despacho -->
           <div class="item span9">
@@ -410,6 +404,8 @@
             </div>
 
           </div>
+
+          {% endif %}
           <!-- fin info envoltorio -->
 
           <!-- descuentos
@@ -452,7 +448,6 @@
 
       </div>
     </div>
-
   </div>
 
   <div class="span9 stepAction">
@@ -475,6 +470,7 @@
         Modificar
         </a>-->
   </div>
+
 
 </section>
 <script>
