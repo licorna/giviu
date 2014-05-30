@@ -2,7 +2,8 @@
   {
     "id":15101,
     "name":"Arica",
-    "provincia_id":151
+    "provincia_id":151,
+    "zona":1
   },
   {
     "id":15102,
@@ -235,11 +236,6 @@
     "provincia_id":51
   },
   {
-    "id":5104,
-    "name":"Juan Fernández",
-    "provincia_id":51
-  },
-  {
     "id":5105,
     "name":"Puchuncaví",
     "provincia_id":51
@@ -253,11 +249,6 @@
     "id":5109,
     "name":"Viña del Mar",
     "provincia_id":51
-  },
-  {
-    "id":5201,
-    "name":"Isla de Pascua",
-    "provincia_id":52
   },
   {
     "id":5301,

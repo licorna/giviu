@@ -17,7 +17,7 @@
       </figure>
       <div class="span6 col">
         <h3>{{ giftcard.title }}</h3>
-        <strong id="price"></strong>
+        <strong id="price">{{ original_price }}</strong>
       </div>
     </div>
     <form class="span9" method="post" action="/giftcard/checkout" id="customForm">
@@ -58,9 +58,16 @@
 	      <select id="comunas" class="span6 col required address address_third_line">
 	      	<option value="">Selecciona una comuna</option>
 	      </select>
-
       </div>
 
+      <div class="span9 deliveryPrice" style="display:none; border-botom:1px dotted #ccc;">
+	      <span class="span3 title">
+	      Valor despacho: 
+	      </span>
+	      <div class="span6 col" style="padding-top:10px;">
+	      	<strong id="deliveryPrice"></strong>
+	      </div>
+      </div>
 	 <label class="span9">
 	    <span class="ico">
 	        <span class="icon-calendar"></span> 
@@ -443,16 +450,15 @@
 
             	function searchLocation(){
 					$.getJSON( "/static/js/provincias.json", function( data ) {
-						console.log(data[1])
 						$.each( data, function( key, val ) {
 							if($('#comunas option:selected').attr('data-provincia')==val.id){
 								var provincia = val.name; //provincia
 								var region_id = val.region_id;
-
 								$.getJSON( "/static/js/region.json", function( data ) {
 									$.each( data, function( key, val ) {
 										if(region_id==val.id){
 											var region = val.name;
+											calcDelivery(val.chilexpress,val.zone);
 											createAddress(provincia,region);
 										}
 									});
@@ -508,6 +514,18 @@
 
 					});
 
+                }
+
+                function calcDelivery(price,zone){
+                	if(price!=null){
+                		value =	'$'+price;
+                	}else{
+                		value =	'<span style="font-size:12px;">Por el momento no despachamos a este lugar</span>';
+                	}
+                	alert('pirula')
+                	$('.deliveryPrice').slideDown('fast');
+                	$('#deliveryPrice').html(value);
+                	$('[name="delivery-price"]').val(zone);
                 }
 
             });

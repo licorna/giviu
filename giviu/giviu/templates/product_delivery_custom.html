@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load locale_price %}
 
 <section class="container steps">
   <span class="stepIndicator">
@@ -17,7 +18,7 @@
       </figure>
       <div class="span6 col">
         <h3>{{ giftcard.title }}</h3>
-        <strong id="price"></strong>
+        <strong id="price">{{ giftcard.price|clp }}</strong>
       </div>
     </div>
     <form class="span9" method="post" action="/giftcard/checkout" id="customForm">
@@ -61,6 +62,14 @@
 
       </div>
 
+      <div class="span9 deliveryPrice" style="display:none; border-botom:1px dotted #ccc;">
+        <span class="span3 title">
+        Valor despacho: 
+        </span>
+        <div class="span6 col" style="padding-top:10px;">
+          <strong id="deliveryPrice"></strong>
+        </div>
+      </div>
       <label class="span9">
         <span class="ico">
           <span class="icon-calendar"></span>
@@ -74,6 +83,7 @@
       <input type="hidden" value="" name="ribbon-color"/>
       <input type="hidden" value="" name="paper-color"/>
       <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price"/>
+      <input type="hidden" name="delivery-price"/>
     </form>
   </div>
   <div class="span5 col">
@@ -342,7 +352,7 @@
 
     </div>
     <div class="span9 stepAction">
-      <span href="/giftcard/checkout" onclick="$('#customForm').submit();" id="custom" class="span3 btn primary">
+      <span href="/giftcard/checkout" onclick="" id="custom" class="span3 btn primary">
         Continuar
       </span>
     </div>
@@ -353,161 +363,173 @@
   transition:all 0.3s linear;
   }
 </style>
-<script>
-  $(document).ready(function(){
+        <script>
+            $(document).ready(function(){
 
-  $('#customForm').validate();
-  $('#address').on('keyup',showMoreFields);
-  $('#address').on('focusout',autoComplete);
-  $('.address').on('focusout',searchLocation);
-  $('#random').on('click',randomPackage);
-  $('#comunas').on('change',searchLocation);
+          $('#customForm').validate();
+              $('#address').on('keyup',showMoreFields);
+              //$('#address').on('focusout',autoComplete);
+              $('.address').on('focusout',searchLocation);
+              $('#random').on('click',randomPackage);
+              $('#comunas').on('change',searchLocation);
 
-  $.getJSON( "/static/js/comunas.json", function( data ) {
-  $.each( data, function( key, val ) {
-  $('#comunas').append('<option data-provincia="'+val.provincia_id+'" value="'+val.name+'">'+val.name+'</option>');
-  });
-  });
+        $.getJSON( "/static/js/comunas.json", function( data ) {
+          $.each( data, function( key, val ) {
+            $('#comunas').append('<option data-provincia="'+val.provincia_id+'" value="'+val.name+'">'+val.name+'</option>');
+          });
+        });
 
-  $('.color.paper').on('click',function(){
-  var dark = $(this).attr('data-dark');
-  var light = $(this).attr('data-light');
-  $('.paper.dark').attr("style","stop-color:"+dark);
-  $('.paper.light').attr("style","stop-color:"+light);
-  $('[name="paper"]').val($(this).attr('data-name'))
-  });
+                $('.color.paper').on('click',function(){
+                    var dark = $(this).attr('data-dark');
+                    var light = $(this).attr('data-light');
+                    $('.paper.dark').attr("style","stop-color:"+dark);
+                    $('.paper.light').attr("style","stop-color:"+light);
+                    $('[name="paper"]').val($(this).attr('data-name'))
+                });
+                
+                $('.color.tape').on('click',function(){
+                    var dark = $(this).attr('data-dark');
+                    var light = $(this).attr('data-light');
+                    $('.tape.dark').attr("style","stop-color:"+dark);
+                    $('.tape.light').attr("style","stop-color:"+light);
+                    $('[name="rebone"]').val($(this).attr('data-name'))
+                })  
+              
+              randomPackage();
 
-  $('.color.tape').on('click',function(){
-  var dark = $(this).attr('data-dark');
-  var light = $(this).attr('data-light');
-  $('.tape.dark').attr("style","stop-color:"+dark);
-  $('.tape.light').attr("style","stop-color:"+light);
-  $('[name="rebone"]').val($(this).attr('data-name'))
-  })
+        $( "#datepicker" ).datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+            dayNamesMin:["Do","Lu","Ma","Mi","Ju","Vi","Sa"],
+            monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+            dateFormat: "yy-m-d",
+            defaultDate: +4,
+            autoSize: true,
+            maxDate: "+1m",
+            minDate: "2",
+            onSelect: function(e) {
 
-  randomPackage();
+                var month = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+                var terms = ['Hoy','Mañana','Pasado mañana']
+                var special_dates = ['2014-2-14','Mañana','Pasado mañana']
+                var special_msg = ['El día de los enamorados','Mañana','Pasado mañana']
+                var picker_date = e;
+                var new_format_date = e.split('-');
+                var new_format_date =new_format_date[2]+' de '+month[new_format_date[1]-1]
+                var d = new Date(); 
+                var fechaInicio= new Date(picker_date);
+                var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());            
+                var fechaResta= fechaInicio-hoy;
+                fechaResta=(((fechaResta/1000)/60)/60)/24;   
+                fechaResta = parseInt(fechaResta);        
 
-  $( "#datepicker" ).datepicker({
-  showOtherMonths: true,
-  selectOtherMonths: true,
-  monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
-  dayNamesMin:["Do","Lu","Ma","Mi","Ju","Vi","Sa"],
-  monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-  dateFormat: "yy-m-d",
-  defaultDate: +4,
-  autoSize: true,
-  maxDate: "+1m",
-  minDate: "2",
-  onSelect: function(e) {
+                if(fechaResta<=2) {
+                  $('#datepicker').val(terms[fechaResta]);
+                }else if(fechaResta<=5){
+                  $('#datepicker').val('En '+fechaResta+' días');
+                }else{
+                   $('#datepicker').val(new_format_date);
+                }
+                var special_date_review = $.inArray(e,special_dates)
+                if(special_date_review!=-1){
+                  $('#datepicker').val(special_msg[special_date_review]);
+                }
 
-  var month = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-  var terms = ['Hoy','Mañana','Pasado mañana']
-  var special_dates = ['2014-2-14','Mañana','Pasado mañana']
-  var special_msg = ['El día de los enamorados','Mañana','Pasado mañana']
-  var picker_date = e;
-  var new_format_date = e.split('-');
-  var new_format_date =new_format_date[2]+' de '+month[new_format_date[1]-1]
-  var d = new Date();
-  var fechaInicio= new Date(picker_date);
-  var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());
-  var fechaResta= fechaInicio-hoy;
-  fechaResta=(((fechaResta/1000)/60)/60)/24;
-  fechaResta = parseInt(fechaResta);
+              var re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1})))(?![\\d])';
 
-  if(fechaResta<=2) {
-                    $('#datepicker').val(terms[fechaResta]);
-                    }else if(fechaResta<=5){
-                                          $('#datepicker').val('En '+fechaResta+' días');
-                                          }else{
-                                          $('#datepicker').val(new_format_date);
-                                          }
-                                          var special_date_review = $.inArray(e,special_dates)
-                                          if(special_date_review!=-1){
-                                          $('#datepicker').val(special_msg[special_date_review]);
-                                          }
+              var p = new RegExp(re1,["i"]);
+              var m = p.exec(e);
+              if (m != null){
+                  var yyyymmdd1=m[1];
+                  $('#hidden-date').val(e);
+              }else{
+                  $('#datepicker').val('');
+              }
 
-                                          var re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1})))(?![\\d])';
+            }
+        });
 
-                                          var p = new RegExp(re1,["i"]);
-                                          var m = p.exec(e);
-                                          if (m != null){
-                                          var yyyymmdd1=m[1];
-                                          $('#hidden-date').val(e);
-                                          }else{
-                                          $('#datepicker').val('');
-                                          }
+        function searchLocation(){
+          $.getJSON( "/static/js/provincias.json", function( data ) {
+            $.each( data, function( key, val ) {
+              if($('#comunas option:selected').attr('data-provincia')==val.id){
+                var provincia = val.name; //provincia
+                var region_id = val.region_id;
+                $.getJSON( "/static/js/region.json", function( data ) {
+                  $.each( data, function( key, val ) {
+                    if(region_id==val.id){
+                      var region = val.name;
+                      calcDelivery(val.chilexpress,val.zone);
+                      createAddress(provincia,region);
+                    }
+                  });
+                });
+              }
+            });
+          });
+              }
 
-                                          }
-                                          });
+              function createAddress(provincia,region){
+                var first_line  = $('.address_first_line').val()+',';
+                if($('.address_second_line').val()!=""){
+                  var second_line = $('.address_second_line').val()+',';
+                }else{
+                  var second_line = "";
+                }
+                var division  = $('#comunas option:selected').val()+',';
+                var provincia   = provincia+',';
+                var complete_address = first_line+second_line+division+provincia+region;
+                $('[name="address"]').val(complete_address);
+              }
 
-                                          function searchLocation(){
-                                          $.getJSON( "/static/js/provincias.json", function( data ) {
-                                          $.each( data, function( key, val ) {
-                                          if($('#comunas option:selected').attr('data-provincia')==val.id){
-                                          var provincia = val.name; //provincia
-                                          var region_id = val.region_id;
-                                          $.getJSON( "/static/js/region.json", function( data ) {
-                                          $.each( data, function( key, val ) {
-                                          if(region_id==val.id){
-                                          var region = val.name;
-                                          createAddress(provincia,region);
-                                          }
-                                          });
-                                          });
-                                          }
-                                          });
-                                          });
-                                          }
+                function randomPackage(){
+                  tape  = $('.color.tape').length;
+                  paper = $('.color.paper').length;
+                  $('.color.tape').eq(Math.floor((Math.random() * tape))).trigger('click')
+                  $('.color.paper').eq(Math.floor((Math.random() * paper))).trigger('click')
+                }
 
-                                          function createAddress(provincia,region){
-                                          var first_line  = $('.address_first_line').val()+',';
-                                          if($('.address_second_line').val()!=""){
-                                          var second_line = $('.address_second_line').val()+',';
-                                          }else{
-                                          var second_line = "";
-                                          }
-                                          var division    = $('#comunas option:selected').val()+',';
-                                          var provincia   = provincia+',';
-                                          var complete_address = first_line+second_line+division+provincia+region;
-                                          $('[name="address"]').val(complete_address);
+                function showMoreFields(){
+                  if($(this).val()!=""){
+                    $('.morefields').slideDown();
+                  }
+                } 
 
-                                          }
+                // function autoComplete(){
+                //   var key = $(this).val()+',chile';
+                // var endpoint = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=cl&key=AIzaSyBq7j3YJ9ObY8GqhE0pweyeBmt7D7TmqXc&address=";
 
-                                          function randomPackage(){
-                                          tape  = $('.color.tape').length;
-                                          paper = $('.color.paper').length;
-                                          $('.color.tape').eq(Math.floor((Math.random() * tape))).trigger('click')
-                                          $('.color.paper').eq(Math.floor((Math.random() * paper))).trigger('click')
-                                          }
+                //   $.getJSON(endpoint+key+"", function( data ) {
+                //     if(data.status=="OK"){
+                //       comuna = data.results[0].formatted_address.split(',');
+                //       $('#comunas option').each(function(){
+                //         response = comuna[1].toLowerCase().trim();
+                //         value = $(this).html().toLowerCase().trim();
+                //         if(response == value){
+                //           $(this).attr('selected','selected');
+                //         }else{
+                //           $(this).removeAttr('selected');
+                //         }
+                //       });
+                //     }
 
-                                          function showMoreFields(){
-                                          if($(this).val()!=""){
-                                          $('.morefields').slideDown();
-                                          }
-                                          }
+                //   });
 
-                                          function autoComplete(){
-                                          var key = $(this).val()+',chile';
-                                          var endpoint = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=cl&key=AIzaSyBq7j3YJ9ObY8GqhE0pweyeBmt7D7TmqXc&address=";
+                // }
 
-                                          $.getJSON(endpoint+key+"", function( data ) {
-                                          if(data.status=="OK"){
-                                          comuna = data.results[0].formatted_address.split(',');
-                                          $('#comunas option').each(function(){
-                                          response = comuna[1].toLowerCase().trim();
-                                          value = $(this).html().toLowerCase().trim();
-                                          if(response == value){
-                                          $(this).attr('selected','selected');
-                                          }else{
-                                          $(this).removeAttr('selected');
-                                          }
-                                          });
-                                          }
+                function calcDelivery(price,zone){
+                  if(price!=null){
+                    value = '$'+price;
+                  }else{
+                    value = '<span style="font-size:12px;">Por el momento no despachamos a este lugar</span>';
+                  }
+                  $('.deliveryPrice').slideDown('fast');
+                  $('#deliveryPrice').html(value);
+                  $('[name="delivery-price"]').val(zone);
+                  $('#custom').attr('onclick',$('#customForm').submit());
+                }
 
-                                          });
-
-                                          }
-
-                                          });
-                                          </script>
+            });
+        </script>
 {% endblock %}

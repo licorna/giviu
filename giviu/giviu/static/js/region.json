@@ -1,62 +1,93 @@
 [
   {
     "id":15,
-    "name":"Arica y Parinacota"
+    "name":"Arica y Parinacota",
+    "zona": 1,
+    "chilexpress": 7420
   },
   {
     "id":1,
-    "name":"Tarapacá"
+    "name":"Tarapacá",
+    "zona":1,
+    "chilexpress": 7420
   },
   {
     "id":2,
-    "name":"Antofagasta"
+    "name":"Antofagasta",
+    "zona":2,
+    "chilexpress": 6690
   },
   {
     "id":3,
-    "name":"Atacama"
+    "name":"Atacama",
+    "zona":3,
+    "chilexpress":3890
   },
   {
     "id":4,
-    "name":"Coquimbo"
+    "name":"Coquimbo",
+    "zona": 3,
+    "chilexpress":3890    
   },
   {
     "id":5,
-    "name":"Valparaíso"
+    "name":"Valparaíso",
+    "zona":4,
+    "chilexpress": 3720
   },
   {
     "id":6,
-    "name":"Región del Libertador Gral. Bernardo O’Higgins"
+    "name":"Región del Libertador Gral. Bernardo O’Higgins",
+    "zona": 5,
+    "chilexpress":2450
   },
   {
     "id":7,
-    "name":"Región del Maule"
+    "name":"Región del Maule",
+    "zona": 6,
+    "chilexpress" : 3780
   },
   {
     "id":8,
-    "name":"Región del Biobío"
+    "name":"Región del Biobío",
+    "zona": 7,
+    "chilexpress" : 3900
   },
   {
     "id":9,
-    "name":"Región de la Araucanía"
+    "name":"Región de la Araucanía",
+    "zona": 8,
+    "chilexpress":3900
+
   },
   {
     "id":10,
-    "name":"Región de Los Lagos"
+    "name":"Región de Los Lagos",
+    "zona": 8,
+    "chilexpress": 3900
   },
   {
     "id":11,
-    "name":"Región Aisén del Gral. Carlos Ibáñez del Campo"
+    "name":"Región Aisén del Gral. Carlos Ibáñez del Campo",
+    "zona": 0,
+    "chilexpress": null
   },
   {
     "id":12,
-    "name":"Región de Magallanes y de la Antártica Chilena"
+    "name":"Región de Magallanes y de la Antártica Chilena",
+    "zona": 0,
+    "chilexpress": null
   },
   {
     "id":13,
-    "name":"Región Metropolitana de Santiago"
+    "name":"Región Metropolitana de Santiago",
+    "zona":5,
+    "chilexpress": 2450
   },
   {
     "id":14,
-    "name":"Región de Los Ríos"
+    "name":"Región de Los Ríos",
+    "zona":8,
+    "chilexpress": 3900  
   }
 ]
