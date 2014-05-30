@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cache %}
 {% load locale_price %}
 {% block title %}{{ this_category }}{% if show_title %} | {% endif %}{% endblock %}
 {% block content %}
@@ -62,7 +63,9 @@
         <span class="giftcardTitle">
           <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:9 }}</h2></a>
         </span>
+        {% cache 1800 cachemerchant product.merchant.slug %}
         <h4><span class="in">en</span> <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
+        {% endcache %}
         <div class="newAction">
           {% if product.kind == '1' %}
             <select class="span5" name="webmenu"  onchange="showValue(this.value)">

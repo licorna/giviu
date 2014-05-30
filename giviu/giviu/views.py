@@ -12,6 +12,8 @@ from models import (
     GiftcardCategory, Giftcard, GiftcardDesign, Campaign,
     Users, Product, ProductDeliveryInformation
 )
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from merchant.models import MerchantTabs, Merchants
 from social.models import Likes
 from marketing import event_user_registered
@@ -136,18 +138,29 @@ def home(request, slug=None, division=None):
             products = Giftcard.objects.filter(status=1).order_by('-priority')
 
     if division == 'category':
-        category = get_object_or_404(GiftcardCategory, slug=slug)
-        products = Giftcard.objects.filter(category=category.id,
-                                           status=1).order_by('-priority')
+        products = cache.get('products/category/' + slug)
+        category = cache.get('category/' + slug)
+        if not products or not category:
+            category = get_object_or_404(GiftcardCategory, slug=slug)
+            products = Giftcard.objects.filter(category=category.id,
+                                               status=1).order_by('-priority')
+            cache.set('products/category/' + slug, products)
+            cache.set('category/' + slug, category)
+        else:
+            print products
         show_title = True
         data.update({'this_category': category})
 
     if division == 'campaign':
-        campaign = get_object_or_404(Campaign, slug=slug)
-        products = campaign.giftcards.filter(status=1).order_by('-priority')
+        products = cache.get('products/campaign/' + slug)
+        campaign = cache.get('campaign/' + slug)
+        if not products or not campaign:
+            campaign = get_object_or_404(Campaign, slug=slug)
+            products = campaign.giftcards.filter(status=1).order_by('-priority')
+            cache.set('products/campaign/' + slug, products)
+            cache.set('campaign/' + slug, campaign)
         data.update({'this_campaign': campaign})
 
-    #all_product_len = Giftcard.objects.filter(status=1).count()
     if request.user.is_authenticated() and settings.SOCIAL['FETCH_FRIEND_LIKES']:
         for product in products:
             product.get_friend_likes = Likes.get_likes_from_friends(request.user.fbid,
@@ -155,13 +168,20 @@ def home(request, slug=None, division=None):
             product.get_own_like = Likes.does_user_likes(request.user.fbid,
                                                          product.id)
 
+    campaigns = cache.get('campaigns/')
+    if not campaigns:
+        campaigns = Campaign.objects.order_by('id')
+        cache.set('campaigns/', campaigns)
+
     data.update({
         'products': products,
         #'all_products_len': all_product_len,
         'show_title': show_title,
-        'campaigns' : Campaign.objects.order_by('id')
+        'campaigns' : campaigns,
     })
     data.update(get_data_for_header(request))
+    if slug:
+        data.update({'slug': slug})
     return render_to_response('giftcard.html', data,
                               context_instance=RequestContext(request))
 
