@@ -179,6 +179,9 @@ def pp_response(request, token, **kwargs):
         if transaction.use_credits is not None:
             finalize_use_user_credits(transaction.use_credits)
 
+        product.giftcard.sold_quantity += 1
+        product.giftcard.save()
+
         return render_to_response('success.html', data,
                                   context_instance=RequestContext(request))
     else:
