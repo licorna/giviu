@@ -384,7 +384,7 @@
                     var light = $(this).attr('data-light');
                     $('.paper.dark').attr("style","stop-color:"+dark);
                     $('.paper.light').attr("style","stop-color:"+light);
-                    $('[name="paper"]').val($(this).attr('data-name'))
+                    $('[name="ribbon-color"]').val($(this).attr('data-name'))
                 });
                 
                 $('.color.tape').on('click',function(){
@@ -392,7 +392,7 @@
                     var light = $(this).attr('data-light');
                     $('.tape.dark').attr("style","stop-color:"+dark);
                     $('.tape.light').attr("style","stop-color:"+light);
-                    $('[name="rebone"]').val($(this).attr('data-name'))
+                    $('[name="ribbon-color"]').val($(this).attr('data-name'))
                 })  
               
               randomPackage();
@@ -527,7 +527,7 @@
                   $('.deliveryPrice').slideDown('fast');
                   $('#deliveryPrice').html(value);
                   $('[name="delivery-price"]').val(zone);
-                  $('#custom').attr('onclick',$('#customForm').submit());
+                  $('#custom').attr('onclick',"$('#customForm').submit()");
                 }
 
             });
