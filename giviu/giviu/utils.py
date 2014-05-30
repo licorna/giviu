@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.contrib import sitemaps
 from django.conf import settings
 from credits import user_credits
+from django.core.cache import cache
 
 
 class GiftcardsSitemap(sitemaps.Sitemap):
@@ -36,7 +37,10 @@ class PartnersSitemap(sitemaps.Sitemap):
 
 def get_data_for_header(request):
     from models import GiftcardCategory
-    categories = GiftcardCategory.get_categories()
+    categories = cache.get('categories/')
+    if not categories:
+        categories = GiftcardCategory.get_categories()
+        cache.set('categories/', categories)
     if request.user.is_authenticated():
         credits = user_credits(request.user.fbid)['amount']
     else:

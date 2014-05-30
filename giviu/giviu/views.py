@@ -135,7 +135,10 @@ def home(request, slug=None, division=None):
                                     Q(title__contains=search) |
                                     Q(description__contains=search))
         else:
-            products = Giftcard.objects.filter(status=1).order_by('-priority')
+            products = cache.get('products/')
+            if not products:
+                products = Giftcard.objects.filter(status=1).order_by('-priority')
+                cache.set('products/', products, 1800)
 
     if division == 'category':
         products = cache.get('products/category/' + slug)
@@ -144,8 +147,8 @@ def home(request, slug=None, division=None):
             category = get_object_or_404(GiftcardCategory, slug=slug)
             products = Giftcard.objects.filter(category=category.id,
                                                status=1).order_by('-priority')
-            cache.set('products/category/' + slug, products)
-            cache.set('category/' + slug, category)
+            cache.set('products/category/' + slug, products, 1800)
+            cache.set('category/' + slug, category, 1800)
         else:
             print products
         show_title = True
@@ -157,8 +160,8 @@ def home(request, slug=None, division=None):
         if not products or not campaign:
             campaign = get_object_or_404(Campaign, slug=slug)
             products = campaign.giftcards.filter(status=1).order_by('-priority')
-            cache.set('products/campaign/' + slug, products)
-            cache.set('campaign/' + slug, campaign)
+            cache.set('products/campaign/' + slug, products, 1800)
+            cache.set('campaign/' + slug, campaign, 1800)
         data.update({'this_campaign': campaign})
 
     if request.user.is_authenticated() and settings.SOCIAL['FETCH_FRIEND_LIKES']:
@@ -171,7 +174,7 @@ def home(request, slug=None, division=None):
     campaigns = cache.get('campaigns/')
     if not campaigns:
         campaigns = Campaign.objects.order_by('id')
-        cache.set('campaigns/', campaigns)
+        cache.set('campaigns/', campaigns, 1800)
 
     data.update({
         'products': products,

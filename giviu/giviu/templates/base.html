@@ -40,7 +40,7 @@
 
   </head>
   <body class="cf">
-    <header class="span9 {% if products %}header{% endif %}">
+    <header class="span9 header">
       <div class="container big">
         <div class="span1">
           <a href="/" class="title"><img src="{% static "img/logo.png" %}"></a>
@@ -50,11 +50,9 @@
               Todos
             </a>
           {% for category in categories %}
-          {% if category.count > 0 %}
             <a href="/giftcard/category/{{ category.slug }}" class="{% if this_category.name == category.name %}selected{% endif %}">
               {{ category.name }}
             </a>
-          {% endif %}
           {% endfor %}
         </div>
         <nav class="span4 col showyourlove">

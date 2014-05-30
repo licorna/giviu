@@ -21,7 +21,9 @@
       <h3>Regalos para: </h3>
       <ul class="span9">
         {% for campaign in campaigns %}
+        {% cache 1800 cachecampaign campaign.slug %}
         <li class="span9 category {% if this_campaign.name == campaign.name %}selected{% endif %}"><a data-id="{{ campaign.id }}"  href="/campaign/{{ campaign.slug }}">{{ campaign.name }} <span id="count{{ campaign.id }}" style="background-color: #{{ campaign.color }}">{{ campaign.giftcards.all|length }}</span></a></li>
+        {% endcache %}
         {% endfor %}
 
       </ul>
@@ -63,7 +65,7 @@
         <span class="giftcardTitle">
           <a href="/giftcard/detail/{{ product.slug }}"><h2>{{ product.title|truncatewords:9 }}</h2></a>
         </span>
-        {% cache 1800 cachemerchant product.merchant.slug %}
+        {% cache 1800 cachemerchant product.slug %}
         <h4><span class="in">en</span> <a href="/partner/{{ product.merchant.slug }}">{{ product.merchant.name }}</a></h4>
         {% endcache %}
         <div class="newAction">
