@@ -6,6 +6,7 @@
   <section class="payment_response">
   	<section class="span7">
   		<h2>Tu compra  en Giviu ha terminado satisfactoriamente</h2>
+                {% if product.giftcard.is_product %}
   		<h3>Información del producto</h3>
   		<div class="giftcardDetail span9">
                   {% if not product.giftcard.auto_validate %}
@@ -26,6 +27,7 @@
   				</ul>
   			</div>
   		</div>
+                {% endif %}
 
   		<h3>Información de pago</h3>
   		<div class="giftcardDetail span9">
