@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from utils import (GiftcardsSitemap,
                    CategoriesSitemap,
                    PartnersSitemap)
+from django.conf import settings
 
 from django.views.generic.base import RedirectView
 
@@ -85,3 +86,10 @@ urlpatterns = patterns('',
 
                        url(r'^marketing/', include('marketing.urls'))
 )
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+                            url(r'^__debug__/', include(debug_toolbar.urls)),
+    )

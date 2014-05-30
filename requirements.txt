@@ -6,3 +6,4 @@ pymongo==2.6.3
 requests==2.1.0
 uWSGI==2.0
 wsgiref==0.1.2
+django-debug-toolbar==1.2.1
