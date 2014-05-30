@@ -314,7 +314,7 @@ def giftcard_confirmation(request):
         ribbon_light = request.POST.get('ribbon-light', 0)
         paper = request.POST.get('paper-color', 0)
         paper_dark = request.POST.get('paper-dark', 0)
-        paper_light = request.POST.get('paper-dark', 0)        
+        paper_light = request.POST.get('paper-dark', 0)
         validated = 1
         already_sent = 0
         trx_credit = user_credits(request.user.fbid)
@@ -440,7 +440,7 @@ def giftcard_confirmation(request):
     if giftcard.is_product:
         delivery_information = ProductDeliveryInformation(
             product=product,
-            address=' '.join([address1, address2, address3]),
+            address=address_complete,
             ribbon_color=ribbon,
             package_color=paper
         )
@@ -448,7 +448,6 @@ def giftcard_confirmation(request):
     else:
         delivery_information = None
     product_id = product.uuid
-    print date 
     data = {
         'name_to': name_to,
         'email_to': email_to,

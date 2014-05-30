@@ -4,71 +4,86 @@
 
 <section class="container">
   <section class="payment_response">
-  	<section class="span7">
-  		<h2>Tu compra  en Giviu ha terminado satisfactoriamente</h2>
-                {% if product.giftcard.is_product %}
-  		<h3>Información del producto</h3>
-  		<div class="giftcardDetail span9">
-                  {% if not product.giftcard.auto_validate %}
-  			<figure class="span3">
-  				<img src="{{ product.design.image }}" class="span9"/>
-  			</figure>
-                  {% endif %}
-  			<div class="span6 col">
-  				<ul>
-                                  {% if not product.giftcard.auto_validate %}
-	  				<li><strong class="gift">{{ product.giftcard }}</strong></li>
-	  				<li>Giftcard regalada a: <strong>{{ product.giftcard_to.get_full_name }}</strong></li>
-  					<li>Al correo: <strong>{{ product.giftcard_to.email }}</strong></li>
-  					<li>Se enviara el: <strong>{{ product.send_date }}</strong></li>
-                                  {% else %}
-                                        <li><strong class="gift">Ya estás ayudando a {{ product.giftcard.title }}</strong></li>
-                                  {% endif %}
-  				</ul>
-  			</div>
-  		</div>
-                {% endif %}
+    <section class="span7">
+      <h2>Tu compra  en Giviu ha terminado satisfactoriamente</h2>
+      {% if not product.giftcard.is_product %}
+      <h3>Información del producto</h3>
+      <div class="giftcardDetail span9">
+        {% if not product.giftcard.auto_validate %}
+        <figure class="span3">
+          <img src="{{ product.design.image }}" class="span9"/>
+        </figure>
+        {% endif %}
+        <div class="span6 col">
+          <ul>
+            {% if not product.giftcard.auto_validate %}
+            <li><strong class="gift">{{ product.giftcard }}</strong></li>
+            <li>Giftcard regalada a: <strong>{{ product.giftcard_to.get_full_name }}</strong></li>
+            <li>Al correo: <strong>{{ product.giftcard_to.email }}</strong></li>
+            <li>Se enviara el: <strong>{{ product.send_date }}</strong></li>
+            {% else %}
+            <li><strong class="gift">Ya estás ayudando a {{ product.giftcard.title }}</strong></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
 
-  		<h3>Información de pago</h3>
-  		<div class="giftcardDetail span9">
-                  {% if used_credits %}
-                  <ul class="span4">
-                    <li>Precio Final: Has utilizado {{ used_credits|clp}}</li>
-                  </ul>
-                  {% else %}
-	  		<ul class="span4">
-	  			<li>Metodo de pago: <strong>{{ transaction.medio_pago_descripcion }}</strong></li>
-	  			<li>Monto: <strong>{{ transaction.monto|clp }}</strong></li>
-	  			<li>Fecha: <strong>{{ transaction.fecha_aprobacion }}</strong></li>
-	  		</ul>
-	  		<ul class="span5 col">
-	  			<li>Numero de cuotas: <strong>{{ transaction.num_cuotas }}</strong></li>
-	  			<li>Numero operacion: <strong>{{ transaction.numero_operacion }}</strong></li>
-	  		</ul>
-                  {% endif %}
-	  	</div>
+      {% if product.giftcard.is_product %}
+      <h3>Información de despacho</h3>
+      <div class="giftcardDetail span9">
+        <figure class="span3">
+          <img src="{{ product.image }}" class="span9" />
+        </figure>
+        <div class="span6 col">
+          <ul>
+            <li>Se enviará a la dirección: {{ product.address_to_deliver.first.address }}</li>
+            <li>El día: {{ product.send_date }}</li>
+          </ul>
+        </div>
+      </div>
+      {% endif %}
 
-	  	<span class="span9">
-	  		 <center>
-	  		 	Comparte Giviu<br/>
-			  	<a class="social facebook share" href="http://www.facebook.com/sharer.php?u=http://www.giviu.com">
-					<span class="icon-facebook"></span>
-				</a>
-				<a class="social twitter share" href="https://twitter.com/intent/tweet?url=http://www.giviu.com&text=Yo ya utilizo Giviu y tu?&via=giviuchile" >
-					<span class="icon-twitter"></span>
-				</a>
-				<a class="social google share" href="https://plus.google.com/share?url=http://www.giviu.com">
-					<span class="icon-google-plus"></span>
-				</a>
-	  		</center>
+      <h3>Información de pago</h3>
+      <div class="giftcardDetail span9">
+        {% if used_credits %}
+        <ul class="span4">
+          <li>Precio Final: Has utilizado {{ used_credits|clp}}</li>
+        </ul>
+        {% else %}
+        <ul class="span4">
+          <li>Metodo de pago: <strong>{{ transaction.medio_pago_descripcion }}</strong></li>
+          <li>Monto: <strong>{{ transaction.monto|clp }}</strong></li>
+          <li>Fecha: <strong>{{ transaction.fecha_aprobacion }}</strong></li>
+        </ul>
+        <ul class="span5 col">
+          <li>Numero de cuotas: <strong>{{ transaction.num_cuotas }}</strong></li>
+          <li>Numero operacion: <strong>{{ transaction.numero_operacion }}</strong></li>
+        </ul>
+        {% endif %}
+      </div>
 
-	  	</span>
-  	</section>
+      <span class="span9">
+        <center>
+          Comparte Giviu<br/>
+          <a class="social facebook share" href="http://www.facebook.com/sharer.php?u=http://www.giviu.com">
+            <span class="icon-facebook"></span>
+          </a>
+          <a class="social twitter share" href="https://twitter.com/intent/tweet?url=http://www.giviu.com&text=Yo ya utilizo Giviu y tu?&via=giviuchile" >
+            <span class="icon-twitter"></span>
+          </a>
+          <a class="social google share" href="https://plus.google.com/share?url=http://www.giviu.com">
+            <span class="icon-google-plus"></span>
+          </a>
+        </center>
 
-	<aside class="span2 col misGiftCards">
-		<h2><span class="icon-question"></span> ¿Necesitas ayuda?</h2>
-		<p>Si tienes alguna duda te recomendamos primero revisar nuestra seccion de <a href="/page/preguntas-frecuentes">preguntas frecuentes</a>, si aun tienes dudas contáctate con nosotros al correo <a href="#">soporte@giviu.com</a></p>
-	</aside>
+      </span>
+    </section>
+
+    <aside class="span2 col misGiftCards">
+      <h2><span class="icon-question"></span> ¿Necesitas ayuda?</h2>
+      <p>Si tienes alguna duda te recomendamos primero revisar nuestra seccion de <a href="/page/preguntas-frecuentes">preguntas frecuentes</a>, si aun tienes dudas contáctate con nosotros al correo <a href="#">soporte@giviu.com</a></p>
+    </aside>
 
   </section>
 </section>
