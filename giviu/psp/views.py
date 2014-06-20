@@ -68,8 +68,7 @@ def first_stage(request):
 
 
 @require_GET
-def pp_response(request, token, **kwargs):
-    status = kwargs.get('status', 'error') == 'success'
+def pp_response_success(request, token, **kwargs):
     try:
         transaction = PaymentTransaction.objects.get(psp_token=token)
         if transaction.is_closed():
@@ -88,11 +87,11 @@ def pp_response(request, token, **kwargs):
             transaction.amount,
             transaction.origin_timestamp
         )
-        payment_method = response['medio_pago_descripcion']
-        payment_total = response['monto']
-        payment_date = response['fecha_aprobacion']
-        payment_operation_number = response['numero_operacion']
-        payment_authorization_code = response['codigo_autorizacion']
+        payment_method = response.get('medio_pago_descripcion', '')
+        payment_total = response.get('monto', 0)
+        payment_date = response.get('fecha_aprobacion', '')
+        payment_operation_number = response.get('numero_operacion', 0)
+        payment_authorization_code = response.get('codigo_autorizacion', 0)
     else:
         import locale
         locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
@@ -110,85 +109,87 @@ def pp_response(request, token, **kwargs):
         return HttpResponseBadRequest()
         #TODO: Error grave
 
-    if status is True:
-        if transaction.state == 'USING_CREDITS_SUCCESS':
-            product.set_state('USING_CREDITS_SUCCESS')
-            transaction.set_state('USING_CREDITS_SUCCESS')
-        else:
-            product.set_state('RESPONSE_FROM_PP_SUCCESS')
-            transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
-
-        try:
-            customer = CustomerInfo.objects.get(user=product.giftcard_to,
-                                                merchant=product.giftcard.merchant)
-        except CustomerInfo.DoesNotExist:
-            customer = CustomerInfo(user=product.giftcard_to,
-                                    merchant=product.giftcard.merchant)
-            customer.save()
-
-        args = {
-            'payment_method': payment_method,
-            'payment_total': payment_total,
-            'payment_date': payment_date,
-            'payment_operation_number': payment_operation_number,
-        }
-        transaction.operation_number = payment_operation_number
-        transaction.authorization_code = payment_authorization_code
-
-        if product.state != 'USING_CREDITS_SUCCESS':
-            transaction.raw_response = response
-            transaction.save()
-
-        # Next block will send notification emails
-        if not product.giftcard.auto_validate:
-            # Merchant notification
-            args0 = {
-                'merchant_name': product.giftcard.merchant.name,
-                'product_name': product.giftcard.title,
-                'product_date': product.created.isoformat(),
-            }
-            event_merchant_notification_giftcard_was_bought(product.giftcard.merchant.contact_email, args0)
-            _code = product.validation_code
-            _code = _code[:4] + '-' + _code[4:]
-            merchant_notification.send(sender=request,
-                                       merchant=product.giftcard.merchant.id,
-                                       code=_code,
-                                       ammount=product.price)
-
-            event_user_buy_product_confirmation(product.giftcard_from.email, args)
-            now = datetime.now()
-            if (product.send_date.year == now.year and
-                product.send_date.month == now.month and
-                product.send_date.day == now.day and
-                not product.giftcard.auto_validate):
-
-                simple_giftcard_send_notification(product)
-        else:
-            # Is auto_validation giftcard
-            # FIXME: 'levantemos_chile' parameter needs to be taken
-            # from somewhere else ;)
-            simple_giftcard_send_notification_auto_validate('levantemos_chile',
-                                                            product)
-
-        data = {'product': product}
-        if product.state == 'USING_CREDITS_SUCCESS':
-            data.update({'used_credits': product.price})
-        else:
-            data.update({'transaction': response})
-
-        if transaction.use_credits is not None:
-            finalize_use_user_credits(transaction.use_credits)
-
-        product.giftcard.sold_quantity += 1
-        product.giftcard.save()
-
-        return render_to_response('success.html', data,
-                                  context_instance=RequestContext(request))
+    if transaction.state == 'USING_CREDITS_SUCCESS':
+        product.set_state('USING_CREDITS_SUCCESS')
+        transaction.set_state('USING_CREDITS_SUCCESS')
     else:
-        product.set_state('RESPONSE_FROM_PP_ERROR')
-        transaction.set_state('RESPONSE_FROM_PP_ERROR')
-        if transaction.use_credits is not None:
-            finalize_use_user_credits(transaction.use_credits, False)
-        data = {}
-        return render_to_response('error.html', data,
-                                  context_instance=RequestContext(request))
+        product.set_state('RESPONSE_FROM_PP_SUCCESS')
+        transaction.set_state('RESPONSE_FROM_PP_SUCCESS')
+
+    try:
+        customer = CustomerInfo.objects.get(user=product.giftcard_to,
+                                            merchant=product.giftcard.merchant)
+    except CustomerInfo.DoesNotExist:
+        customer = CustomerInfo(user=product.giftcard_to,
+                                merchant=product.giftcard.merchant)
+        customer.save()
+
+    args = {
+        'payment_method': payment_method,
+        'payment_total': payment_total,
+        'payment_date': payment_date,
+        'payment_operation_number': payment_operation_number,
+    }
+    transaction.operation_number = payment_operation_number
+    transaction.authorization_code = payment_authorization_code
+
+    if product.state != 'USING_CREDITS_SUCCESS':
+        transaction.raw_response = response
+        transaction.save()
+
+    # Next block will send notification emails
+    if not product.giftcard.auto_validate:
+        # Merchant notification
+        args0 = {
+            'merchant_name': product.giftcard.merchant.name,
+            'product_name': product.giftcard.title,
+            'product_date': product.created.isoformat(),
+        }
+        event_merchant_notification_giftcard_was_bought(product.giftcard.merchant.contact_email, args0)
+        _code = product.validation_code
+        _code = _code[:4] + '-' + _code[4:]
+        merchant_notification.send(sender=request,
+                                   merchant=product.giftcard.merchant.id,
+                                   code=_code,
+                                   ammount=product.price)
+
+        event_user_buy_product_confirmation(product.giftcard_from.email, args)
+        now = datetime.now()
+        if (product.send_date.year == now.year and
+            product.send_date.month == now.month and
+            product.send_date.day == now.day and
+            not product.giftcard.auto_validate):
+
+            simple_giftcard_send_notification(product)
+    else:
+        # Is auto_validation giftcard
+        # FIXME: 'levantemos_chile' parameter needs to be taken
+        # from somewhere else ;)
+        simple_giftcard_send_notification_auto_validate('levantemos_chile',
+                                                        product)
+
+    data = {'product': product}
+    if product.state == 'USING_CREDITS_SUCCESS':
+        data.update({'used_credits': product.price})
+    else:
+        data.update({'transaction': response})
+
+    if transaction.use_credits is not None:
+        finalize_use_user_credits(transaction.use_credits)
+
+    product.giftcard.sold_quantity += 1
+    product.giftcard.save()
+
+    return render_to_response('success.html', data,
+                              context_instance=RequestContext(request))
+
+
+@require_GET
+def pp_response_error(request, token, **kwargs):
+    product.set_state('RESPONSE_FROM_PP_ERROR')
+    transaction.set_state('RESPONSE_FROM_PP_ERROR')
+    if transaction.use_credits is not None:
+        finalize_use_user_credits(transaction.use_credits, False)
+    data = {}
+    return render_to_response('error.html', data,
+                              context_instance=RequestContext(request))

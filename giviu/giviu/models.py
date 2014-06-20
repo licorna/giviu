@@ -228,6 +228,8 @@ class Product(models.Model):
     created = models.DateTimeField(default=lambda: get_now())
     giftcard_to = models.ForeignKey('Users', db_column='to', related_name='+')
     giftcard_from = models.ForeignKey('Users', db_column='from', related_name='+')
+    to_name = models.CharField(max_length=40)
+    to_email = models.CharField(max_length=255)
     comment = models.TextField()
     status = models.CharField(max_length=255)
     expiration_date = models.DateField(default=lambda: get_three_month())

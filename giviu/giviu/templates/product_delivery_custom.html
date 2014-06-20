@@ -64,7 +64,7 @@
 
       <div class="span9 deliveryPrice" style="display:none; border-botom:1px dotted #ccc;">
         <span class="span3 title">
-        Valor despacho: 
+        Valor despacho:
         </span>
         <div class="span6 col" style="padding-top:10px;">
           <strong id="deliveryPrice"></strong>
@@ -83,6 +83,7 @@
       <input type="hidden" value="" name="ribbon-color"/>
       <input type="hidden" value="" name="paper-color"/>
       <input type="hidden" value="{{ giftcard.price }}" name="giftcard-price"/>
+      <input type="hidden" value="{{ option.id }}" name="giftcard-option"/>
       <input type="hidden" name="delivery-price"/>
       <input type="hidden" name="address" val="">
       <input type="hidden" name="paper-light" val="">
@@ -383,7 +384,7 @@
                     $('[name="paper-light"]').val(light);
                     $('[name="paper-dark"]').val(dark);
                 });
-                
+
                 $('.color.tape').on('click',function(){
                     var dark = $(this).attr('data-dark');
                     var light = $(this).attr('data-light');
@@ -392,8 +393,8 @@
                     $('[name="ribbon-color"]').val($(this).attr('data-name'));
                     $('[name="ribbon-light"]').val(light);
                     $('[name="ribbon-dark"]').val(dark);
-                })  
-              
+                })
+
               randomPackage();
 
         $( "#datepicker" ).datepicker({
@@ -416,12 +417,12 @@
                 var picker_date = e;
                 var new_format_date = e.split('-');
                 var new_format_date =new_format_date[2]+' de '+month[new_format_date[1]-1]
-                var d = new Date(); 
+                var d = new Date();
                 var fechaInicio= new Date(picker_date);
-                var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());            
+                var hoy= new Date(d.getFullYear()+ "-" + (d.getMonth() + 1 ) + "-" + d.getDate());
                 var fechaResta= fechaInicio-hoy;
-                fechaResta=(((fechaResta/1000)/60)/60)/24;   
-                fechaResta = parseInt(fechaResta);        
+                fechaResta=(((fechaResta/1000)/60)/60)/24;
+                fechaResta = parseInt(fechaResta);
 
                 if(fechaResta<=2) {
                   $('#datepicker').val(terms[fechaResta]);
@@ -493,7 +494,7 @@
                   if($(this).val()!=""){
                     $('.morefields').slideDown();
                   }
-                } 
+                }
 
                 // function autoComplete(){
                 //   var key = $(this).val()+',chile';

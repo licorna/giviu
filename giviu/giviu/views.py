@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, user_passes_test
 from models import (
     GiftcardCategory, Giftcard, GiftcardDesign, Campaign,
-    Users, Product, ProductDeliveryInformation
+    Users, Product, ProductDeliveryInformation,
 )
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
@@ -293,12 +293,17 @@ def giftcard_confirmation(request):
     paper_light = ''
     paper_dark = ''
     address = ''
+    option = None
+    name_to = ''
+    email_to = ''
+
 
     if giftcard.is_product:
         '''Fetch necessary information to create the product with delivery
         information.
         '''
         name_to = request.POST['name-to']
+        print name_to
         email_to = 'auto_validate@giviu.com'
         comment = request.POST['comment']
         price = request.POST['giftcard-price']
@@ -432,7 +437,9 @@ def giftcard_confirmation(request):
                           giftcard=giftcard,
                           transaction=transaction,
                           validated=validated,
-                          already_sent=already_sent)
+                          already_sent=already_sent,
+                          to_name=name_to,
+                          to_email=email_to)
 
     # TODO: why is this?
     product = Product.objects.get(uuid=product.uuid)
